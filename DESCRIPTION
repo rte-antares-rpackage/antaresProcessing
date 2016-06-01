@@ -8,5 +8,9 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 LazyData: TRUE
 Depends:
-  antares
-Suggests: testthat
+    antares
+Imports:
+    data.table
+Suggests:
+    testthat
+RoxygenNote: 5.0.1
