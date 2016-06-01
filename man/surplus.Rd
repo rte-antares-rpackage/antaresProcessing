@@ -4,12 +4,14 @@
 \alias{surplus}
 \title{Compute economic surplus}
 \usage{
-surplus(x)
+surplus(x, timeStep = "annual")
 }
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
 \code{readAntares}. It has to contain some areas and all the links that are
-connected to these areas.}
+connected to these areas. Moreover it needs to have a hourly time step.}
+
+\item{timeStep}{Desired time step for the result.}
 }
 \value{
 A data.table with the wollowing columns:
@@ -28,7 +30,7 @@ and the global surplus of an area.
 }
 \examples{
 \dontrun{
-mydata <- readAntares(areas = "all", links = "all", timeStep = "annual")
+mydata <- readAntares(areas = "all", links = "all")
 
 mySurplus <- surplus(mydata)
 }
