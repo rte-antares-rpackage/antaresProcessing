@@ -80,7 +80,7 @@ surplusClusters <- function(x, timeStep="annual") {
   attr(res, "timeStep") <- "hourly"
   attr(res, "synthesis") <- attr(res, "synthesis")
   attr(res, "opts") <- opts
-  attr(res, "type") <- "surplus"
+  attr(res, "type") <- "surplusClusters"
 
   changeTimeStep(res, timeStep)
 
