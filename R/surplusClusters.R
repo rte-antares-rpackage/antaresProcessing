@@ -16,7 +16,13 @@
 #' \item{area}{Area name.}
 #' \item{cluster}{Cluster name.}
 #' \item{timeId}{Time id and other time columns.}
-#' \item{surplus}{Surplus of a given cluster at a given time step.}
+#' \item{surplusPerUnit}{Average surplus per unit of the cluster.}
+#' \item{surplusLastUnit}{Surplus of the last unit of the cluster.}
+#' \item{totalSurplus}{Surplus of all units of the cluster.}
+#' \item{nbHoursGeneration}{...}
+#' \item{upWardModulation}{...}
+#' \item{downWardModulation}{...}
+#' \item{absoluteModulation}{...}
 #'
 #' @examples
 #' \dontrun{
@@ -61,12 +67,14 @@ surplusClusters <- function(x, timeStep="annual") {
   tmp[, prodCost := production * marginal.cost + NODU * fixed.cost]
   tmp[, startupCost := max(0, NODU - shift(NODU, fill = 0)) * startup.cost]
 
-
-
   res <- tmp[, append(mget(idCols),
                       .(surplusPerUnit = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount,
-                        surplusLastUnit = ifelse(NODU == unitcount, (`MRG. PRICE` * (production - (NODU - 1) * nominalcapacity) - prodCost / NODU - startupCost * (startupCost > 0)), 0),
-                        totalSurplus=`MRG. PRICE` * production - prodCost - startupCost))]
+                        surplusLastUnit = ifelse(NODU == unitcount, ((`MRG. PRICE` * production - prodCost) / NODU - startupCost * (startupCost > 0)), 0),
+                        totalSurplus = `MRG. PRICE` * production - prodCost - startupCost,
+                        nbHoursModulation = production / (unitcount * nominalcapacity),
+                        upwardModulation = pmax(0, production - shift(production, fill=0)) / unitcount,
+                        downwardModulation = pmax(0, shift(production, fill=0) - production) / unitcount,
+                        absoluteModulation = abs(production - shift(production, fill=0)) / unitcount))]
 
   # Set correct attributes to the result
   class(res) <- c("antaresDataTable", "antaresData", "data.table", "data.frame")
