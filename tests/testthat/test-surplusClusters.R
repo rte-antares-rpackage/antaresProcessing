@@ -8,7 +8,7 @@ data <- readAntares(areas="all", clusters = "all", select = "MRG. PRICE",
 
 describe("surplusClusters", {
 
-  it("stops if synthethic or not hourly results", {
+  it("stops if synthetic or not hourly results", {
     tmp <- readAntares(areas="all", clusters = "all", select = "MRG. PRICE",
                        showProgress = FALSE, synthesis = TRUE)
     expect_error(surplusClusters(tmp), "synthetic")

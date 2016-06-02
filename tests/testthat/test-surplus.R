@@ -1,4 +1,4 @@
-context("Surplus function")
+context("Function surplus")
 
 source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)

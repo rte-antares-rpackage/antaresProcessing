@@ -18,7 +18,13 @@ A data.table of class \code{antaresDataTable} with the following columns:
 \item{area}{Area name.}
 \item{cluster}{Cluster name.}
 \item{timeId}{Time id and other time columns.}
-\item{surplus}{Surplus of a given cluster at a given time step.}
+\item{surplusPerUnit}{Average surplus per unit of the cluster.}
+\item{surplusLastUnit}{Surplus of the last unit of the cluster.}
+\item{totalSurplus}{Surplus of all units of the cluster.}
+\item{nbHoursGeneration}{...}
+\item{upWardModulation}{...}
+\item{downWardModulation}{...}
+\item{absoluteModulation}{...}
 }
 \description{
 This function computes the surplus of clusters of interest. The surplus of a
