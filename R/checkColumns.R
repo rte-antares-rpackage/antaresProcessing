@@ -37,3 +37,21 @@
 
   return(x)
 }
+
+.checkAttrs <- function(x, timeStep = NULL, synthesis = NULL, type = NULL) {
+  if (!is(x, "antaresData")) stop("'x' is not an 'antaresData' object")
+
+  attrs <- attributes(x)
+
+  if (!is.null(timeStep) && timeStep != attrs$timeStep) {
+    stop("'x' has a ", attrs$timeStep, " time step, but the function requires a",
+         timeStep, " time step.")
+  }
+
+  if (!is.null(synthesis) && synthesis != attrs$synthesis) {
+    if (attrs$synthesis) stop("'x' contains synthetic results but the function requires detailed results")
+    else stop("'x' contains detailed results but the function needs synthetic results")
+  }
+
+  x
+}

@@ -3,17 +3,20 @@ context("Surplus function")
 source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
-data <- readAntares(areas="all", links = "all", showProgress = FALSE)
+data <- readAntares(areas="all", links = "all", showProgress = FALSE,
+                    synthesis = FALSE, mcYears = 1)
 
 describe("surplus", {
 
   it("stops if some links are missing", {
-    data2 <- readAntares(areas="all", links = "a - b", showProgress = FALSE)
+    data2 <- readAntares(areas="all", links = "a - b", showProgress = FALSE,
+                         synthesis = FALSE)
     expect_error(surplus(data2), "missing")
   })
 
   it("stops if time step is not hourly", {
-    data2 <- readAntares(areas="all", links = "a - b", timeStep = "annual", showProgress = FALSE)
+    data2 <- readAntares(areas="all", links = "a - b", timeStep = "annual",
+                         showProgress = FALSE, synthesis = FALSE)
     expect_error(surplus(data2), "hourly")
   })
 
@@ -21,15 +24,6 @@ describe("surplus", {
     surplus <- surplus(data, timeStep = "hourly")
     expect_equal(nrow(surplus), nrow(data$areas))
     expect_true(all(c("area", "timeId", "consumerSurplus",
-                  "producerSurplus", "congestionFees", "globalSurplus") %in% names(surplus)))
-  })
-
-  it("also works when synthesis = FALSE", {
-    dataDet <- readAntares(areas="all", links = "all", synthesis = FALSE,
-                           showProgress = FALSE)
-    surplus <- surplus(dataDet, timeStep = "hourly")
-    expect_equal(nrow(surplus), nrow(dataDet$areas))
-    expect_true(all(c("area", "timeId", "mcYear", "consumerSurplus",
                   "producerSurplus", "congestionFees", "globalSurplus") %in% names(surplus)))
   })
 

@@ -36,14 +36,13 @@
 #'
 surplusClusters <- function(x, timeStep="annual") {
 
+  x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
+
   opts <- simOptions(x)
   if(opts$antaresVersion < 500) stop("This function only works for study created with Antares 5.0 and newer versions")
 
   x <- .checkColumns(x, list(areas = "MRG. PRICE",
                              clusters = c("production", "NODU", "NP Cost")))
-
-
-  if (attr(x, "timeStep") != "hourly") stop("'x' needs to have a hourly time step")
 
   # Get marginal, fixed and startup cost of the clusters
   clusterDesc <- readClusterDesc(opts)

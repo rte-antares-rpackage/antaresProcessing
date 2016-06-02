@@ -32,13 +32,13 @@
 #'
 surplus <- function(x, timeStep = "annual") {
 
+  x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
+
   prodVars <- c("NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
                 "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR")
 
   x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OV. COST", prodVars),
                              links = "CONG. FEE (ALG.)"))
-
-  if (attr(x, "timeStep") != "hourly") stop("'x' needs to have a hourly time step")
 
   opts <- simOptions(x)
 
