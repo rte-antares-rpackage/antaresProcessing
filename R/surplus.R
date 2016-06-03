@@ -73,10 +73,10 @@ surplus <- function(x, timeStep = "annual") {
   # Read unsupplied energy costs
   # unsupliedCost is a named vector. Names are area names and values are the
   # the unsuplied costs of the corresponding areas
-  unsupliedCost <- unlist(antares:::readIniFile(file.path(opts$inputPath, "thermal", "areas.ini"))$unserverdenergycost)
+  unsupliedCost <- unlist(antaresRead:::readIniFile(file.path(opts$inputPath, "thermal", "areas.ini"))$unserverdenergycost)
 
   # consumer and producer surplus
-  idColsA <- intersect(names(x$areas), antares:::pkgEnv$idVars)
+  idColsA <- intersect(names(x$areas), antaresRead:::pkgEnv$idVars)
   res <- x$areas[,append(mget(idColsA),
                          .(consumerSurplus = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD,
                            producerSurplus = `MRG. PRICE` * production - `OV. COST`))]
@@ -87,7 +87,7 @@ surplus <- function(x, timeStep = "annual") {
   links <- rbind(links[, .(area = from, link)], links[, .(area = to, link)])
   links <- links[area %in% areas]
 
-  idColsL <- intersect(names(x$links), antares:::pkgEnv$idVars)
+  idColsL <- intersect(names(x$links), antaresRead:::pkgEnv$idVars)
   cong <- merge(links,
                 x$links[, append(mget(idColsL), .(congestionFees = `CONG. FEE (ALG.)`))],
                 by = "link", allow.cartesian = TRUE)

@@ -36,7 +36,7 @@ surplusSectors <- function(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR", 
   opts <- simOptions(x)
 
   fatalProdVars <- intersect(sectors, c("WIND", "SOLAR", "H. ROR", "H. STOR"))
-  idVars <- intersect(names(x$areas), antares:::pkgEnv$idVars)
+  idVars <- intersect(names(x$areas), antaresRead:::pkgEnv$idVars)
 
   if (length(fatalProdVars) > 0) {
     x <- .checkColumns(x, list(areas = c("MRG. PRICE", fatalProdVars)))

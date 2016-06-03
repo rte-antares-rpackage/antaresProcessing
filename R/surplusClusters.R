@@ -55,7 +55,7 @@ surplusClusters <- function(x, timeStep="annual") {
   clusterDesc[is.na(startup.cost), startup.cost := 0]
 
 
-  idCols <- intersect(names(x$clusters), antares:::pkgEnv$idVars)
+  idCols <- intersect(names(x$clusters), antaresRead:::pkgEnv$idVars)
 
   tmp <- merge(x$clusters,
                x$areas[, mget(c(setdiff(idCols, "cluster"), "MRG. PRICE"))],
