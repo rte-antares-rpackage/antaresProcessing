@@ -1,5 +1,3 @@
 #' @import data.table
 
-.first <- function() {
-
-}
+.idCols <- antaresRead:::.idCols
