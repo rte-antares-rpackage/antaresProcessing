@@ -41,10 +41,14 @@ modulation <- function(x, timeStep = "annual") {
                clusterDesc[, .(area, cluster, unitcount)],
                by = c("area", "cluster"))
 
+  setorderv(tmp, .idCols(tmp))
+
+  tmp[, shiftProd := ifelse(timeId == 1, 0, shift(production, fill = 0))]
+
   res <- tmp[, append(mget(.idCols(tmp)),
-                      .(meanUpwardModulation = pmax(0, production - shift(production, fill=0)) / unitcount,
-                        meanDownwardModulation = pmax(0, shift(production, fill=0) - production) / unitcount,
-                        meanAbsoluteModulation = abs(production - shift(production, fill=0)) / unitcount))]
+                      .(meanUpwardModulation = pmax(0, production - shiftProd) / unitcount,
+                        meanDownwardModulation = pmax(0, shiftProd - production) / unitcount,
+                        meanAbsoluteModulation = abs(production - shiftProd) / unitcount))]
   res[, maxUpwardModulation := meanUpwardModulation]
   res[, maxDownwardModulation := meanDownwardModulation]
   res[, maxAbsoluteModulation := meanAbsoluteModulation]

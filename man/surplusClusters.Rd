@@ -22,9 +22,6 @@ A data.table of class \code{antaresDataTable} with the following columns:
 \item{surplusLastUnit}{Surplus of the last unit of the cluster.}
 \item{totalSurplus}{Surplus of all units of the cluster.}
 \item{nbHoursGeneration}{...}
-\item{upWardModulation}{...}
-\item{downWardModulation}{...}
-\item{absoluteModulation}{...}
 }
 \description{
 This function computes the surplus of clusters of interest. The surplus of a
