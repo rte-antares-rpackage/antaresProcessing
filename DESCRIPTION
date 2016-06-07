@@ -1,6 +1,6 @@
 Package: antaresProcessing
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Antares results processing
 Version: 0.1.0
 Author: Francois Guillem
 Maintainer: Francois Guillem <francois.guillem@rte-france.com>
