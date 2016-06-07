@@ -70,11 +70,7 @@ surplusClusters <- function(x, timeStep="annual") {
                         nbHoursModulation = production / (unitcount * nominalcapacity)))]
 
   # Set correct attributes to the result
-  class(res) <- c("antaresDataTable", "antaresData", "data.table", "data.frame")
-  attr(res, "timeStep") <- "hourly"
-  attr(res, "synthesis") <- attr(res, "synthesis")
-  attr(res, "opts") <- opts
-  attr(res, "type") <- "surplusClusters"
+  res <- .setAttrs(res, "surplusClusters", opts)
 
   changeTimeStep(res, timeStep)
 

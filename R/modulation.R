@@ -54,11 +54,7 @@ modulation <- function(x, timeStep = "annual") {
   res[, maxAbsoluteModulation := meanAbsoluteModulation]
 
   # Set correct attributes to the result
-  class(res) <- c("antaresDataTable", "antaresData", "data.table", "data.frame")
-  attr(res, "timeStep") <- "hourly"
-  attr(res, "synthesis") <- FALSE
-  attr(res, "opts") <- opts
-  attr(res, "type") <- "modulation"
+  res <- .setAttrs(res, "modulations", opts)
 
   changeTimeStep(res, timeStep, fun = c("mean", "mean", "mean", "max", "max", "max"))
 

@@ -100,10 +100,7 @@ surplus <- function(x, timeStep = "annual") {
   res[, globalSurplus := consumerSurplus + producerSurplus + congestionFees]
 
   # Set correct attributes to the result
-  attr(res, "timeStep") <- "hourly"
-  attr(res, "synthesis") <- attr(res, "synthesis")
-  attr(res, "opts") <- opts
-  attr(res, "type") <- "surplus"
+  res <- .setAttrs(res, "surplus", opts)
 
   changeTimeStep(res, timeStep)
 }
