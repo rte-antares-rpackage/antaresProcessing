@@ -36,7 +36,7 @@ surplusSectors <- function(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR", 
   opts <- simOptions(x)
 
   fatalProdVars <- intersect(sectors, c("WIND", "SOLAR", "H. ROR", "H. STOR"))
-  idVars <- intersect(names(x$areas), antaresRead:::pkgEnv$idVars)
+  idVars <- .idCols(x$areas)
 
   if (length(fatalProdVars) > 0) {
     x <- .checkColumns(x, list(areas = c("MRG. PRICE", fatalProdVars)))
@@ -68,7 +68,11 @@ surplusSectors <- function(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR", 
                             value.var = "surplus", fill = 0)
 
     if (is.null(res)) res <- surplusThermal
-    else res <- merge(res, surplusThermal, by = idVars)
+    else res <- merge(res, surplusThermal, by = idVars, all.x = TRUE)
+
+    # Remove NA values introduced with the previous merge
+    cols <- intersect(names(res), clusterDesc$group)
+    res[is.na(get(cols[1])), c(cols) := 0]
   }
 
   # Add to the name of the columns the prefix "surplus"
@@ -76,11 +80,7 @@ surplusSectors <- function(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR", 
   setnames(res, cols, paste0("surplus", cols))
 
   # Set correct attributes to the result
-  class(res) <- c("antaresDataTable", "antaresData", "data.table", "data.frame")
-  attr(res, "timeStep") <- "hourly"
-  attr(res, "synthesis") <- FALSE
-  attr(res, "opts") <- opts
-  attr(res, "type") <- "surplusSectors"
+  res <- .setAttrs(res, "surplusSectors", opts)
 
   changeTimeStep(res, timeStep)
 
