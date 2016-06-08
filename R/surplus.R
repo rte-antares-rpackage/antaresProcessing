@@ -73,7 +73,7 @@ surplus <- function(x, timeStep = "annual") {
   # Read unsupplied energy costs
   # unsupliedCost is a named vector. Names are area names and values are the
   # the unsuplied costs of the corresponding areas
-  unsupliedCost <- unlist(antaresRead:::readIniFile(file.path(opts$inputPath, "thermal", "areas.ini"))$unserverdenergycost)
+  unsupliedCost <- opts$energyCosts$unserved
 
   # consumer and producer surplus
   idColsA <- intersect(names(x$areas), antaresRead:::pkgEnv$idVars)
