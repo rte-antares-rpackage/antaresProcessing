@@ -19,7 +19,11 @@
 #' \item{surplusPerUnit}{Average surplus per unit of the cluster.}
 #' \item{surplusLastUnit}{Surplus of the last unit of the cluster.}
 #' \item{totalSurplus}{Surplus of all units of the cluster.}
-#' \item{nbHoursGeneration}{...}
+#' \item{nbHoursGeneration}{It represents the production of a cluster expressed
+#' in number of hours of production at the total capacity of the cluster. It is
+#' equal to the production divided by the capacity of the cluster.}
+#' \item{economicGradient}{Economic gradient of a cluster. It is equal to
+#' the surplus per unit divided by the capacity of a unit.}
 #'
 #' @examples
 #' \dontrun{
@@ -67,7 +71,11 @@ surplusClusters <- function(x, timeStep="annual") {
                       .(surplusPerUnit = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount,
                         surplusLastUnit = ifelse(NODU == unitcount, ((`MRG. PRICE` * production - prodCost) / NODU - startupCost * (startupCost > 0)), 0),
                         totalSurplus = `MRG. PRICE` * production - prodCost - startupCost,
-                        nbHoursModulation = production / (unitcount * nominalcapacity)))]
+                        nbHoursGeneration = production / (unitcount * nominalcapacity),
+                        nominalcapacity = nominalcapacity))]
+
+  res[, economicGradient := surplusPerUnit / nominalcapacity]
+  res[, nominalcapacity := NULL]
 
   # Set correct attributes to the result
   res <- .setAttrs(res, "surplusClusters", opts)
