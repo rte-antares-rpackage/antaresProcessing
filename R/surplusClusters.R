@@ -27,7 +27,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE")
+#' mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE",
+#'                       thermalAvailabilities = TRUE)
 #'
 #' surplusClusters(mydata)
 #'
@@ -43,7 +44,7 @@ surplusClusters <- function(x, timeStep="annual") {
   if(opts$antaresVersion < 500) stop("This function only works for study created with Antares 5.0 and newer versions")
 
   x <- .checkColumns(x, list(areas = "MRG. PRICE",
-                             clusters = c("production", "NODU", "NP Cost")))
+                             clusters = c("production", "NODU", "NP Cost", "availableUnits")))
 
   # Get marginal, fixed and startup cost of the clusters
   clusterDesc <- readClusterDesc(opts)
@@ -56,7 +57,7 @@ surplusClusters <- function(x, timeStep="annual") {
   clusterDesc[is.na(startup.cost), startup.cost := 0]
 
 
-  idCols <- intersect(names(x$clusters), antaresRead:::pkgEnv$idVars)
+  idCols <- .idCols(x$clusters)
 
   tmp <- merge(x$clusters,
                x$areas[, mget(c(setdiff(idCols, "cluster"), "MRG. PRICE"))],
@@ -65,14 +66,14 @@ surplusClusters <- function(x, timeStep="annual") {
 
   # Computed variable, fixed and startup costs
   tmp[, prodCost := production * marginal.cost + NODU * fixed.cost]
-  tmp[, startupCost := max(0, NODU - shift(NODU, fill = 0)) * startup.cost]
+  tmp[, startupCost := pmax(0, NODU - shift(NODU, fill = 0)) * startup.cost]
+  tmp[, prodLastUnit := pmax(0, (NODU == availableUnits) * (production - nominalcapacity * (NODU - 1)))]
 
-  res <- tmp[, append(mget(idCols),
+  res <- tmp[, append(mget(c(idCols, "nominalcapacity")),
                       .(surplusPerUnit = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount,
-                        surplusLastUnit = ifelse(NODU == unitcount, ((`MRG. PRICE` * production - prodCost) / NODU - startupCost * (startupCost > 0)), 0),
+                        surplusLastUnit = (prodLastUnit > 0) * (`MRG. PRICE` * prodLastUnit - prodCost / pmax(1, NODU) - startup.cost * (startupCost > 0)),
                         totalSurplus = `MRG. PRICE` * production - prodCost - startupCost,
-                        nbHoursGeneration = production / (unitcount * nominalcapacity),
-                        nominalcapacity = nominalcapacity))]
+                        nbHoursGeneration = production / (unitcount * nominalcapacity)))]
 
   res[, economicGradient := surplusPerUnit / nominalcapacity]
   res[, nominalcapacity := NULL]
