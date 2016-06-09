@@ -1,4 +1,5 @@
 #' @import data.table
+#' @import antaresRead
 
 .idCols <- antaresRead:::.idCols
 
