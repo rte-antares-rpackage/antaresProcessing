@@ -67,6 +67,7 @@ surplusClusters <- function(x, timeStep="annual") {
   # Computed variable, fixed and startup costs
   tmp[, prodCost := production * marginal.cost + NODU * fixed.cost]
   tmp[, startupCost := pmax(0, NODU - shift(NODU, fill = 0)) * startup.cost]
+  tmp[timeId == min(timeId), startupCost := NODU * startup.cost]
   tmp[, prodLastUnit := pmax(0, (NODU == availableUnits) * (production - nominalcapacity * (NODU - 1)))]
 
   res <- tmp[, append(mget(c(idCols, "nominalcapacity")),

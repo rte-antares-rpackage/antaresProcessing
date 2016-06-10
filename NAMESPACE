@@ -2,6 +2,7 @@
 
 export(modulation)
 export(netLoad)
+export(ramps)
 export(surplus)
 export(surplusClusters)
 export(surplusSectors)

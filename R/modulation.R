@@ -43,7 +43,7 @@ modulation <- function(x, timeStep = "annual") {
 
   setorderv(tmp, .idCols(tmp))
 
-  tmp[, shiftProd := ifelse(timeId == 1, 0, shift(production, fill = 0))]
+  tmp[, shiftProd := ifelse(timeId == min(timeId), 0, shift(production, fill = 0))]
 
   res <- tmp[, append(mget(.idCols(tmp)),
                       .(meanUpwardModulation = pmax(0, production - shiftProd) / unitcount,
