@@ -10,6 +10,11 @@
 #'   least the column \code{MRG. PRICE}.
 #' @param timeStep
 #'   Desired time step for the result
+#' @param surplusLastUnit
+#'   Should the surplus of the last unit of a cluster be computed ? If
+#'   \code{TRUE}, then \code{x} must have been created with the option
+#'   \code{thermalAvailabilities=TRUE} in order to contain the required column
+#'   "available units"
 #'
 #' @return
 #' A data.table of class \code{antaresDataTable} with the following columns:
@@ -27,16 +32,23 @@
 #'
 #' @examples
 #' \dontrun{
+#'
+#' mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE")
+#' surplusClusters(mydata)
+#'
+#' # Computing the surplus of the last unit of a cluster requires the additional
+#' # column "availableUnits". To add this column, one has to use parameter
+#' # "thermalAvailabilities = TRUE" in readAntares.
+#'
 #' mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE",
 #'                       thermalAvailabilities = TRUE)
-#'
-#' surplusClusters(mydata)
+#' surplusClusters(mydata, surplusLastUnit = TRUE)
 #'
 #' }
 #'
 #' @export
 #'
-surplusClusters <- function(x, timeStep="annual") {
+surplusClusters <- function(x, timeStep="annual", surplusLastUnit = FALSE) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
@@ -44,7 +56,9 @@ surplusClusters <- function(x, timeStep="annual") {
   if(opts$antaresVersion < 500) stop("This function only works for study created with Antares 5.0 and newer versions")
 
   x <- .checkColumns(x, list(areas = "MRG. PRICE",
-                             clusters = c("production", "NODU", "NP Cost", "availableUnits")))
+                             clusters = c("production", "NODU", "NP Cost")))
+
+  if (surplusLastUnit) x <- .checkColumns(x, list(clusters = "availableUnits"))
 
   # Get marginal, fixed and startup cost of the clusters
   clusterDesc <- readClusterDesc(opts)
@@ -56,28 +70,35 @@ surplusClusters <- function(x, timeStep="annual") {
   if(is.null(clusterDesc$startup.cost)) clusterDesc$startup.cost <- 0
   clusterDesc[is.na(startup.cost), startup.cost := 0]
 
-
-  idCols <- .idCols(x$clusters)
+  idVars <- .idCols(x$clusters)
 
   tmp <- merge(x$clusters,
-               x$areas[, mget(c(setdiff(idCols, "cluster"), "MRG. PRICE"))],
-               by = setdiff(idCols, "cluster"))
+               x$areas[, c(setdiff(idVars, "cluster"), "MRG. PRICE"), with = FALSE],
+               by = setdiff(idVars, "cluster"))
   tmp <- merge(tmp, clusterDesc, by = c("area", "cluster"))
 
   # Computed variable, fixed and startup costs
   tmp[, prodCost := production * marginal.cost + NODU * fixed.cost]
   tmp[, startupCost := pmax(0, NODU - shift(NODU, fill = 0)) * startup.cost]
   tmp[timeId == min(timeId), startupCost := NODU * startup.cost]
-  tmp[, prodLastUnit := pmax(0, (NODU == availableUnits) * (production - nominalcapacity * (NODU - 1)))]
 
-  res <- tmp[, append(mget(c(idCols, "nominalcapacity")),
-                      .(surplusPerUnit = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount,
-                        surplusLastUnit = (prodLastUnit > 0) * (`MRG. PRICE` * prodLastUnit - prodCost / pmax(1, NODU) - startup.cost * (startupCost > 0)),
-                        totalSurplus = `MRG. PRICE` * production - prodCost - startupCost,
-                        nbHoursGeneration = production / (unitcount * nominalcapacity)))]
+  tmp[, `:=`(surplusPerUnit = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount,
+             totalSurplus = `MRG. PRICE` * production - prodCost - startupCost,
+             nbHoursGeneration = production / (unitcount * nominalcapacity))]
 
-  res[, economicGradient := surplusPerUnit / nominalcapacity]
-  res[, nominalcapacity := NULL]
+  tmp[, economicGradient := surplusPerUnit / nominalcapacity]
+
+  if (surplusLastUnit) {
+    tmp[, prodLastUnit := pmax(0, (NODU == availableUnits) * (production - nominalcapacity * (NODU - 1)))]
+    tmp[, surplusLastUnit := (prodLastUnit > 0) * (`MRG. PRICE` * prodLastUnit - prodCost / pmax(1, NODU) - startup.cost * (startupCost > 0))]
+    res <- tmp[, c(idVars, "surplusPerUnit", "surplusLastUnit", "totalSurplus",
+                   "nbHoursGeneration", "economicGradient"),
+               with = FALSE]
+  } else {
+    res <- tmp[, c(idVars, "surplusPerUnit", "totalSurplus","nbHoursGeneration",
+                   "economicGradient"),
+               with = FALSE]
+  }
 
   # Set correct attributes to the result
   res <- .setAttrs(res, "surplusClusters", opts)

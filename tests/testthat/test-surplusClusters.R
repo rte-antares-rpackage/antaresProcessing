@@ -4,17 +4,20 @@ source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 data <- readAntares(areas="all", clusters = "all", select = "MRG. PRICE",
-                    showProgress = FALSE, synthesis = FALSE)
+                    showProgress = FALSE, synthesis = FALSE,
+                    thermalAvailabilities = TRUE)
 
 describe("surplusClusters", {
 
   it("stops if synthetic or not hourly results", {
     tmp <- readAntares(areas="all", clusters = "all", select = "MRG. PRICE",
-                       showProgress = FALSE, synthesis = TRUE)
+                       showProgress = FALSE, synthesis = TRUE,
+                       thermalAvailabilities = TRUE)
     expect_error(surplusClusters(tmp), "synthetic")
 
     tmp <- readAntares(areas="all", clusters = "all", select = "MRG. PRICE",
-                       showProgress = FALSE, synthesis = FALSE, timeStep = "annual")
+                       showProgress = FALSE, synthesis = FALSE, timeStep = "annual",
+                       thermalAvailabilities = TRUE)
     expect_error(surplusClusters(tmp), "hourly")
   })
 
@@ -29,7 +32,7 @@ describe("surplusClusters", {
 test_that("All cluster surpluses are positive, except for must run clusters", {
   s <- surplusClusters(data)
   s <- s[!cluster %like% "must_run"]
-  for (v in c("surplusPerUnit", "surplusLastUnit", "totalSurplus")) {
+  for (v in c("surplusPerUnit", "totalSurplus")) {
     expect_true(all(s[[v]] >= 0), info = v)
   }
 })
