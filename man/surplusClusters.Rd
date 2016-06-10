@@ -34,7 +34,8 @@ belongs to minus variable, fixed and startup costs.
 }
 \examples{
 \dontrun{
-mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE")
+mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE",
+                      thermalAvailabilities = TRUE)
 
 surplusClusters(mydata)
 
