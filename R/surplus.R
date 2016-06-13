@@ -31,7 +31,7 @@
 #'
 #'@export
 #'
-surplus <- function(x, timeStep = "annual") {
+surplus <- function(x, timeStep = "annual", groupByDistrict = FALSE) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
@@ -106,7 +106,8 @@ surplus <- function(x, timeStep = "annual") {
   res <- merge(res, cong, by = idColsA)
 
   # Global surplus
-  res[, globalSurplus := consumerSurplus + producerSurplus + + storageSurplus + congestionFees]
+  res[, globalSurplus := consumerSurplus + producerSurplus + storageSurplus + congestionFees]
+  if (groupByDistrict) res <- .groupByDistrict(res, opts)
 
   # Set correct attributes to the result
   res <- .setAttrs(res, "surplus", opts)

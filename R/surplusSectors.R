@@ -29,7 +29,7 @@
 #' @export
 #'
 surplusSectors <- function(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR", "H. STOR"),
-                           timeStep = "annual") {
+                           timeStep = "annual", groupByDistrict = FALSE) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
@@ -78,6 +78,9 @@ surplusSectors <- function(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR", 
   # Add to the name of the columns the prefix "surplus"
   cols <- setdiff(names(res), idVars)
   setnames(res, cols, paste0("surplus", cols))
+
+  # Group by district
+  if (groupByDistrict) res <- .groupByDistrict(res, opts)
 
   # Set correct attributes to the result
   res <- .setAttrs(res, "surplusSectors", opts)
