@@ -47,16 +47,20 @@ test_that("Surpluses are correctly computed", {
   surplusProdA <- data$areas[area == "a", sum(production * mrgPrice - `OV. COST`)]
 
   surplusProdA <- surplusProdA + data$areas[area == "a_offshore", sum(production* mrgPrice)]
-  surplusProdA <- surplusProdA - data$links[link == "a - psp out", sum(mrgPrice * `FLOW LIN.`)]
-  surplusProdA <- surplusProdA - data$links[link == "a - psp in", sum(mrgPrice * `FLOW LIN.`)]
 
   expect_equal(surplusProdA, surplus[area == "a", producerSurplus])
+
+  # Storage surplus
+  storageSurplusA <- - data$links[link == "a - psp out", sum(mrgPrice * `FLOW LIN.`)] -
+    data$links[link == "a - psp in", sum(mrgPrice * `FLOW LIN.`)]
+  expect_equal(storageSurplusA, surplus[area == "a", storageSurplus])
 
   # Congestion fees
   congestionFeesA <- 1/2 * data$links[link == "a - b", sum(`CONG. FEE (ALG.)`)]
   expect_equal(congestionFeesA, surplus[area == "a", congestionFees])
 
   # Total surplus
-  expect_equal(surplusConsoA + surplusProdA + congestionFeesA, surplus[area == "a", globalSurplus])
+  expect_equal(surplusConsoA + surplusProdA + storageSurplusA + congestionFeesA,
+               surplus[area == "a", globalSurplus])
 })
 

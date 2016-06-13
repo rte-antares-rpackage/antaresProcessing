@@ -16,6 +16,7 @@
 #' \item{timeId}{timeId and other time columns.}
 #' \item{consumerSurplus}{The surplus of the consumers of some area.}
 #' \item{producerSurplus}{The surplus of the producers of some area.}
+#' \item{storageSurplus}{Surplus created by storage/flexibility areas.}
 #' \item{congestionFees}{The congestion fees of a given area. It equals to half
 #'   the congestion fees of the links connected to that area.}
 #' \item{globalSurplus}{Sum of the consumer surplus, the producer surplus and
@@ -60,12 +61,9 @@ surplus <- function(x, timeStep = "annual") {
 
 
   # Compute total production of each area
-  # For now, we had to the total production of an area the production of the
-  # virtual nodes connected to it.
+  # For now, we had to the direct production of an area. We add the production of
+  # the virtual nodes connected to it.
   allProdVars <- c(prodVars, paste0(prodVars, "_virtual"))
-  if (!is.null(vnodes)) {
-    allProdVars <- c(allProdVars, attr(x, "virtualNodes")$storageFlexibility)
-  }
   allProdVars <- intersect(allProdVars, names(x$areas))
 
   production <- rowSums(x$areas[, allProdVars, with = FALSE])
@@ -80,6 +78,17 @@ surplus <- function(x, timeStep = "annual") {
   res <- x$areas[,append(mget(idColsA),
                          .(consumerSurplus = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD,
                            producerSurplus = `MRG. PRICE` * production - `OV. COST`))]
+
+  # Compute surplus of storage/flexibility
+  res[, storageSurplus := 0]
+
+  if (!is.null(vnodes)) {
+    storageVars <- attr(x, "virtualNodes")$storageFlexibility
+    if (!is.null(storageVars) && length(storageVars) > 0) {
+      storage <- rowSums(x$areas[,storageVars, with = FALSE])
+      res[, storageSurplus := storage * x$areas$`MRG. PRICE`]
+    }
+  }
 
   # Congestion fees
   links <- tstrsplit(neededLinks, split = " - ")
@@ -97,7 +106,7 @@ surplus <- function(x, timeStep = "annual") {
   res <- merge(res, cong, by = idColsA)
 
   # Global surplus
-  res[, globalSurplus := consumerSurplus + producerSurplus + congestionFees]
+  res[, globalSurplus := consumerSurplus + producerSurplus + + storageSurplus + congestionFees]
 
   # Set correct attributes to the result
   res <- .setAttrs(res, "surplus", opts)
