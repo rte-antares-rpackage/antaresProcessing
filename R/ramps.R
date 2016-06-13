@@ -7,7 +7,7 @@
 #'   Object of class \code{antaresData} containing data for areas. It must
 #'   contain the columns needed to compute the net load and the column
 #'   \code{BALANCE}.
-#' @inheritParams netLoad
+#' @inheritParams addNetLoad
 #'
 #' @return
 #' A data.table of class \code{antaresDataTable} containing the foloowing columns:

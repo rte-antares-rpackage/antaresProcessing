@@ -29,8 +29,9 @@ at a given time step.
 }
 \examples{
 \dontrun{
+
   mydata <- readAntares(areas = "all", mustRun = TRUE)
-  tamps(mydata)
+  ramps(mydata)
 }
 
 }

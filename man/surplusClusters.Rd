@@ -4,7 +4,7 @@
 \alias{surplusClusters}
 \title{Compute the surplus of clusters}
 \usage{
-surplusClusters(x, timeStep = "annual")
+surplusClusters(x, timeStep = "annual", surplusLastUnit = FALSE)
 }
 \arguments{
 \item{x}{An \code{antaresData} object created with \code{readAntares}. It must
@@ -12,6 +12,11 @@ contain an element \code{clusters} and an element \code{areas} with at
 least the column \code{MRG. PRICE}.}
 
 \item{timeStep}{Desired time step for the result}
+
+\item{surplusLastUnit}{Should the surplus of the last unit of a cluster be computed ? If
+\code{TRUE}, then \code{x} must have been created with the option
+\code{thermalAvailabilities=TRUE} in order to contain the required column
+"available units"}
 }
 \value{
 A data.table of class \code{antaresDataTable} with the following columns:
@@ -34,10 +39,17 @@ belongs to minus variable, fixed and startup costs.
 }
 \examples{
 \dontrun{
+
+mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE")
+surplusClusters(mydata)
+
+# Computing the surplus of the last unit of a cluster requires the additional
+# column "availableUnits". To add this column, one has to use parameter
+# "thermalAvailabilities = TRUE" in readAntares.
+
 mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE",
                       thermalAvailabilities = TRUE)
-
-surplusClusters(mydata)
+surplusClusters(mydata, surplusLastUnit = TRUE)
 
 }
 
