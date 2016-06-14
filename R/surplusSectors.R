@@ -29,7 +29,7 @@
 #' @export
 #'
 surplusSectors <- function(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR", "H. STOR"),
-                           timeStep = "annual", groupByDistrict = FALSE) {
+                           timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
@@ -85,6 +85,9 @@ surplusSectors <- function(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR", 
   # Set correct attributes to the result
   res <- .setAttrs(res, "surplusSectors", opts)
 
-  changeTimeStep(res, timeStep)
+  res <- changeTimeStep(res, timeStep)
 
+  if (synthesis) res <- .aggregateMcYears(res)
+
+  res
 }

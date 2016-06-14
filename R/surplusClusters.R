@@ -8,13 +8,12 @@
 #'   An \code{antaresData} object created with \code{readAntares}. It must
 #'   contain an element \code{clusters} and an element \code{areas} with at
 #'   least the column \code{MRG. PRICE}.
-#' @param timeStep
-#'   Desired time step for the result
 #' @param surplusLastUnit
 #'   Should the surplus of the last unit of a cluster be computed ? If
 #'   \code{TRUE}, then \code{x} must have been created with the option
 #'   \code{thermalAvailabilities=TRUE} in order to contain the required column
 #'   "available units"
+#' @inheritParams surplus
 #'
 #' @return
 #' A data.table of class \code{antaresDataTable} with the following columns:
@@ -48,7 +47,7 @@
 #'
 #' @export
 #'
-surplusClusters <- function(x, timeStep="annual", surplusLastUnit = FALSE) {
+surplusClusters <- function(x, timeStep="annual", synthesis = FALSE, surplusLastUnit = FALSE) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
@@ -103,6 +102,8 @@ surplusClusters <- function(x, timeStep="annual", surplusLastUnit = FALSE) {
   # Set correct attributes to the result
   res <- .setAttrs(res, "surplusClusters", opts)
 
-  changeTimeStep(res, timeStep)
+  res <- changeTimeStep(res, timeStep)
+  if (synthesis) res <- .aggregateMcYears(res)
 
+  res
 }

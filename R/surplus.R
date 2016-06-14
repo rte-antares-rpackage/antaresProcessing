@@ -9,6 +9,11 @@
 #'   connected to these areas. Moreover it needs to have a hourly time step.
 #' @param timeStep
 #'   Desired time step for the result.
+#' @param synthesis
+#'   If TRUE, average surpluses are returned. Else the function returns surpluses
+#'   per Monte-Carlo scenario.
+#' @param groupByDistrict
+#'   If TRUE, results are grouped by district.
 #'
 #' @return
 #' A data.table with the wollowing columns:
@@ -24,14 +29,18 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares(areas = "all", links = "all")
+#' mydata <- readAntares(areas = "all", links = "all", synthesis = FALSE)
 #'
-#' mySurplus <- surplus(mydata)
+#' surplus(mydata)
+#'
+#' surplus(mydata, synthesis = TRUE)
+#'
+#' surplus(mydata, synthesis = TRUE, groupByDistrict = TRUE)
 #' }
 #'
 #'@export
 #'
-surplus <- function(x, timeStep = "annual", groupByDistrict = FALSE) {
+surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
@@ -112,5 +121,9 @@ surplus <- function(x, timeStep = "annual", groupByDistrict = FALSE) {
   # Set correct attributes to the result
   res <- .setAttrs(res, "surplus", opts)
 
-  changeTimeStep(res, timeStep)
+  res <- changeTimeStep(res, timeStep)
+
+  if (synthesis) res <- .aggregateMcYears(res)
+
+  res
 }
