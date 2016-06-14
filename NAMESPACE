@@ -2,6 +2,7 @@
 
 export(addNetLoad)
 export(addRamps)
+export(compare)
 export(modulation)
 export(surplus)
 export(surplusClusters)

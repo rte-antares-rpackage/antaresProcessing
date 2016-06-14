@@ -5,7 +5,7 @@
 \title{Compute the surplus of sectors}
 \usage{
 surplusSectors(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR",
-  "H. STOR"), timeStep = "annual")
+  "H. STOR"), timeStep = "annual", groupByDistrict = FALSE)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with \code{readAntares}. It needs
