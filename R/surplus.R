@@ -52,6 +52,9 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
 
   opts <- simOptions(x)
 
+  # Add miscellaneous productions to production variables
+  prodVars <- union(prodVars, intersect(names(x$areas), antaresRead:::pkgEnv$miscNames))
+
   # Check that necessary links are present in the object
   areas <- unique(x$areas$area)
   neededLinks <- getLinks(areas, regexpSelect = FALSE, opts = opts)
