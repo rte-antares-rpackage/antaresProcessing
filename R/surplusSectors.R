@@ -9,14 +9,17 @@
 #'   to contain hourly detailed results of a simulation. Moreover, it must contain
 #'   area data and if thermal sectors are required, cluster data.
 #' @param sectors
-#'   vector containing the name of the sector wor which surplus needs to be
-#'   computed. Possible values are "thermal", "WIND", "SOLAR", "H. ROR", "H. STOR".
-#'   If it contains the value "thermal", then the parameter \code{x} has to contain
-#'   cluster data.
+#'   vector containing the name of the sectors for which surplus needs to be
+#'   computed. Possible values are "thermal" for thermal sectors(nuclear, coal,..),
+#'   "ren" for renewable energie and any column name that can be considered as
+#'   a production (for instance production of virtual areas). It is assumed that
+#'   the cost of these productions is equal to 0 as for renewable energies.
+#'   If the parameter contains the value "thermal", then the parameter
+#'   \code{x} has to contain cluster data.
 #' @inheritParams surplus
 #'
 #' @return
-#' A data.table of class "antaresData". Ir contains one column per sector
+#' A data.table of class "antaresData". It contains one column per sector
 #' containing the surplus of that sector for a given area and timeId.
 #'
 #'
@@ -28,14 +31,19 @@
 #'
 #' @export
 #'
-surplusSectors <- function(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR", "H. STOR"),
+surplusSectors <- function(x, sectors = c("thermal", "ren"),
                            timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
-
   opts <- simOptions(x)
 
-  fatalProdVars <- intersect(sectors, c("WIND", "SOLAR", "H. ROR", "H. STOR"))
+  ren <- c("WIND", "SOLAR", "H. ROR", "H. STOR")
+  if (any(sectors == "ren")) {
+    sectors <- sectors[!sectors == "ren"]
+    sectors <- union(sectors, ren)
+  }
+
+  fatalProdVars <- intersect(sectors, names(x$areas))
   idVars <- .idCols(x$areas)
 
   if (length(fatalProdVars) > 0) {
