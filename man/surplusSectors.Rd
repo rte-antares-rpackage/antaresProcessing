@@ -4,23 +4,31 @@
 \alias{surplusSectors}
 \title{Compute the surplus of sectors}
 \usage{
-surplusSectors(x, sectors = c("thermal", "WIND", "SOLAR", "H. ROR",
-  "H. STOR"), timeStep = "annual", groupByDistrict = FALSE)
+surplusSectors(x, sectors = c("thermal", "ren"), timeStep = "annual",
+  synthesis = FALSE, groupByDistrict = FALSE)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with \code{readAntares}. It needs
 to contain hourly detailed results of a simulation. Moreover, it must contain
 area data and if thermal sectors are required, cluster data.}
 
-\item{sectors}{vector containing the name of the sector wor which surplus needs to be
-computed. Possible values are "thermal", "WIND", "SOLAR", "H. ROR", "H. STOR".
-If it contains the value "thermal", then the parameter \code{x} has to contain
-cluster data.}
+\item{sectors}{vector containing the name of the sectors for which surplus needs to be
+computed. Possible values are "thermal" for thermal sectors(nuclear, coal,..),
+"ren" for renewable energie and any column name that can be considered as
+a production (for instance production of virtual areas). It is assumed that
+the cost of these productions is equal to 0 as for renewable energies.
+If the parameter contains the value "thermal", then the parameter
+\code{x} has to contain cluster data.}
 
 \item{timeStep}{Desired time step for the result.}
+
+\item{synthesis}{If TRUE, average surpluses are returned. Else the function returns surpluses
+per Monte-Carlo scenario.}
+
+\item{groupByDistrict}{If TRUE, results are grouped by district.}
 }
 \value{
-A data.table of class "antaresData". Ir contains one column per sector
+A data.table of class "antaresData". It contains one column per sector
 containing the surplus of that sector for a given area and timeId.
 }
 \description{

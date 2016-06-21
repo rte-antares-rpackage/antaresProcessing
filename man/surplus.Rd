@@ -4,7 +4,8 @@
 \alias{surplus}
 \title{Compute economic surplus}
 \usage{
-surplus(x, timeStep = "annual", groupByDistrict = FALSE)
+surplus(x, timeStep = "annual", synthesis = FALSE,
+  groupByDistrict = FALSE)
 }
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
@@ -12,6 +13,11 @@ surplus(x, timeStep = "annual", groupByDistrict = FALSE)
 connected to these areas. Moreover it needs to have a hourly time step.}
 
 \item{timeStep}{Desired time step for the result.}
+
+\item{synthesis}{If TRUE, average surpluses are returned. Else the function returns surpluses
+per Monte-Carlo scenario.}
+
+\item{groupByDistrict}{If TRUE, results are grouped by district.}
 }
 \value{
 A data.table with the wollowing columns:
@@ -31,9 +37,13 @@ and the global surplus of an area.
 }
 \examples{
 \dontrun{
-mydata <- readAntares(areas = "all", links = "all")
+mydata <- readAntares(areas = "all", links = "all", synthesis = FALSE)
 
-mySurplus <- surplus(mydata)
+surplus(mydata)
+
+surplus(mydata, synthesis = TRUE)
+
+surplus(mydata, synthesis = TRUE, groupByDistrict = TRUE)
 }
 
 }

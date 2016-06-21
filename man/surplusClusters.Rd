@@ -4,14 +4,18 @@
 \alias{surplusClusters}
 \title{Compute the surplus of clusters}
 \usage{
-surplusClusters(x, timeStep = "annual", surplusLastUnit = FALSE)
+surplusClusters(x, timeStep = "annual", synthesis = FALSE,
+  surplusLastUnit = FALSE)
 }
 \arguments{
 \item{x}{An \code{antaresData} object created with \code{readAntares}. It must
 contain an element \code{clusters} and an element \code{areas} with at
 least the column \code{MRG. PRICE}.}
 
-\item{timeStep}{Desired time step for the result}
+\item{timeStep}{Desired time step for the result.}
+
+\item{synthesis}{If TRUE, average surpluses are returned. Else the function returns surpluses
+per Monte-Carlo scenario.}
 
 \item{surplusLastUnit}{Should the surplus of the last unit of a cluster be computed ? If
 \code{TRUE}, then \code{x} must have been created with the option
