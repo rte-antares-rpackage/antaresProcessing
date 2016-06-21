@@ -1,0 +1,13 @@
+Changes in version 0.2 (2016-06-20)
+
+NEW FEATURES:
+* New function 'compare' to compares the surpluses of two simulations.
+* 'surplus' and 'surplusSectors' can now aggregate results by district.
+* 'surplus', 'surplusSectors' and 'surplusClusters' can now compute the average surplus off the Monte-Carlo scnearios.
+* New functions addNetLoad and addRamps that add new columns to an antaresData object.
+* 'surplusClusters' returns a new column "economicGradient".
+* 'surplusClusters' gains a new argument 'surplusLastUnit' to indicate if the function should compute the surplus of last unit or not.
+* Function 'surplus' now distinguishes the production of virtual nodes.
+
+BUGFIXES:
+* When computing the surplus of the last unit of a cluster, 'surplusCLusters' now uses the number of available units instead of the total number of units.
