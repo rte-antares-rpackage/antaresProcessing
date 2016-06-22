@@ -22,7 +22,7 @@
   #reset attributes
   setattr(x, "type", attrs$type)
   setattr(x, "timeStep", attrs$timeStep)
-  setattr(x, "synthesis", FALSE)
+  setattr(x, "synthesis", TRUE)
   setattr(x, "class", attrs$class)
   setattr(x, "opts", attrs$opts)
 

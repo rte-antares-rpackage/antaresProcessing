@@ -4,34 +4,78 @@
 \alias{modulation}
 \title{Compute the modulation of cluster units}
 \usage{
-modulation(x, timeStep = "annual")
+modulation(x, timeStep = "annual", synthesis = FALSE, by = c("cluster",
+  "sector"))
 }
 \arguments{
 \item{x}{An \code{antaresData} object created with \code{readAntares}. It must
-contain the hourly detailed results for clusters}
+contain the hourly detailed results for clusters if \code{by = "cluster}
+or for areas and/or districts if \code{by = "sector"}}
 
-\item{timeStep}{Desired time step for the result}
+\item{timeStep}{Desired time step for the result.}
+
+\item{synthesis}{If TRUE, average surpluses are returned. Else the function returns surpluses
+per Monte-Carlo scenario.}
+
+\item{by}{Should modulations computed by cluster or by sector ? Possible values are
+"sector" and "cluster".}
 }
 \value{
-A data.table of class \code{antaresDataTable} with the following columns:
-\item{area}{Area name.}
-\item{cluster}{Cluster name.}
-\item{timeId}{Time id and other time columns.}
-\item{meanUpWardModulation}{...}
-\item{meanDownWardModulation}{...}
-\item{meanAbsoluteModulation}{...}
-\item{maxUpWardModulation}{...}
-\item{maxDownWardModulation}{...}
-\item{maxAbsoluteModulation}{...}
+A data.table of class \code{antaresDataTable} or a list of such tables with
+the following columns:
+\item{area}{
+  Area name. If \code{byDistrict=TRUE}, this column is replaced by column
+  \code{district}.
+}
+\item{cluster}{
+  Cluster name. If \code{by="sector"}, this column is replaced by column
+  \code{sector}.
+}
+\item{timeId}{
+  Time id and other time columns.
+}
+\item{meanUpWardModulation}{
+  Average upward modulcation of a cluster unit or of the sector.
+}
+\item{meanDownWardModulation}{
+  Average downward modulation of a cluster unit or of the sector.
+}
+\item{meanAbsoluteModulation}{
+  Average absolute modulation of a cluster unit or of the sector.
+}
+\item{maxUpWardModulation}{
+  Maximal upward modulation of a cluster unit or of the sector.
+}
+\item{maxDownWardModulation}{
+  Maximal downward modulation of a cluster unit or of the sector.
+}
+\item{maxAbsoluteModulation}{
+  Maximal absolute modulation of a cluster unit or of the sector.
+}
+
+Notice that if \code{by="cluster"}, the function computes the modulation per
+unit, ie. the modulation of a cluster divided by the number of units of the
+cluster. On the opposite, if \code{by="sector"}, the function returns the
+modulation of the global production of the sector. Moreover, if parameter
+\code{x} contains area and district data, the function returns a list with
+components \code{areas} and \code{districts}.
 }
 \description{
-This function computes the modulation of cluster units.
+This function computes the modulation of cluster units or of sectors.
 }
 \examples{
 \dontrun{
-mydata <- readAntares(clusters = "all")
 
+# Modulation of cluster units
+mydata <- readAntares(clusters = "all", synthesis = FALSE)
 modulation(mydata)
+
+# Modulation of sectors
+mydata <- readAntares(areas = "all", synthesis = FALSE)
+modulation(mydata, by = "sector")
+
+# Modulation of sectors per district
+mydata <- readAntares(districts = "all")
 
 }
 
