@@ -9,7 +9,7 @@ modulation(x, timeStep = "annual", synthesis = FALSE, by = c("cluster",
 }
 \arguments{
 \item{x}{An \code{antaresData} object created with \code{readAntares}. It must
-contain the hourly detailed results for clusters if \code{by = "cluster}
+contain the hourly detailed results for clusters if \code{by = "cluster"}
 or for areas and/or districts if \code{by = "sector"}}
 
 \item{timeStep}{Desired time step for the result.}
@@ -70,13 +70,16 @@ This function computes the modulation of cluster units or of sectors.
 mydata <- readAntares(clusters = "all", synthesis = FALSE)
 modulation(mydata)
 
+# Aggregate Monte-Carlo scenarios
+modulation(mydata, synthesis = TRUE)
+
 # Modulation of sectors
 mydata <- readAntares(areas = "all", synthesis = FALSE)
 modulation(mydata, by = "sector")
 
 # Modulation of sectors per district
 mydata <- readAntares(districts = "all")
-
+modulation(mydata, by = "sector")
 }
 
 }

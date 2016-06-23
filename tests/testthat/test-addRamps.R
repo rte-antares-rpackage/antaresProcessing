@@ -1,41 +1,47 @@
-context("Function addRamps")
+context("Function netLoadRamp")
 
-describe("addRamps", {
+describe("netLoadRamp", {
 
-  it("adds column 'netLoad' to the input data", {
-    mydata <- readAntares("all", timeStep = "monthly", showProgress = FALSE, select = "nostat")
-    addRamps(mydata, ignoreMustRun = TRUE)
-    expect_false(is.null(mydata$netLoadRamp))
-    expect_false(is.null(mydata$balanceRamp))
-    expect_false(is.null(mydata$areaRamp))
+  mydata <- readAntares(areas = "all", districts = "all", links = "all",
+                        synthesis = FALSE, showProgress = FALSE)
+
+  it("returns an antaresDataTable with correct number of lines and columns", {
+    s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE)
+    expect_is(s, "antaresDataTable")
+    expect_equal(nrow(s) / length(simOptions()$mcYears) / (24 * 7 * 52),
+                 nrow(unique(mydata$areas[, .(area)])))
   })
 
 
   it("accepts 'antaresDataList' objects", {
-    mydata <- readAntares(areas = "all", districts = "all", timeStep = "monthly", showProgress = FALSE)
-    addRamps(mydata, ignoreMustRun = TRUE)
+    s <- netLoadRamp(mydata, ignoreMustRun = TRUE)
 
-    expect_is(mydata, "antaresDataList")
-    expect_false(is.null(mydata$areas$areaRamp))
-    expect_false(is.null(mydata$districts$areaRamp))
+    expect_is(s, "antaresDataList")
+    expect_false(is.null(s$areas$areaRamp))
+    expect_false(is.null(s$districts$areaRamp))
+  })
+
+
+  it("creates min and max columns only if timeStep is not hourly or synthesis is true", {
+    s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE)
+    expect_true(is.null(s$minAreaRamp))
+
+    s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE, synthesis = TRUE)
+    expect_false(is.null(s$minAreaRamp))
+
+    s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE, timeStep = "monthly")
+    expect_false(is.null(s$minAreaRamp))
   })
 
 
   it("stops if input does not contain area or district data", {
-    mydata <- readAntares(links="all", timeStep = "monthly", showProgress = FALSE)
-    expect_error(addRamps(mydata, ignoreMustRun = TRUE), "area")
+    expect_error(netLoadRamp(mydata$links, ignoreMustRun = TRUE), "area")
   })
 
-
-  it("stops if input already contains ramps columns", {
-    mydata <- readAntares(areas="all", timeStep = "monthly", showProgress = FALSE)
-    addRamps(mydata, ignoreMustRun = TRUE)
-    expect_error(addRamps(mydata, ignoreMustRun = TRUE))
-  })
 
   it("stops if some 'necesary'BALANCE' column is missing", {
-    mydata <- readAntares(areas="all", timeStep = "monthly", showProgress = FALSE, select = "LOAD")
-    expect_error(addRamps(mydata, ignoreMustRun = TRUE), "missing")
+    mydata <- readAntares(areas="all", showProgress = FALSE, select = "LOAD", synthesis = FALSE)
+    expect_error(netLoadRamp(mydata, ignoreMustRun = TRUE), "missing")
   })
 
 })
