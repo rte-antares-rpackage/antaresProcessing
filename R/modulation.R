@@ -4,7 +4,7 @@
 #'
 #' @param x
 #'   An \code{antaresData} object created with \code{readAntares}. It must
-#'   contain the hourly detailed results for clusters if \code{by = "cluster}
+#'   contain the hourly detailed results for clusters if \code{by = "cluster"}
 #'   or for areas and/or districts if \code{by = "sector"}
 #' @param by
 #'   Should modulations computed by cluster or by sector ? Possible values are
