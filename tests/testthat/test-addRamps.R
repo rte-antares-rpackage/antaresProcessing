@@ -1,5 +1,8 @@
 context("Function netLoadRamp")
 
+source("setup_test_case.R")
+opts <- setSimulationPath(studyPath)
+
 describe("netLoadRamp", {
 
   mydata <- readAntares(areas = "all", districts = "all", links = "all",

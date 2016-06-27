@@ -55,20 +55,27 @@
 #' @export
 #'
 margins <- function(x, ignoreMustRun = FALSE) {
-  x <- .checkColumns(x, list(areas = c("hstorPMaxAvg", "H. ROR", "WIND",
-                                       "SOLAR", "MISC. DTG", "LOAD", "BALANCE"),
-                             clusters = c("thermalAvailability")))
+  if (!is(x, "antaresDataList")) stop ("'x' is not an object of class 'antaresDataList'")
+
+  # Check that x contains the needed variables
+  neededCol <- list(clusters = c("thermalAvailability"))
+  if (!ignoreMustRun) neededCol$clusters <- append(neededCol$clusters, "mustRunPartial")
+
+  neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. DTG", "LOAD", "BALANCE")
+
+  if(is.null(x$areas) & is.null(x$districts)) stop("'x' has to contain 'area' and/or 'district' data")
+  if (!is.null(x$areas)) neededCol$areas <- neededColArea
+  if (!is.null(x$districts)) neededCol$districts <- neededColArea
+
+  x <- .checkColumns(x, neededCol)
 
   opts <- simOptions(x)
-  idVars <- .idCols(x$areas)
 
-  # Create the main table that will be used to compute the margins
-  data <- x$areas[, c(
-                      idVars,
-                      c("hstorPMaxAvg", "H. ROR", "WIND","SOLAR", "MISC. DTG",
-                        "LOAD", "BALANCE")
-                    ),
-                  with = FALSE]
+  if (!is.null(x$areas)) idVars <- .idCols(x$areas)
+  else {
+    idVars <- .idCols(x$districts)
+    idVars[idVars == "district"] <- "area"
+  }
 
   if (ignoreMustRun) {
     clusters <- x$clusters[, c(idVars, "cluster", "thermalAvailability"), with = FALSE]
@@ -78,13 +85,15 @@ margins <- function(x, ignoreMustRun = FALSE) {
                                "mustRunPartial"), with = FALSE]
   }
 
-  # Add cluster available power.
+  # Construt the required intermediary tables
+  #
+  # Cluster available power
   available <- clusters[, .(thermalAvailability = sum(thermalAvailability)),
                         by = idVars]
-  data <- merge(data, available, by = idVars, all.x = TRUE)
-  data[is.na(thermalAvailability), thermalAvailability := 0]
 
-  # Compute step disponibility. It is equal to the transmission capacity of a
+  #Step disponibility
+  #
+  # Step disponibility is equal to the transmission capacity of a
   #link between a real area and a storage area. One has to be carefull with the
   # direction of the link.
   # If there is no pumped storage virtual areas, then step disponibility is equal
@@ -122,15 +131,12 @@ margins <- function(x, ignoreMustRun = FALSE) {
 
     stepCapacity[is.na(pumping), c("pumping", "storage") := 0]
 
-    # add transmission capacities
-    data <- merge(data, stepCapacity, by = idVars)
-
   } else {
-    # If there is no pumped storage node, then pumping and storage are equal to 0
-    data[, c("pumping", "storage") := 0]
+    stepCapacity <- NULL
   }
 
-  # Compute thermalPmin
+  # Thermal minimal power
+  #
   # For a given cluster, Pmin is the maximum of Min Stable Power and partial
   # must run.
   clusterDesc <- readClusterDesc(opts)
@@ -142,21 +148,101 @@ margins <- function(x, ignoreMustRun = FALSE) {
   clusters[, thermalPmin := pmax(min.stable.power, mustRunPartial)]
 
   thermalPmin <- clusters[, .(thermalPmin = sum(thermalPmin)), by = idVars]
-  data <- merge(data, thermalPmin, by = idVars)
 
-  # Finally compute margins !
-  data[,`:=`(
-    isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD,
-    isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD
-  )]
+  # Put all together !
+  intermediaryData <- merge(available, thermalPmin, by = idVars, all = TRUE)
+  if (!is.null(stepCapacity)) {
+    intermediaryData <- merge(intermediaryData, stepCapacity, by = idVars, all = TRUE)
+  } else {
+    intermediaryData[, c("pumping", "storage") := 0]
+  }
 
-  data[, `:=`(
-    interconnectedUpwardMargin = isolatedUpwardMargin - BALANCE,
-    interconnectedDownwardMargin = isolatedDownwardMargin + BALANCE
-  )]
 
-  data[, c(idVars, "thermalAvailability", "thermalPmin", "pumping", "storage",
-           "isolatedUpwardMargin", "isolatedDownwardMargin",
-           "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
-       with = FALSE]
+
+  # Effective computation of the margins
+
+  res <- list()
+
+  if (!is.null(x$areas)) {
+    # Create the main table that will be used to compute the margins
+    data <- x$areas[, c(
+      idVars,
+      c("hstorPMaxAvg", "H. ROR", "WIND","SOLAR", "MISC. DTG",
+        "LOAD", "BALANCE")
+    ),
+    with = FALSE]
+
+    # Add intermediary data
+    data <- merge(data, intermediaryData, by = idVars, all.x = TRUE)
+    data[is.na(thermalAvailability), thermalAvailability := 0]
+    data[is.na(pumping), c("pumping", "storage") := 0]
+    data[is.na(thermalPmin), thermalPmin := 0]
+
+    # Compute margins
+    data[,`:=`(
+      isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD,
+      isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD
+    )]
+
+    data[, `:=`(
+      interconnectedUpwardMargin = isolatedUpwardMargin - BALANCE,
+      interconnectedDownwardMargin = isolatedDownwardMargin + BALANCE
+    )]
+
+    # Add the results to the final object returned by the function
+    res$areas <- data[, c(idVars, "thermalAvailability", "thermalPmin", "pumping", "storage",
+                    "isolatedUpwardMargin", "isolatedDownwardMargin",
+                    "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
+                with = FALSE]
+
+    res$areas <- .setAttrs(res$areas, "margins", opts, timeStep = attr(x, "timeStep"),
+                           synthesis = attr(x, "synthesis"))
+  }
+
+  if (!is.null(x$districts)) {
+    idVars[idVars == "area"] <- "district"
+
+    # Create the main table that will be used to compute the margins
+    data <- x$districts[, c(
+      idVars,
+      c("hstorPMaxAvg", "H. ROR", "WIND","SOLAR", "MISC. DTG",
+        "LOAD", "BALANCE")
+    ),
+    with = FALSE]
+
+    # Add intermediary data
+    data <- merge(data, .groupByDistrict(intermediaryData, opts), by = idVars, all.x = TRUE)
+    data[is.na(thermalAvailability), thermalAvailability := 0]
+    data[is.na(pumping), c("pumping", "storage") := 0]
+    data[is.na(thermalPmin), thermalPmin := 0]
+
+    # Compute margins
+    data[,`:=`(
+      isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD,
+      isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD
+    )]
+
+    data[, `:=`(
+      interconnectedUpwardMargin = isolatedUpwardMargin - BALANCE,
+      interconnectedDownwardMargin = isolatedDownwardMargin + BALANCE
+    )]
+
+    # Add the results to the final object returned by the function
+    res$districts <- data[, c(idVars, "thermalAvailability", "thermalPmin", "pumping", "storage",
+                             "isolatedUpwardMargin", "isolatedDownwardMargin",
+                             "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
+                      with = FALSE]
+
+    res$districts <- .setAttrs(res$districts, "margins", opts, timeStep = attr(x, "timeStep"),
+                               synthesis = attr(x, "synthesis"))
+  }
+
+  if (length(res) == 1) return(res[[1]])
+
+  class(res) <- append(c("antaresDataList", "antaresData"), class(res))
+  attr(res, "timeStep") <- attr(x, "timeStep")
+  attr(res, "synthesis") <- attr(x, "synthesis")
+  attr(res, "opts") <- simOptions(x)
+
+  res
 }
