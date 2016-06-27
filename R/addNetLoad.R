@@ -22,8 +22,13 @@
 #' mydata <- readAntares(areas = "all", synthesis = FALSE, mustRun= TRUE, select = "nostat")
 #'
 #' addNetLoad(mydata)
-#'
 #' names("mydata")
+#'
+#' # Example that minimizes the quantity of data read
+#' mydata <- readAntares(areas = "all", timeStep = "annual",
+#'                       select = c("LOAD", "ROW BAL.", "PSP", "MISC. NDG",
+#'                                  "H. ROR", "WIND", "SOLAR"))
+#' addNetLoad(mydata, ignoreMustRun = TRUE)
 #'
 #' }
 #'

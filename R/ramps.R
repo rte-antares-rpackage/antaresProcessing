@@ -28,9 +28,14 @@
 #' @examples
 #' \dontrun{
 #'
-#'   mydata <- readAntares(areas = "all", mustRun = TRUE, timeStep = "monthly")
+#'   mydata <- readAntares(areas = "all", mustRun = TRUE, synthesis = FALSE)
+#'   addRamps(mydata, timeStep = "annual")
 #'
-#'   addRamps(mydata)
+#'   # Example that minimizes the quantity of data read
+#'   mydata <- readAntares(areas = "all", synthesis = FALSE,
+#'                         select = c("LOAD", "ROW BAL.", "PSP", "MISC. NDG",
+#'                                    "H. ROR", "WIND", "SOLAR", "BALANCE"))
+#'   netLoadRamp(mydata, timeStep = "annual", ignoreMustRun = TRUE)
 #' }
 #'
 #' @export

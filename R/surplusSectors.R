@@ -25,8 +25,21 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares(areas = "all", clusters = "all")
+#' mydata <- readAntares(areas = "all", clusters = "all", synthesis = FALSE)
 #' surplusSectors(mydata)
+#'
+#' # Example that minimizes the quantity of data read
+#' mydata <- readAntares(areas = "all", clusters = "all", synthesis = FALSE,
+#'                       select = c("WIND", "SOLAR", "H. ROR", "H. STOR", "MRG. PRICE"))
+#' surplusSectors(mydata)
+#'
+#' # Note that if the parameter "sectors" is modified, the function can require
+#' # more or less data. For instance, if one only wants surplus for thermal
+#' # sectors:
+#' mydata <- readAntares(areas = "all", clusters = "all", synthesis = FALSE,
+#'                       select = "MRG. PRICE")
+#' surplusSectors(mydata, sectors = "thermal")
+#'
 #' }
 #'
 #' @export

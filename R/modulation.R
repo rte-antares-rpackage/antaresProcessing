@@ -66,7 +66,15 @@
 #' modulation(mydata, by = "sector")
 #'
 #' # Modulation of sectors per district
-#' mydata <- readAntares(districts = "all")
+#' mydata <- readAntares(districts = "all", synthesis = FALSE)
+#' modulation(mydata, by = "sector")
+#'
+#' # Example that minimizes the quantity of data read for getting the modulation
+#' # per area
+#' mydata <- readAntares(areas = "all", synthesis = FALSE,
+#'                       select = c("NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL",
+#'                                  "MIX. FUEL", "MISC. DTG", "H. STOR", "H. ROR",
+#'                                  "SOLAR", "WIND")) # Any subset is accepted
 #' modulation(mydata, by = "sector")
 #' }
 #'
@@ -107,7 +115,7 @@ modulation <- function(x, timeStep = "annual", synthesis = FALSE, by = c("cluste
       if (! attr(x, "type") %in% c("areas", "districts"))
         stop("x needs to contain area or district data.")
 
-      tmp <- .prodPerSector(x, byDistrict)
+      tmp <- .prodPerSector(x)
       return(.computeModulation(tmp, timeStep, synthesis, opts))
 
     } else { # 'x' is an antaresDataList

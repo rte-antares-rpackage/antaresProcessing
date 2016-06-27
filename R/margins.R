@@ -50,6 +50,15 @@
 #'                       thermalAvailabilities = TRUE,
 #'                       hydroStorageMaxPower = TRUE)
 #' margins(mydata, ignoreMustRun = TRUE)
+#'
+#' # Example that minimises the data imported
+#' mydata <- readAntares(areas = "all", clusters = "all",
+#'                       thermalAvailabilities = TRUE,
+#'                       hydroStorageMaxPower = TRUE,
+#'                       select = c("H. ROR", "WIND", "SOLAR", "MISC. DTG",
+#'                                  "LOAD", "BALANCE"))
+#'
+#' margins(mydata, ignoreMustRun = TRUE)
 #' }
 #'
 #' @export
