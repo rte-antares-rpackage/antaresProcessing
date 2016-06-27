@@ -2,6 +2,7 @@
 
 export(addNetLoad)
 export(compare)
+export(margins)
 export(modulation)
 export(netLoadRamp)
 export(surplus)
