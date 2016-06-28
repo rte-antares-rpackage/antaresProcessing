@@ -39,7 +39,7 @@ and/or districts and add them to the data.
 \examples{
 \dontrun{
 
-  mydata <- readAntares(areas = "all", mustRun = TRUE)
+  mydata <- readAntares(areas = "all", mustRun = TRUE, synthesis = FALSE)
   addRamps(mydata, timeStep = "annual")
 
   # Example that minimizes the quantity of data read
