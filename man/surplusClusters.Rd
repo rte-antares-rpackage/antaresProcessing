@@ -5,7 +5,7 @@
 \title{Compute the surplus of clusters}
 \usage{
 surplusClusters(x, timeStep = "annual", synthesis = FALSE,
-  surplusLastUnit = FALSE)
+  surplusLastUnit = FALSE, clusterDesc = NULL)
 }
 \arguments{
 \item{x}{An \code{antaresData} object created with \code{readAntares}. It must
@@ -21,6 +21,10 @@ per Monte-Carlo scenario.}
 \code{TRUE}, then \code{x} must have been created with the option
 \code{thermalAvailabilities=TRUE} in order to contain the required column
 "available units"}
+
+\item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
+If is this parameter is set to \code{NULL} (the default), then the function
+attemps to read the needed data in the same study as \code{x}.}
 }
 \value{
 A data.table of class \code{antaresDataTable} with the following columns:

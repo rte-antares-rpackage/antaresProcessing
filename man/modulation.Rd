@@ -5,7 +5,7 @@
 \title{Compute the modulation of cluster units}
 \usage{
 modulation(x, timeStep = "annual", synthesis = FALSE, by = c("cluster",
-  "sector"))
+  "sector"), clusterDesc = NULL)
 }
 \arguments{
 \item{x}{An \code{antaresData} object created with \code{readAntares}. It must
@@ -19,6 +19,10 @@ per Monte-Carlo scenario.}
 
 \item{by}{Should modulations computed by cluster or by sector ? Possible values are
 "sector" and "cluster".}
+
+\item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
+If is this parameter is set to \code{NULL} (the default), then the function
+attemps to read the needed data in the same study as \code{x}.}
 }
 \value{
 A data.table of class \code{antaresDataTable} or a list of such tables with

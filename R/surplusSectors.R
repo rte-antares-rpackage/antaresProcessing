@@ -17,6 +17,7 @@
 #'   If the parameter contains the value "thermal", then the parameter
 #'   \code{x} has to contain cluster data.
 #' @inheritParams surplus
+#' @inheritParams surplusClusters
 #'
 #' @return
 #' A data.table of class "antaresData". It contains one column per sector
@@ -45,7 +46,8 @@
 #' @export
 #'
 surplusSectors <- function(x, sectors = c("thermal", "ren"),
-                           timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE) {
+                           timeStep = "annual", synthesis = FALSE,
+                           groupByDistrict = FALSE, clusterDesc = NULL) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
   opts <- simOptions(x)
@@ -75,7 +77,7 @@ surplusSectors <- function(x, sectors = c("thermal", "ren"),
     surplusThermal <- surplusClusters(x, "hourly")
 
     # Add column group
-    clusterDesc <- readClusterDesc()
+    if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
     surplusThermal <- merge(surplusThermal,
                             clusterDesc[, .(area, cluster, group)],
                             by = c("area", "cluster"))

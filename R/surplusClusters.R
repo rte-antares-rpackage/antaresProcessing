@@ -13,7 +13,12 @@
 #'   \code{TRUE}, then \code{x} must have been created with the option
 #'   \code{thermalAvailabilities=TRUE} in order to contain the required column
 #'   "available units"
+#' @param clusterDesc
+#'    A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
+#'    If is this parameter is set to \code{NULL} (the default), then the function
+#'    attemps to read the needed data in the same study as \code{x}.
 #' @inheritParams surplus
+#' @inheritParams surplusClusters
 #'
 #' @return
 #' A data.table of class \code{antaresDataTable} with the following columns:
@@ -48,7 +53,8 @@
 #'
 #' @export
 #'
-surplusClusters <- function(x, timeStep="annual", synthesis = FALSE, surplusLastUnit = FALSE) {
+surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
+                            surplusLastUnit = FALSE, clusterDesc = NULL) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
@@ -61,7 +67,7 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE, surplusLast
   if (surplusLastUnit) x <- .checkColumns(x, list(clusters = "availableUnits"))
 
   # Get marginal, fixed and startup cost of the clusters
-  clusterDesc <- readClusterDesc(opts)
+  if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
   clusterDesc[is.na(marginal.cost), marginal.cost := 0]
 
   if(is.null(clusterDesc$fixed.cost)) clusterDesc$fixed.cost <- 0

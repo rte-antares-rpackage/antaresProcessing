@@ -10,6 +10,7 @@
 #'   Should modulations computed by cluster or by sector ? Possible values are
 #'   "sector" and "cluster".
 #' @inheritParams surplus
+#' @inheritParams surplusClusters
 #'
 #' @return
 #' A data.table of class \code{antaresDataTable} or a list of such tables with
@@ -80,7 +81,8 @@
 #'
 #' @export
 #'
-modulation <- function(x, timeStep = "annual", synthesis = FALSE, by = c("cluster", "sector")) {
+modulation <- function(x, timeStep = "annual", synthesis = FALSE,
+                       by = c("cluster", "sector"), clusterDesc = NULL) {
   by <- match.arg(by)
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
@@ -101,7 +103,7 @@ modulation <- function(x, timeStep = "annual", synthesis = FALSE, by = c("cluste
     x <- .checkColumns(x, list(clusters = "production"))
 
     # Add variable unitcount to the table containing the production of clusters
-    clusterDesc <- readClusterDesc(opts)
+    if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
     tmp <- merge(x$clusters,
                  clusterDesc[, .(area, cluster, unitcount)],
                  by = c("area", "cluster"))

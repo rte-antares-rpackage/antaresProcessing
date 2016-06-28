@@ -17,6 +17,7 @@
 #' @param ignoreMustRun
 #'   Should must run productions be ignored in the computation ? It should be
 #'   \code{TRUE} only if the studied areas have no clusters in must run.
+#' @inheritParams surplusClusters
 #'
 #' @return
 #' A data.table of class \code{antaresDataTable} with the following columns:
@@ -63,7 +64,7 @@
 #'
 #' @export
 #'
-margins <- function(x, ignoreMustRun = FALSE) {
+margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   if (!is(x, "antaresDataList")) stop ("'x' is not an object of class 'antaresDataList'")
 
   # Check that x contains the needed variables
@@ -148,7 +149,7 @@ margins <- function(x, ignoreMustRun = FALSE) {
   #
   # For a given cluster, Pmin is the maximum of Min Stable Power and partial
   # must run.
-  clusterDesc <- readClusterDesc(opts)
+  if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
   if (is.null(clusterDesc$min.stable.power)) clusterDesc[, min.stable.power := 0]
   clusterDesc[is.na(min.stable.power), min.stable.power := 0]
 

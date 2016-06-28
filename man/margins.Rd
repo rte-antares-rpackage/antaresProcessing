@@ -4,7 +4,7 @@
 \alias{margins}
 \title{Upward and downward margins for an area}
 \usage{
-margins(x, ignoreMustRun = FALSE)
+margins(x, ignoreMustRun = FALSE, clusterDesc = NULL)
 }
 \arguments{
 \item{x}{an object created with function \code{\link[antaresRead]{readAntares}}. It
@@ -17,6 +17,10 @@ one has to invoke \code{\link[antaresRead]{readAntares}} with parameters:
 
 \item{ignoreMustRun}{Should must run productions be ignored in the computation ? It should be
 \code{TRUE} only if the studied areas have no clusters in must run.}
+
+\item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
+If is this parameter is set to \code{NULL} (the default), then the function
+attemps to read the needed data in the same study as \code{x}.}
 }
 \value{
 A data.table of class \code{antaresDataTable} with the following columns:
