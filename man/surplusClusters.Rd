@@ -31,14 +31,19 @@ A data.table of class \code{antaresDataTable} with the following columns:
 \item{area}{Area name.}
 \item{cluster}{Cluster name.}
 \item{timeId}{Time id and other time columns.}
-\item{surplusPerUnit}{Average surplus per unit of the cluster.}
-\item{surplusLastUnit}{Surplus of the last unit of the cluster.}
-\item{totalSurplus}{Surplus of all units of the cluster.}
+\item{surplusPerUnit}{Average surplus per unit of the cluster.\cr
+ formula = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount }
+\item{surplusLastUnit}{Surplus of the last unit of the cluster.\cr
+formula = (`MRG. PRICE` * prodLastUnit - prodCost / pmax(1, NODU) - startup.cost)}
+\item{totalSurplus}{Surplus of all units of the cluster.\cr
+formula = `MRG. PRICE` * production - prodCost - startupCost}
 \item{nbHoursGeneration}{It represents the production of a cluster expressed
 in number of hours of production at the total capacity of the cluster. It is
-equal to the production divided by the capacity of the cluster.}
+equal to the production divided by the capacity of the cluster.\cr
+formula = production / (unitcount * nominalcapacity)}
 \item{economicGradient}{Economic gradient of a cluster. It is equal to
-the surplus per unit divided by the capacity of a unit.}
+the surplus per unit divided by the capacity of a unit.\cr
+formula = surplusPerUnit / nominalcapacity }
 }
 \description{
 This function computes the surplus of clusters of interest. The surplus of a
