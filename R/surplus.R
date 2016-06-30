@@ -59,8 +59,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
-  prodVars <- c("NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
-                "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR")
+  prodVars <- antaresRead:::pkgEnv$production
 
   x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OV. COST", prodVars),
                              links = "CONG. FEE (ALG.)"))
