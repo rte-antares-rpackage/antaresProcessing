@@ -23,19 +23,25 @@
 #' A data.table of class \code{antaresDataTable} with the following columns:
 #' \item{area}{Area name.}
 #' \item{timeId}{Time id and other time columns.}
-#' \item{thermalAvailability}{sum of thermal availabilities of all cluster of an area.}
+#' \item{thermalAvailability}{sum of thermal availabilities of all cluster of an area.\cr
+#'                      formula = sum(thermalAvailability) }
 #' \item{thermalPmin}{
 #'   Sum of thermal minimum power of all clusters of an area. The minimum power
 #'   of a cluster is defined as the maximum of the partial must run and the
 #'   minimum stable power of the cluster. If \code{ignoreMustRun = TRUE}, it
-#'   is simply equal to the minimum stable power of the cluster.
+#'   is simply equal to the minimum stable power of the cluster.\cr
+#'                      formula = pmax(min.stable.power*unitcount, mustRunPartial)
 #' }
 #' \item{pumping}{}
 #' \item{storage}{}
-#' \item{isolatedUpwardMargin}{}
-#' \item{isolatedDownwardMargin}{}
-#' \item{interconnectedUpwardMargin}{}
-#' \item{interconnectedDownwardMargin}{}
+#' \item{isolatedUpwardMargin}{\cr
+#'                      formula = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD}
+#' \item{isolatedDownwardMargin}{\cr
+#'                      formula = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD}
+#' \item{interconnectedUpwardMargin}{\cr
+#'                      formula = isolatedUpwardMargin - BALANCE}
+#' \item{interconnectedDownwardMargin}{\cr
+#'                      formula = isolatedDownwardMargin + BALANCE}
 #'
 #' @examples
 #' \dontrun{
