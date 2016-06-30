@@ -153,9 +153,9 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   if (is.null(clusterDesc$min.stable.power)) clusterDesc[, min.stable.power := 0]
   clusterDesc[is.na(min.stable.power), min.stable.power := 0]
 
-  clusters <- merge(clusters, clusterDesc[, .(area, cluster, min.stable.power)],
+  clusters <- merge(clusters, clusterDesc[, .(area, cluster, min.stable.power,unitcount)],
                     by = c("area", "cluster"))
-  clusters[, thermalPmin := pmax(min.stable.power, mustRunPartial)]
+  clusters[, thermalPmin := pmax(min.stable.power*unitcount, mustRunPartial)]
 
   thermalPmin <- clusters[, .(thermalPmin = sum(thermalPmin)), by = idVars]
 
