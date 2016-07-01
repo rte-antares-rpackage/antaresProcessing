@@ -114,7 +114,7 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
   }
 
   # Set correct attributes to the result
-  res <- .setAttrs(res, "surplusClusters", opts)
+  res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "surplusClusters")
 
   res <- changeTimeStep(res, timeStep)
   if (synthesis) res <- .aggregateMcYears(res)

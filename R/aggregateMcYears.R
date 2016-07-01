@@ -29,11 +29,5 @@
          by = idVars]
 
   #reset attributes
-  setattr(x, "type", attrs$type)
-  setattr(x, "timeStep", attrs$timeStep)
-  setattr(x, "synthesis", TRUE)
-  setattr(x, "class", attrs$class)
-  setattr(x, "opts", attrs$opts)
-
-  x
+  .addClassAndAttributes(x, TRUE, attrs$timeStep, attrs$opts, type = attrs$type)
 }

@@ -136,7 +136,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   if (groupByDistrict) res <- .groupByDistrict(res, opts)
 
   # Set correct attributes to the result
-  res <- .setAttrs(res, "surplus", opts)
+  res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "surplus")
 
   res <- changeTimeStep(res, timeStep)
 

@@ -133,14 +133,8 @@ modulation <- function(x, timeStep = "annual", synthesis = FALSE,
       }
 
       if (length(res) == 0) stop("x needs to contain area and/or district data and at least one sector production (NUCLEAR, LIGNITE, ...).")
-      if (length(res) == 1) return(res[[1]])
 
-      class(res) <- append(c("antaresDataList", "antaresData"), class(res))
-      attr(res, "timeStep") <- timeStep
-      attr(res, "synthesis") <- synthesis
-      attr(res, "opts") <- opts
-
-      return(res)
+      .addClassAndAttributes(res, synthesis, timeStep, opts, simplify = TRUE)
     }
   }
 }
@@ -159,8 +153,8 @@ modulation <- function(x, timeStep = "annual", synthesis = FALSE,
   res[, maxDownwardModulation := meanDownwardModulation]
   res[, maxAbsoluteModulation := meanAbsoluteModulation]
 
-  # Set correct attributes to the result
-  res <- .setAttrs(res, "modulations", opts)
+  # Set correct attributes to the result and aggregate
+  res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "modulations")
 
   res <- changeTimeStep(res, timeStep, fun = c("mean", "mean", "mean", "max", "max", "max"))
 

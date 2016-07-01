@@ -106,7 +106,7 @@ surplusSectors <- function(x, sectors = c("thermal", "ren"),
   if (groupByDistrict) res <- .groupByDistrict(res, opts)
 
   # Set correct attributes to the result
-  res <- .setAttrs(res, "surplusSectors", opts)
+  res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "surplusSectors")
 
   res <- changeTimeStep(res, timeStep)
 

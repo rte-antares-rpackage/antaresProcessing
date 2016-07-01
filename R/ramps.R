@@ -56,15 +56,10 @@ netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun
     if (!is.null(x$districts)) res$districts <- netLoadRamp(x$districts, timeStep, synthesis, ignoreMustRun)
 
     if (length(res) == 0) stop("'x' needs to contain area and/or district data.")
-    if (length(res) == 1) return(res[[1]])
 
-    class(res) <- append(c("antaresDataList", "antaresData"), class(res))
-    attr(res, "timeStep") <- timeStep
-    attr(res, "synthesis") <- synthesis
-    attr(res, "opts") <- simOptions(x)
+    res <- .addClassAndAttributes(res, synthesis, timeStep, opts, simplify = TRUE)
 
     return(res)
-
   }
 
   if(! attr(x, "type") %in% c("areas", "districts")) stop("'x' does not contain area or district data")
@@ -85,7 +80,7 @@ netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun
 
   x <- x[, c(idVars, "netLoadRamp", "balanceRamp", "areaRamp"), with = FALSE]
 
-  x <- .setAttrs(x, "netLoadRamp", opts)
+  x <- .addClassAndAttributes(x, FALSE, "hourly", opts, type = "netLoadRamp")
 
   if (timeStep != "hourly" | synthesis) {
     x[, `:=`(
