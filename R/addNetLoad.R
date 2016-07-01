@@ -15,7 +15,8 @@
 #'
 #' @return
 #' \code{addNetLoad} modifies its input by adding to it a column "netLoad". For
-#' convenience, it invisibly returns the modified input.
+#' convenience, it invisibly returns the modified input.\cr
+#'              formula = LOAD - `ROW BAL.` - PSP - `MISC. NDG` - `H. ROR` - WIND - SOLAR - mustRunTotal
 #'
 #' @examples
 #' \dontrun{
@@ -62,7 +63,9 @@ addNetLoad <- function(x, ignoreMustRun = FALSE) {
 
   } else {
 
-    stop("Column 'mustRunTotal' is needed but missing. You can use argument 'ignoreMustRun=TRUE' if you do not want to take 'must run' production into account.")
+    if(is.null(x$mustRunTotal)){
+      stop("Column 'mustRunTotal' is needed but missing. You can use argument 'ignoreMustRun=TRUE' if you do not want to take 'must run' production into account.")
+    }
     x[, netLoad := LOAD - `ROW BAL.` - PSP - `MISC. NDG` - `H. ROR` - WIND - SOLAR - mustRunTotal]
   }
 

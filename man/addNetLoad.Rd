@@ -16,7 +16,8 @@ net load.}
 }
 \value{
 \code{addNetLoad} modifies its input by adding to it a column "netLoad". For
-convenience, it invisibly returns the modified input.
+convenience, it invisibly returns the modified input.\cr
+             formula = LOAD - `ROW BAL.` - PSP - `MISC. NDG` - `H. ROR` - WIND - SOLAR - mustRunTotal
 }
 \description{
 This function computes the net load of areas or districts and add it to an

@@ -10,7 +10,7 @@ surplus(x, timeStep = "annual", synthesis = FALSE,
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
 \code{readAntares}. It has to contain some areas and all the links that are
-connected to these areas. Moreover it needs to have a hourly time step.}
+connected to these areas. Moreover it needs to have a hourly time step and detailed results.}
 
 \item{timeStep}{Desired time step for the result.}
 
@@ -23,13 +23,21 @@ per Monte-Carlo scenario.}
 A data.table with the wollowing columns:
 \item{area}{Name of the area.}
 \item{timeId}{timeId and other time columns.}
-\item{consumerSurplus}{The surplus of the consumers of some area.}
-\item{producerSurplus}{The surplus of the producers of some area.}
-\item{storageSurplus}{Surplus created by storage/flexibility areas.}
+\item{consumerSurplus}{The surplus of the consumers of some area.\cr
+                     formula = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD}
+\item{producerSurplus}{The surplus of the producers of some area.\cr
+                     formula = `MRG. PRICE` * production - `OV. COST` \cr
+                     production contains "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL", "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR"}
+\item{storageSurplus}{Surplus created by storage/flexibility areas.\cr
+formula = storage * x$areas$`MRG. PRICE`
+}
 \item{congestionFees}{The congestion fees of a given area. It equals to half
-  the congestion fees of the links connected to that area.}
+  the congestion fees of the links connected to that area.\cr
+  formula = congestionFees / 2
+ }
 \item{globalSurplus}{Sum of the consumer surplus, the producer surplus and
-  the congestion fees.}
+  the congestion fees.\cr
+  formula = consumerSurplus + producerSurplus + storageSurplus + congestionFees}
 }
 \description{
 This function computes the economic surplus for the consumers, the producers
