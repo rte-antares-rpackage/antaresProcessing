@@ -71,16 +71,16 @@ netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun
 
   x <- x[, c(.idCols(x), "BALANCE", "netLoad"), with = FALSE]
 
-  idVars <- setdiff(.idCols(x), "timeId")
+  idVars <- .idCols(x)
 
-  setorderv(x, c(idVars, "timeId"))
+  setorderv(x, idVars)
   x[, `:=`(netLoadRamp = netLoad - shift(netLoad, fill = 0),
            balanceRamp = BALANCE - shift(BALANCE, fill = 0))]
 
   x[timeId == min(timeId), c("netLoadRamp", "balanceRamp") := 0]
   x[, areaRamp := netLoadRamp + balanceRamp]
 
-  x <- x[, c(idVars, "timeId", "netLoadRamp", "balanceRamp", "areaRamp"), with = FALSE]
+  x <- x[, c(idVars, "netLoadRamp", "balanceRamp", "areaRamp"), with = FALSE]
 
   x <- .setAttrs(x, "netLoadRamp", opts)
 

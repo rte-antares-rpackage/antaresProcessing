@@ -85,6 +85,8 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
 
   # Computed variable, fixed and startup costs
   tmp[, prodCost := production * marginal.cost + NODU * fixed.cost]
+
+  setorderv(tmp, .idCols(tmp))
   tmp[, startupCost := pmax(0, NODU - shift(NODU, fill = 0)) * startup.cost]
   tmp[timeId == min(timeId), startupCost := NODU * startup.cost]
 
