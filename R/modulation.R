@@ -171,7 +171,7 @@ modulation <- function(x, timeStep = "annual", synthesis = FALSE,
 #'   data.table of class antaresDataTable with type "areas" or "districts".
 #' @noRd
 .prodPerSector <- function(x) {
-  sectors <- antaresRead:::pkgEnv$production
+  sectors <- pkgEnv$production
 
   sectors <- intersect(sectors, names(x))
   if (length(sectors) == 0) return(NULL)
