@@ -1,3 +1,5 @@
+.neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. DTG", "LOAD", "BALANCE")
+
 #' Upward and downward margins for an area
 #'
 #' This function computes the upward and downward margins for each area at a
@@ -77,11 +79,9 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   neededCol <- list(clusters = c("thermalAvailability"))
   if (!ignoreMustRun) neededCol$clusters <- append(neededCol$clusters, "mustRunPartial")
 
-  neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. DTG", "LOAD", "BALANCE")
-
   if(is.null(x$areas) & is.null(x$districts)) stop("'x' has to contain 'area' and/or 'district' data")
-  if (!is.null(x$areas)) neededCol$areas <- neededColArea
-  if (!is.null(x$districts)) neededCol$districts <- neededColArea
+  if (!is.null(x$areas)) neededCol$areas <- .neededColArea
+  if (!is.null(x$districts)) neededCol$districts <- .neededColArea
 
   x <- .checkColumns(x, neededCol)
 
@@ -173,83 +173,61 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
     intermediaryData[, c("pumping", "storage") := 0]
   }
 
-
-
-  # Effective computation of the margins
-
+  # Effective computation of the margins. The function .computeMargins is
+  # defined below.
   res <- list()
 
   if (!is.null(x$areas)) {
-    # Create the main table that will be used to compute the margins
-    data <- x$areas[, c(
-      idVars,
-      c("hstorPMaxAvg", "H. ROR", "WIND","SOLAR", "MISC. DTG",
-        "LOAD", "BALANCE")
-    ),
-    with = FALSE]
-
-    # Add intermediary data
-    data <- merge(data, intermediaryData, by = idVars, all.x = TRUE)
-    data[is.na(thermalAvailability), thermalAvailability := 0]
-    data[is.na(pumping), c("pumping", "storage") := 0]
-    data[is.na(thermalPmin), thermalPmin := 0]
-
-    # Compute margins
-    data[,`:=`(
-      isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD,
-      isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD
-    )]
-
-    data[, `:=`(
-      interconnectedUpwardMargin = isolatedUpwardMargin - BALANCE,
-      interconnectedDownwardMargin = isolatedDownwardMargin + BALANCE
-    )]
-
-    # Add the results to the final object returned by the function
-    res$areas <- data[, c(idVars, "thermalAvailability", "thermalPmin", "pumping", "storage",
-                    "isolatedUpwardMargin", "isolatedDownwardMargin",
-                    "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
-                with = FALSE]
-
+    res$areas <- .computeMargins(x$areas, intermediaryData)
     attr(res$areas, "type") <- "areaMargins"
   }
 
   if (!is.null(x$districts)) {
-    idVars[idVars == "area"] <- "district"
-
-    # Create the main table that will be used to compute the margins
-    data <- x$districts[, c(
-      idVars,
-      c("hstorPMaxAvg", "H. ROR", "WIND","SOLAR", "MISC. DTG",
-        "LOAD", "BALANCE")
-    ),
-    with = FALSE]
-
-    # Add intermediary data
-    data <- merge(data, .groupByDistrict(intermediaryData, opts), by = idVars, all.x = TRUE)
-    data[is.na(thermalAvailability), thermalAvailability := 0]
-    data[is.na(pumping), c("pumping", "storage") := 0]
-    data[is.na(thermalPmin), thermalPmin := 0]
-
-    # Compute margins
-    data[,`:=`(
-      isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD,
-      isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD
-    )]
-
-    data[, `:=`(
-      interconnectedUpwardMargin = isolatedUpwardMargin - BALANCE,
-      interconnectedDownwardMargin = isolatedDownwardMargin + BALANCE
-    )]
-
-    # Add the results to the final object returned by the function
-    res$districts <- data[, c(idVars, "thermalAvailability", "thermalPmin", "pumping", "storage",
-                             "isolatedUpwardMargin", "isolatedDownwardMargin",
-                             "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
-                      with = FALSE]
-
+    res$districts <- .computeMargins(x$districts, .groupByDistrict(intermediaryData, opts))
     attr(res$districts, "type") <- "districtMargins"
   }
 
   .addClassAndAttributes(res, attr(x, "synthesis"), attr(x, "timeStep"), opts, simplify = TRUE)
 }
+
+
+
+#' Private function used in function "margins".
+#'
+#' @param mainDT
+#'   an antaresDataTable obkect containing areas or districts.
+#' @param additionalDT
+#'   data.table with the same id columns and the same number of rows. It must
+#'   contain columns thermalPmin, pumping, storage and thermalAvailability.
+#'
+#' @noRd
+.computeMargins <- function(mainDT, additionalDT) {
+  idVars <- .idCols(mainDT)
+
+  # Create the main table that will be used to compute the margins
+  data <- mainDT[, c(idVars, .neededColArea), with = FALSE]
+
+  # Add intermediary data
+  data <- merge(data, additionalDT, by = idVars, all.x = TRUE)
+  data[is.na(thermalAvailability), thermalAvailability := 0]
+  data[is.na(pumping), c("pumping", "storage") := 0]
+  data[is.na(thermalPmin), thermalPmin := 0]
+
+  # Compute margins
+  data[,`:=`(
+    isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD,
+    isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD
+  )]
+
+  data[, `:=`(
+    interconnectedUpwardMargin = isolatedUpwardMargin - BALANCE,
+    interconnectedDownwardMargin = isolatedDownwardMargin + BALANCE
+  )]
+
+  data[, c(idVars, "thermalAvailability", "thermalPmin", "pumping", "storage",
+           "isolatedUpwardMargin", "isolatedDownwardMargin",
+           "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
+       with = FALSE]
+}
+
+
