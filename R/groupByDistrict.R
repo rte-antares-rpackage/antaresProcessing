@@ -1,3 +1,24 @@
+#' aggregate a data.table by district
+#'
+#' @param x
+#'   data.table containing at least a column area.
+#' @param opts
+#'   simulation options returned with simOptions()
+#' @param fun
+#'   vector of functions with size equal to the number of columns to aggregate
+#'   (number of columns - number of id columns). If it is of length 1, the
+#'   function is used for all columns.
+#'
+#' @return
+#' A data.table with the same columns as the input except that the column area
+#' is replaced by column district.
+#'
+#' @note
+#' This is a private function that is used in functions like surplus that require
+#' detailed data by area, but user may want aggregated output.
+#'
+#' @noRd
+#'
 .groupByDistrict <- function(x, opts, fun = c(sum)) {
   x <- merge(x, opts$districtsDef, by = "area", allow.cartesian = TRUE)
 

@@ -211,8 +211,7 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
                     "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
                 with = FALSE]
 
-    res$areas <- .setAttrs(res$areas, "margins", opts, timeStep = attr(x, "timeStep"),
-                           synthesis = attr(x, "synthesis"))
+    attr(res$areas, "type") <- "areaMargins"
   }
 
   if (!is.null(x$districts)) {
@@ -249,16 +248,8 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
                              "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
                       with = FALSE]
 
-    res$districts <- .setAttrs(res$districts, "margins", opts, timeStep = attr(x, "timeStep"),
-                               synthesis = attr(x, "synthesis"))
+    attr(res$districts, "type") <- "districtMargins"
   }
 
-  if (length(res) == 1) return(res[[1]])
-
-  class(res) <- append(c("antaresDataList", "antaresData"), class(res))
-  attr(res, "timeStep") <- attr(x, "timeStep")
-  attr(res, "synthesis") <- attr(x, "synthesis")
-  attr(res, "opts") <- simOptions(x)
-
-  res
+  .addClassAndAttributes(res, attr(x, "synthesis"), attr(x, "timeStep"), opts, simplify = TRUE)
 }

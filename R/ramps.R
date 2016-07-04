@@ -56,15 +56,10 @@ netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun
     if (!is.null(x$districts)) res$districts <- netLoadRamp(x$districts, timeStep, synthesis, ignoreMustRun)
 
     if (length(res) == 0) stop("'x' needs to contain area and/or district data.")
-    if (length(res) == 1) return(res[[1]])
 
-    class(res) <- append(c("antaresDataList", "antaresData"), class(res))
-    attr(res, "timeStep") <- timeStep
-    attr(res, "synthesis") <- synthesis
-    attr(res, "opts") <- simOptions(x)
+    res <- .addClassAndAttributes(res, synthesis, timeStep, opts, simplify = TRUE)
 
     return(res)
-
   }
 
   if(! attr(x, "type") %in% c("areas", "districts")) stop("'x' does not contain area or district data")
@@ -74,18 +69,18 @@ netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun
 
   x <- x[, c(.idCols(x), "BALANCE", "netLoad"), with = FALSE]
 
-  idVars <- setdiff(.idCols(x), "timeId")
+  idVars <- .idCols(x)
 
-  setorderv(x, c(idVars, "timeId"))
+  setorderv(x, idVars)
   x[, `:=`(netLoadRamp = netLoad - shift(netLoad, fill = 0),
            balanceRamp = BALANCE - shift(BALANCE, fill = 0))]
 
   x[timeId == min(timeId), c("netLoadRamp", "balanceRamp") := 0]
   x[, areaRamp := netLoadRamp + balanceRamp]
 
-  x <- x[, c(idVars, "timeId", "netLoadRamp", "balanceRamp", "areaRamp"), with = FALSE]
+  x <- x[, c(idVars, "netLoadRamp", "balanceRamp", "areaRamp"), with = FALSE]
 
-  x <- .setAttrs(x, "netLoadRamp", opts)
+  x <- .addClassAndAttributes(x, FALSE, "hourly", opts, type = "netLoadRamp")
 
   if (timeStep != "hourly" | synthesis) {
     x[, `:=`(

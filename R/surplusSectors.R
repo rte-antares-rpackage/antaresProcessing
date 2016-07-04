@@ -52,10 +52,9 @@ surplusSectors <- function(x, sectors = c("thermal", "ren"),
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
   opts <- simOptions(x)
 
-  ren <- antaresRead:::pkgEnv$ren
   if (any(sectors == "ren")) {
     sectors <- sectors[!sectors == "ren"]
-    sectors <- union(sectors, ren)
+    sectors <- union(sectors, pkgEnv$ren)
   }
 
   fatalProdVars <- intersect(sectors, names(x$areas))
@@ -106,7 +105,7 @@ surplusSectors <- function(x, sectors = c("thermal", "ren"),
   if (groupByDistrict) res <- .groupByDistrict(res, opts)
 
   # Set correct attributes to the result
-  res <- .setAttrs(res, "surplusSectors", opts)
+  res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "surplusSectors")
 
   res <- changeTimeStep(res, timeStep)
 

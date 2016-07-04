@@ -59,7 +59,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
-  prodVars <- antaresRead:::pkgEnv$production
+  prodVars <- pkgEnv$production
 
   x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OV. COST", prodVars),
                              links = "CONG. FEE (ALG.)"))
@@ -67,7 +67,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   opts <- simOptions(x)
 
   # Add miscellaneous productions to production variables
-  prodVars <- union(prodVars, intersect(names(x$areas), antaresRead:::pkgEnv$miscNames))
+  prodVars <- union(prodVars, intersect(names(x$areas), pkgEnv$miscNames))
 
   # Check that necessary links are present in the object
   areas <- unique(x$areas$area)
@@ -100,7 +100,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   unsupliedCost <- opts$energyCosts$unserved
 
   # consumer and producer surplus
-  idColsA <- intersect(names(x$areas), antaresRead:::pkgEnv$idVars)
+  idColsA <- .idCol(x$areas)
   res <- x$areas[,append(mget(idColsA),
                          .(consumerSurplus = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD,
                            producerSurplus = `MRG. PRICE` * production - `OV. COST`))]
@@ -122,7 +122,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   links <- rbind(links[, .(area = from, link)], links[, .(area = to, link)])
   links <- links[area %in% areas]
 
-  idColsL <- intersect(names(x$links), antaresRead:::pkgEnv$idVars)
+  idColsL <- .idCols(x$links)
   cong <- merge(links,
                 x$links[, append(mget(idColsL), .(congestionFees = `CONG. FEE (ALG.)`))],
                 by = "link", allow.cartesian = TRUE)
@@ -136,7 +136,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   if (groupByDistrict) res <- .groupByDistrict(res, opts)
 
   # Set correct attributes to the result
-  res <- .setAttrs(res, "surplus", opts)
+  res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "surplus")
 
   res <- changeTimeStep(res, timeStep)
 
