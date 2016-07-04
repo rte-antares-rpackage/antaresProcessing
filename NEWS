@@ -1,3 +1,18 @@
+Changes in version 0.3 (2016-07-04)
+
+BREAKING CHANGES:
+* Function addRamps is replaced by netLoadRamp. It returns a table with the ramps of net load and balance and aggregates them at desired time step or among Monte-Carlo scenarios.
+
+NEW FEATURES:
+* Function "modulation" can now return modulation of sectors per area and per district.
+* New function "margins" to compute upward and downward margins of an area.
+* surplusClusters now returns production costs and start-up costs.
+
+BUGFIXES:
+* Computation of ramps, modulations and costs of last unit was erronous because of bad sorting of data
+
+
+
 Changes in version 0.2 (2016-06-20)
 
 NEW FEATURES:
