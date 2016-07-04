@@ -25,6 +25,8 @@
 #' \item{area}{Area name.}
 #' \item{cluster}{Cluster name.}
 #' \item{timeId}{Time id and other time columns.}
+#' \item{prodCost}{Production costs of the cluster (fixed cost + marginal cost * production)}
+#' \item{startupCost}{Start up costs of the cluster.}
 #' \item{surplusPerUnit}{Average surplus per unit of the cluster.\cr
 #'  formula = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount }
 #' \item{surplusLastUnit}{Surplus of the last unit of the cluster.\cr
@@ -108,8 +110,8 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
                    "nbHoursGeneration", "economicGradient"),
                with = FALSE]
   } else {
-    res <- tmp[, c(idVars, "surplusPerUnit", "totalSurplus","nbHoursGeneration",
-                   "economicGradient"),
+    res <- tmp[, c(idVars, "prodCost", "startupCost", "surplusPerUnit",
+                   "totalSurplus","nbHoursGeneration", "economicGradient"),
                with = FALSE]
   }
 
