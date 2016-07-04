@@ -97,7 +97,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   unsupliedCost <- opts$energyCosts$unserved
 
   # consumer and producer surplus
-  idColsA <- .idCol(x$areas)
+  idColsA <- .idCols(x$areas)
   res <- x$areas[,append(mget(idColsA),
                          .(consumerSurplus = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD,
                            producerSurplus = `MRG. PRICE` * production - `OV. COST`))]
