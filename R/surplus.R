@@ -57,17 +57,14 @@
 #'
 surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE) {
 
-  x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
-
   prodVars <- pkgEnv$production
 
+  x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
   x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OV. COST", prodVars),
                              links = "CONG. FEE (ALG.)"))
 
   opts <- simOptions(x)
 
-  # Add miscellaneous productions to production variables
-  prodVars <- union(prodVars, intersect(names(x$areas), pkgEnv$miscNames))
 
   # Check that necessary links are present in the object
   areas <- unique(x$areas$area)
