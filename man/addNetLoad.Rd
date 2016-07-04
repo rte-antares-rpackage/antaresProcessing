@@ -7,9 +7,9 @@
 addNetLoad(x, ignoreMustRun = FALSE)
 }
 \arguments{
-\item{x}{An \code{antaresData} object created with readAntares. unless
+\item{x}{An \code{antaresData} object created with readAntares. Unless
 \code{ignoreMustRun} is true, it must
-have a column \code{mustRunTotal}.}
+have a column  \code{mustRunTotal}.}
 
 \item{ignoreMustRun}{If \code{TRUE}, the production in must run mode is not substracted to the
 net load.}

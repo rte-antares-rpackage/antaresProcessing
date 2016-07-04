@@ -7,7 +7,7 @@
 margins(x, ignoreMustRun = FALSE, clusterDesc = NULL)
 }
 \arguments{
-\item{x}{an object created with function \code{\link[antaresRead]{readAntares}}. It
+\item{x}{An object created with function \code{\link[antaresRead]{readAntares}}. It
 must contain data for areas and for clusters. More specifically this
 function requires the columns \code{hstorPMaxAvg},
 \code{thermalAvailability} and \code{mustRunPartial}. To get these columns,
@@ -15,7 +15,7 @@ one has to invoke \code{\link[antaresRead]{readAntares}} with parameters:
 \code{mustRun = TRUE, thermalAvailabilities = TRUE, hydroStorageMaxPower = TRUE}.
 (see examples).}
 
-\item{ignoreMustRun}{Should must run productions be ignored in the computation ? It should be
+\item{ignoreMustRun}{Should must run productions be ignored in the computation? It should be
 \code{TRUE} only if the studied areas have no clusters in must run.}
 
 \item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
@@ -26,7 +26,7 @@ attemps to read the needed data in the same study as \code{x}.}
 A data.table of class \code{antaresDataTable} with the following columns:
 \item{area}{Area name.}
 \item{timeId}{Time id and other time columns.}
-\item{thermalAvailability}{sum of thermal availabilities of all cluster of an area.\cr
+\item{thermalAvailability}{Sum of thermal availabilities of all cluster of an area.\cr
                      formula = sum(thermalAvailability) }
 \item{thermalPmin}{
   Sum of thermal minimum power of all clusters of an area. The minimum power

@@ -17,7 +17,7 @@ or for areas and/or districts if \code{by = "sector"}}
 \item{synthesis}{If TRUE, average surpluses are returned. Else the function returns surpluses
 per Monte-Carlo scenario.}
 
-\item{by}{Should modulations computed by cluster or by sector ? Possible values are
+\item{by}{Should modulations computed by cluster or by sector? Possible values are
 "sector" and "cluster".}
 
 \item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
@@ -39,7 +39,7 @@ the following columns:
   Time id and other time columns.
 }
 \item{meanUpWardModulation}{
-  Average upward modulcation of a cluster unit or of the sector.
+  Average upward modulation of a cluster unit or of the sector.
 }
 \item{meanDownWardModulation}{
   Average downward modulation of a cluster unit or of the sector.
@@ -58,11 +58,11 @@ the following columns:
 }
 
 Notice that if \code{by="cluster"}, the function computes the modulation per
-unit, ie. the modulation of a cluster divided by the number of units of the
+unit, ie. The modulation of a cluster divided by the number of units of the
 cluster. On the opposite, if \code{by="sector"}, the function returns the
 modulation of the global production of the sector. Moreover, if parameter
 \code{x} contains area and district data, the function returns a list with
-components \code{areas} and \code{districts}.
+components \code{areas} and  \code{districts}.
 }
 \description{
 This function computes the modulation of cluster units or of sectors.

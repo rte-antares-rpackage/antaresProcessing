@@ -5,7 +5,7 @@
 #'
 #' @param x
 #'   Object of class \code{antaresData} containing data for areas and/or
-#'   districts. it must contain the column \code{BALANCE} and either the column
+#'   districts. It must contain the column \code{BALANCE}  and either the column
 #'   "netLoad" or the columns needed to compute the net load.
 #' @inheritParams surplus
 #'
