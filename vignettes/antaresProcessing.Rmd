@@ -222,14 +222,13 @@ valToCol <- function(x, n = 10, domain = range(x, na.rm = TRUE),
 }
 
 
-# Visualize the difference between two surpluses using barplots
+# Visualize the difference between two simulations using barplots
 #
 # Args:
 # - simulation: simulation name
 #
 plotDiffSurplus <- function(simulation) {
-  sim <- simNames[1]
-  comp <- compare(surplusRef, surpluses[[sim]])
+  comp <- compare(surplusRef, surpluses[[simulation]])
   comp[, district := as.character(district)]
   setorder(comp, - district)
   
@@ -254,6 +253,11 @@ plotDiffSurplus <- function(simulation) {
       font.main = 1, outer = TRUE, cex.main = 2, col.main = "black")
 }
 
+# Visualize the difference of global surplus between two simulations on a map.
+#
+# Args:
+# - simulation: simulation name
+#
 plotMapWithSurplus <- function(simulation, countries) {
   comp <- compare(surplusRef, surpluses[[simulation]])
   countries <- merge(countries, comp, by = "district")
@@ -283,7 +287,6 @@ plotMapWithSurplus <- function(simulation, countries) {
   text(coordinates(countriesWithSurplus),
        labels = labels,
        col = "white", cex = 0.7)
-  
 }
 
 ```
