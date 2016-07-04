@@ -6,9 +6,9 @@
 #' production of clusters in must run mode is also subtracted by default.
 #'
 #' @param x
-#'   An \code{antaresData} object created with readAntares. unless
+#'   An \code{antaresData} object created with readAntares. Unless
 #'   \code{ignoreMustRun} is true, it must
-#'   have a column \code{mustRunTotal}.
+#'   have a column  \code{mustRunTotal}.
 #' @param ignoreMustRun
 #'   If \code{TRUE}, the production in must run mode is not substracted to the
 #'   net load.

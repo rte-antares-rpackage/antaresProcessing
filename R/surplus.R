@@ -16,7 +16,7 @@
 #'   If TRUE, results are grouped by district.
 #'
 #' @return
-#' A data.table with the wollowing columns:
+#' A data.table with the following columns:
 #' \item{area}{Name of the area.}
 #' \item{timeId}{timeId and other time columns.}
 #' \item{consumerSurplus}{The surplus of the consumers of some area.\cr
