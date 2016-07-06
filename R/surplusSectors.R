@@ -45,15 +45,15 @@
 #'
 #' @export
 #'
-surplusSectors <- function(x, sectors = c("thermal", "ren"),
+surplusSectors <- function(x, sectors = c("thermal", "renewable"),
                            timeStep = "annual", synthesis = FALSE,
                            groupByDistrict = FALSE, clusterDesc = NULL) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
   opts <- simOptions(x)
 
-  if (any(sectors == "ren")) {
-    sectors <- sectors[!sectors == "ren"]
+  if (any(sectors == "renewable")) {
+    sectors <- sectors[!sectors == "renewable"]
     sectors <- union(sectors, pkgEnv$ren)
   }
 
