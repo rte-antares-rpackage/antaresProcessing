@@ -36,7 +36,8 @@ test_that("Surpluses are correctly computed", {
   surplus <- surplus(dataCorrected)
 
   data$areas$production <- data$areas[,`H. ROR` + WIND + SOLAR + NUCLEAR + LIGNITE + COAL +
-                                        GAS + OIL + `MIX. FUEL` + `MISC. DTG` + `H. STOR`]
+                                        GAS + OIL + `MIX. FUEL` + `MISC. DTG` + `H. STOR` +
+                                        `MISC. NDG`]
 
   # Consumer surplus
   surplusConsoA <- data$areas[area == "a", sum( (10000 - `MRG. PRICE`) * LOAD)]
@@ -52,7 +53,8 @@ test_that("Surpluses are correctly computed", {
 
   # Storage surplus
   storageSurplusA <- - data$links[link == "a - psp out", sum(mrgPrice * `FLOW LIN.`)] -
-    data$links[link == "a - psp in", sum(mrgPrice * `FLOW LIN.`)]
+    data$links[link == "a - psp in", sum(mrgPrice * `FLOW LIN.`)] +
+    data$areas[area == "a", sum(`MRG. PRICE` * PSP)]
   expect_equal(storageSurplusA, surplus[area == "a", storageSurplus])
 
   # Congestion fees

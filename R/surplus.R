@@ -57,7 +57,7 @@
 #'
 surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE) {
 
-  prodVars <- pkgEnv$production
+  prodVars <- setdiff(pkgEnv$production, "PSP")
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
   x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OV. COST", prodVars),
@@ -100,16 +100,16 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   idColsA <- .idCols(x$areas)
   res <- x$areas[,append(mget(idColsA),
                          .(consumerSurplus = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD,
-                           producerSurplus = `MRG. PRICE` * production - `OV. COST`))]
+                           producerSurplus = `MRG. PRICE` * production - `OV. COST`,
+                           storageSurplus = `MRG. PRICE` * PSP))]
 
   # Compute surplus of storage/flexibility
-  res[, storageSurplus := 0]
 
   if (!is.null(vnodes)) {
     storageVars <- attr(x, "virtualNodes")$storageFlexibility
     if (!is.null(storageVars) && length(storageVars) > 0) {
       storage <- rowSums(x$areas[,storageVars, with = FALSE])
-      res[, storageSurplus := storage * x$areas$`MRG. PRICE`]
+      res[, storageSurplus := storageSurplus + storage * x$areas$`MRG. PRICE`]
     }
   }
 
