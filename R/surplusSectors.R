@@ -49,7 +49,9 @@ surplusSectors <- function(x, sectors = c("thermal", "renewable"),
                            timeStep = "annual", synthesis = FALSE,
                            groupByDistrict = FALSE, clusterDesc = NULL) {
 
-  x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
+  .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
+  x <- .checkColumns(x, list(areas = "MRG. PRICE"))
+
   opts <- simOptions(x)
 
   if (any(sectors == "renewable")) {
@@ -61,7 +63,7 @@ surplusSectors <- function(x, sectors = c("thermal", "renewable"),
   idVars <- .idCols(x$areas)
 
   if (length(fatalProdVars) > 0) {
-    x <- .checkColumns(x, list(areas = c("MRG. PRICE", fatalProdVars)))
+    x <- .checkColumns(x, list(areas = c(fatalProdVars)))
 
     res <- x$areas[, c(idVars, fatalProdVars, "MRG. PRICE"), with = FALSE]
 
