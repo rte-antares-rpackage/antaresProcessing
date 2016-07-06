@@ -70,6 +70,10 @@ surplusSectors <- function(x, sectors = c("thermal", "renewable"),
     for (v in fatalProdVars) res[, c(v) := get(v) * `MRG. PRICE`]
 
     res$`MRG. PRICE` <- NULL
+
+    # Put the result in long format
+    res <- melt(res, id.vars = idVars, variable.name = "sector", value.name = "surplus")
+    res$cost <- 0
   } else {
     res <- NULL
   }
@@ -80,28 +84,17 @@ surplusSectors <- function(x, sectors = c("thermal", "renewable"),
     # Add column group
     if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
     surplusThermal <- merge(surplusThermal,
-                            clusterDesc[, .(area, cluster, group)],
+                            clusterDesc[, .(area, cluster, sector = group)],
                             by = c("area", "cluster"))
 
     # Aggregate by group
-    surplusThermal <- surplusThermal[,.(surplus = sum(totalSurplus)),
-                                     by = c(idVars, "group")]
-
-    formula <- sprintf("%s ~ group", paste(idVars, collapse= " + "))
-    surplusThermal <- dcast(surplusThermal, as.formula(formula),
-                            value.var = "surplus", fill = 0)
+    surplusThermal <- surplusThermal[,.(surplus = sum(totalSurplus),
+                                        cost = sum(variableCost + fixedCost + startupCost)),
+                                     by = c(idVars, "sector")]
 
     if (is.null(res)) res <- surplusThermal
-    else res <- merge(res, surplusThermal, by = idVars, all.x = TRUE)
-
-    # Remove NA values introduced with the previous merge
-    cols <- intersect(names(res), clusterDesc$group)
-    res[is.na(get(cols[1])), c(cols) := 0]
+    else res <- rbind(res, surplusThermal)
   }
-
-  # Add to the name of the columns the prefix "surplus"
-  cols <- setdiff(names(res), idVars)
-  setnames(res, cols, paste0("surplus", cols))
 
   # Group by district
   if (groupByDistrict) res <- .groupByDistrict(res, opts)
