@@ -91,7 +91,11 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
   tmp <- merge(tmp, clusterDesc, by = c("area", "cluster"))
 
   # Computed variable, fixed and startup costs
-  tmp[, prodCost := production * marginal.cost + NODU * fixed.cost]
+  tmp[, `:=`(
+    variableCost = production * marginal.cost,
+    fixedCost = NODU * fixed.cost,
+    prodCost = production * marginal.cost + NODU * fixed.cost
+  )]
 
   setorderv(tmp, .idCols(tmp))
   tmp[, startupCost := pmax(0, NODU - shift(NODU, fill = 0)) * startup.cost]
@@ -110,7 +114,7 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
                    "nbHoursGeneration", "economicGradient"),
                with = FALSE]
   } else {
-    res <- tmp[, c(idVars, "prodCost", "startupCost", "surplusPerUnit",
+    res <- tmp[, c(idVars, "variableCost", "fixedCost", "startupCost", "surplusPerUnit",
                    "totalSurplus","nbHoursGeneration", "economicGradient"),
                with = FALSE]
   }
