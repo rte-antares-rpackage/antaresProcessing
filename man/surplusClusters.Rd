@@ -31,21 +31,40 @@ A data.table of class \code{antaresDataTable} with the following columns:
 \item{area}{Area name.}
 \item{cluster}{Cluster name.}
 \item{timeId}{Time id and other time columns.}
-\item{prodCost}{Production costs of the cluster (fixed cost + marginal cost * production)}
-\item{startupCost}{Start up costs of the cluster.}
-\item{surplusPerUnit}{Average surplus per unit of the cluster.\cr
- formula = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount }
-\item{surplusLastUnit}{Surplus of the last unit of the cluster.\cr
-formula = (`MRG. PRICE` * prodLastUnit - prodCost / pmax(1, NODU) - startup.cost)}
-\item{totalSurplus}{Surplus of all units of the cluster.\cr
-formula = `MRG. PRICE` * production - prodCost - startupCost}
-\item{nbHoursGeneration}{It represents the production of a cluster expressed
-in number of hours of production at the total capacity of the cluster. It is
-equal to the production divided by the capacity of the cluster.\cr
-formula = production / (unitcount * nominalcapacity)}
-\item{economicGradient}{Economic gradient of a cluster. It is equal to
-the surplus per unit divided by the capacity of a unit.\cr
-formula = surplusPerUnit / nominalcapacity }
+\item{variableCost}{
+  Proportional costs of production of the cluster\cr
+  Formula = marginal cost * production
+}
+\item{fixedCost}{
+  Fixed costs of production of the cluster\cr
+  Formula = NODU * fixed cost
+}
+\item{startupCost}{
+  Start up costs of the cluster.
+}
+\item{surplusPerUnit}{
+  Average surplus per unit of the cluster.\cr
+  formula = (`MRG. PRICE` * production - opCost - startupCost) / unitcount
+}
+\item{surplusLastUnit}{
+  Surplus of the last unit of the cluster.\cr
+  formula = (`MRG. PRICE` * prodLastUnit - opCost / pmax(1, NODU) - startup.cost)
+}
+\item{totalSurplus}{
+  Surplus of all units of the cluster.\cr
+  formula = `MRG. PRICE` * production - opCost - startupCost
+}
+\item{nbHoursGeneration}{
+  It represents the production of a cluster expressed
+  in number of hours of production at the total capacity of the cluster. It is
+  equal to the production divided by the capacity of the cluster.\cr
+  formula = production / (unitcount * nominalcapacity)
+}
+\item{economicGradient}{
+  Economic gradient of a cluster. It is equal to
+  the surplus per unit divided by the capacity of a unit.\cr
+  formula = surplusPerUnit / nominalcapacity
+}
 }
 \description{
 This function computes the surplus of clusters of interest. The surplus of a

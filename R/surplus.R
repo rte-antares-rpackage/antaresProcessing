@@ -20,19 +20,24 @@
 #' \item{area}{Name of the area.}
 #' \item{timeId}{timeId and other time columns.}
 #' \item{consumerSurplus}{The surplus of the consumers of some area.\cr
-#'                      formula = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD}
-#' \item{producerSurplus}{The surplus of the producers of some area.\cr
-#'                      formula = `MRG. PRICE` * production - `OV. COST` \cr
-#'                      production contains "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL", "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR"}
-#' \item{storageSurplus}{Surplus created by storage/flexibility areas.\cr
-#' formula = storage * x$areas$`MRG. PRICE`
+#'                      formula = (unsupliedCost[area] - `MRG. PRICE`) * LOAD}
+#' \item{producerSurplus}{
+#'   The surplus of the producers of some area.\cr
+#'   formula = `MRG. PRICE` * production - `OV. COST` \cr
+#'   Production includes "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
+#'   "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR" and "MISC. NDG"
 #' }
-#' \item{congestionFees}{The congestion fees of a given area. It equals to half
+#' \item{storageSurplus}{
+#'   Surplus created by storage/flexibility areas.\cr
+#'   formula = storage * x$areas$`MRG. PRICE`
+#' }
+#' \item{congestionFees}{
+#'   The congestion fees of a given area. It equals to half
 #'   the congestion fees of the links connected to that area.\cr
 #'   formula = congestionFees / 2
 #'  }
-#' \item{globalSurplus}{Sum of the consumer surplus, the producer surplus and
-#'   the congestion fees.\cr
+#' \item{globalSurplus}{
+#'   Sum of the consumer surplus, the producer surplus and the congestion fees.\cr
 #'   formula = consumerSurplus + producerSurplus + storageSurplus + congestionFees}
 #'
 #' @examples
@@ -101,7 +106,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   res <- x$areas[,append(mget(idColsA),
                          .(consumerSurplus = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD,
                            producerSurplus = `MRG. PRICE` * production - `OV. COST`,
-                           storageSurplus = `MRG. PRICE` * PSP))]
+                           pspSurplus = `MRG. PRICE` * PSP))]
 
   # Compute surplus of storage/flexibility
 
@@ -109,8 +114,10 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
     storageVars <- attr(x, "virtualNodes")$storageFlexibility
     if (!is.null(storageVars) && length(storageVars) > 0) {
       storage <- rowSums(x$areas[,storageVars, with = FALSE])
-      res[, storageSurplus := storageSurplus + storage * x$areas$`MRG. PRICE`]
+      res[, storageSurplus := pspSurplus + storage * x$areas$`MRG. PRICE`]
     }
+  } else {
+    res[, storageSurplus := pspSurplus]
   }
 
   # Congestion fees

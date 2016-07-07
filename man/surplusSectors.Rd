@@ -4,7 +4,7 @@
 \alias{surplusSectors}
 \title{Compute the surplus of sectors}
 \usage{
-surplusSectors(x, sectors = c("thermal", "ren"), timeStep = "annual",
+surplusSectors(x, sectors = c("thermal", "renewable"), timeStep = "annual",
   synthesis = FALSE, groupByDistrict = FALSE, clusterDesc = NULL)
 }
 \arguments{

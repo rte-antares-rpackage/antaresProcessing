@@ -25,21 +25,40 @@
 #' \item{area}{Area name.}
 #' \item{cluster}{Cluster name.}
 #' \item{timeId}{Time id and other time columns.}
-#' \item{prodCost}{Production costs of the cluster (fixed cost + marginal cost * production)}
-#' \item{startupCost}{Start up costs of the cluster.}
-#' \item{surplusPerUnit}{Average surplus per unit of the cluster.\cr
-#'  formula = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount }
-#' \item{surplusLastUnit}{Surplus of the last unit of the cluster.\cr
-#' formula = (`MRG. PRICE` * prodLastUnit - prodCost / pmax(1, NODU) - startup.cost)}
-#' \item{totalSurplus}{Surplus of all units of the cluster.\cr
-#' formula = `MRG. PRICE` * production - prodCost - startupCost}
-#' \item{nbHoursGeneration}{It represents the production of a cluster expressed
-#' in number of hours of production at the total capacity of the cluster. It is
-#' equal to the production divided by the capacity of the cluster.\cr
-#' formula = production / (unitcount * nominalcapacity)}
-#' \item{economicGradient}{Economic gradient of a cluster. It is equal to
-#' the surplus per unit divided by the capacity of a unit.\cr
-#' formula = surplusPerUnit / nominalcapacity }
+#' \item{variableCost}{
+#'   Proportional costs of production of the cluster\cr
+#'   Formula = marginal cost * production
+#' }
+#' \item{fixedCost}{
+#'   Fixed costs of production of the cluster\cr
+#'   Formula = NODU * fixed cost
+#' }
+#' \item{startupCost}{
+#'   Start up costs of the cluster.
+#' }
+#' \item{surplusPerUnit}{
+#'   Average surplus per unit of the cluster.\cr
+#'   formula = (`MRG. PRICE` * production - opCost - startupCost) / unitcount
+#' }
+#' \item{surplusLastUnit}{
+#'   Surplus of the last unit of the cluster.\cr
+#'   formula = (`MRG. PRICE` * prodLastUnit - opCost / pmax(1, NODU) - startup.cost)
+#' }
+#' \item{totalSurplus}{
+#'   Surplus of all units of the cluster.\cr
+#'   formula = `MRG. PRICE` * production - opCost - startupCost
+#' }
+#' \item{nbHoursGeneration}{
+#'   It represents the production of a cluster expressed
+#'   in number of hours of production at the total capacity of the cluster. It is
+#'   equal to the production divided by the capacity of the cluster.\cr
+#'   formula = production / (unitcount * nominalcapacity)
+#' }
+#' \item{economicGradient}{
+#'   Economic gradient of a cluster. It is equal to
+#'   the surplus per unit divided by the capacity of a unit.\cr
+#'   formula = surplusPerUnit / nominalcapacity
+#' }
 #'
 #' @examples
 #' \dontrun{
@@ -94,22 +113,22 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
   tmp[, `:=`(
     variableCost = production * marginal.cost,
     fixedCost = NODU * fixed.cost,
-    prodCost = production * marginal.cost + NODU * fixed.cost
+    opCost = production * marginal.cost + NODU * fixed.cost
   )]
 
   setorderv(tmp, .idCols(tmp))
   tmp[, startupCost := pmax(0, NODU - shift(NODU, fill = 0)) * startup.cost]
   tmp[timeId == min(timeId), startupCost := NODU * startup.cost]
 
-  tmp[, `:=`(surplusPerUnit = (`MRG. PRICE` * production - prodCost - startupCost) / unitcount,
-             totalSurplus = `MRG. PRICE` * production - prodCost - startupCost,
+  tmp[, `:=`(surplusPerUnit = (`MRG. PRICE` * production - opCost - startupCost) / unitcount,
+             totalSurplus = `MRG. PRICE` * production - opCost - startupCost,
              nbHoursGeneration = production / (unitcount * nominalcapacity))]
 
   tmp[, economicGradient := surplusPerUnit / nominalcapacity]
 
   if (surplusLastUnit) {
     tmp[, prodLastUnit := pmax(0, (NODU == availableUnits) * (production - nominalcapacity * (NODU - 1)))]
-    tmp[, surplusLastUnit := (prodLastUnit > 0) * (`MRG. PRICE` * prodLastUnit - prodCost / pmax(1, NODU) - startup.cost * (startupCost > 0))]
+    tmp[, surplusLastUnit := (prodLastUnit > 0) * (`MRG. PRICE` * prodLastUnit - opCost / pmax(1, NODU) - startup.cost * (startupCost > 0))]
     res <- tmp[, c(idVars, "surplusPerUnit", "surplusLastUnit", "totalSurplus",
                    "nbHoursGeneration", "economicGradient"),
                with = FALSE]
