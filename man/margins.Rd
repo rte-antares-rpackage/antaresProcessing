@@ -38,13 +38,17 @@ A data.table of class \code{antaresDataTable} with the following columns:
 \item{pumping}{}
 \item{storage}{}
 \item{isolatedUpwardMargin}{\cr
-                     formula = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD}
+  formula = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+}
 \item{isolatedDownwardMargin}{\cr
-                     formula = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD}
+  formula = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+}
 \item{interconnectedUpwardMargin}{\cr
-                     formula = isolatedUpwardMargin - BALANCE}
+  formula = isolatedUpwardMargin - BALANCE
+}
 \item{interconnectedDownwardMargin}{\cr
-                     formula = isolatedDownwardMargin + BALANCE}
+  formula = isolatedDownwardMargin + BALANCE
+}
 }
 \description{
 This function computes the upward and downward margins for each area at a
@@ -72,7 +76,7 @@ margins(mydata, ignoreMustRun = TRUE)
 mydata <- readAntares(areas = "all", clusters = "all",
                       thermalAvailabilities = TRUE,
                       hydroStorageMaxPower = TRUE,
-                      select = c("H. ROR", "WIND", "SOLAR", "MISC. DTG",
+                      select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG",
                                  "LOAD", "BALANCE"))
 
 margins(mydata, ignoreMustRun = TRUE)

@@ -1,4 +1,4 @@
-.neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. DTG", "LOAD", "BALANCE")
+.neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE")
 
 #' Upward and downward margins for an area
 #'
@@ -37,13 +37,17 @@
 #' \item{pumping}{}
 #' \item{storage}{}
 #' \item{isolatedUpwardMargin}{\cr
-#'                      formula = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD}
+#'   formula = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+#' }
 #' \item{isolatedDownwardMargin}{\cr
-#'                      formula = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD}
+#'   formula = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+#' }
 #' \item{interconnectedUpwardMargin}{\cr
-#'                      formula = isolatedUpwardMargin - BALANCE}
+#'   formula = isolatedUpwardMargin - BALANCE
+#' }
 #' \item{interconnectedDownwardMargin}{\cr
-#'                      formula = isolatedDownwardMargin + BALANCE}
+#'   formula = isolatedDownwardMargin + BALANCE
+#' }
 #'
 #' @examples
 #' \dontrun{
@@ -64,7 +68,7 @@
 #' mydata <- readAntares(areas = "all", clusters = "all",
 #'                       thermalAvailabilities = TRUE,
 #'                       hydroStorageMaxPower = TRUE,
-#'                       select = c("H. ROR", "WIND", "SOLAR", "MISC. DTG",
+#'                       select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG",
 #'                                  "LOAD", "BALANCE"))
 #'
 #' margins(mydata, ignoreMustRun = TRUE)
@@ -215,8 +219,8 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
 
   # Compute margins
   data[,`:=`(
-    isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD,
-    isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. DTG` - LOAD
+    isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD,
+    isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
   )]
 
   data[, `:=`(
