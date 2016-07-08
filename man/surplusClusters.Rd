@@ -54,11 +54,10 @@ A data.table of class \code{antaresDataTable} with the following columns:
   Surplus of all units of the cluster.\cr
   formula = `MRG. PRICE` * production - opCost - startupCost
 }
-\item{nbHoursGeneration}{
-  It represents the production of a cluster expressed
-  in number of hours of production at the total capacity of the cluster. It is
-  equal to the production divided by the capacity of the cluster.\cr
-  formula = production / (unitcount * nominalcapacity)
+\item{loadFactor}{
+  Average proportion of the installed capacity of a cluster that is
+  effectively used.\cr
+  formula = mean(production) / (unitcount * nominalcapacity)
 }
 \item{economicGradient}{
   Economic gradient of a cluster. It is equal to
