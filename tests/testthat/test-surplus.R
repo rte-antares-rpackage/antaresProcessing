@@ -61,8 +61,12 @@ test_that("Surpluses are correctly computed", {
   congestionFeesA <- 1/2 * data$links[link == "a - b", sum(`CONG. FEE (ALG.)`)]
   expect_equal(congestionFeesA, surplus[area == "a", congestionFees])
 
+  # ROW Balance
+  rowSurplusA <- data$areas[area == "a", sum(`MRG. PRICE` * `ROW BAL.`)]
+  expect_equal(rowSurplusA, surplus[area == "a", rowBalanceSurplus])
+
   # Total surplus
-  expect_equal(surplusConsoA + surplusProdA + storageSurplusA + congestionFeesA,
+  expect_equal(surplusConsoA + surplusProdA + storageSurplusA + congestionFeesA + rowSurplusA,
                surplus[area == "a", globalSurplus])
 })
 

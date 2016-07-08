@@ -31,6 +31,10 @@ A data.table with the following columns:
   Production includes "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
   "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR" and "MISC. NDG"
 }
+\item{rowBalanceSurplus}{
+  Surplus of the ROW balance.\cr
+  Formula: `MRG. PRICE` * `ROW BAL.`
+}
 \item{storageSurplus}{
   Surplus created by storage/flexibility areas.\cr
   formula = storage * x$areas$`MRG. PRICE`
@@ -42,7 +46,7 @@ A data.table with the following columns:
  }
 \item{globalSurplus}{
   Sum of the consumer surplus, the producer surplus and the congestion fees.\cr
-  formula = consumerSurplus + producerSurplus + storageSurplus + congestionFees}
+  formula = consumerSurplus + producerSurplus + storageSurplus + congestionFees + rowBalanceSurplus}
 }
 \description{
 This function computes the economic surplus for the consumers, the producers

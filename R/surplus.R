@@ -27,6 +27,10 @@
 #'   Production includes "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
 #'   "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR" and "MISC. NDG"
 #' }
+#' \item{rowBalanceSurplus}{
+#'   Surplus of the ROW balance.\cr
+#'   Formula: `MRG. PRICE` * `ROW BAL.`
+#' }
 #' \item{storageSurplus}{
 #'   Surplus created by storage/flexibility areas.\cr
 #'   formula = storage * x$areas$`MRG. PRICE`
@@ -38,7 +42,7 @@
 #'  }
 #' \item{globalSurplus}{
 #'   Sum of the consumer surplus, the producer surplus and the congestion fees.\cr
-#'   formula = consumerSurplus + producerSurplus + storageSurplus + congestionFees}
+#'   formula = consumerSurplus + producerSurplus + storageSurplus + congestionFees + rowBalanceSurplus}
 #'
 #' @examples
 #' \dontrun{
@@ -65,7 +69,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   prodVars <- setdiff(pkgEnv$production, "PSP")
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
-  x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OV. COST", prodVars),
+  x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OV. COST", prodVars, "PSP", "ROW BAL."),
                              links = "CONG. FEE (ALG.)"))
 
   opts <- simOptions(x)
@@ -101,24 +105,21 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   # the unsuplied costs of the corresponding areas
   unsupliedCost <- opts$energyCosts$unserved
 
-  # consumer and producer surplus
+  # consumer, producer surplus and row balance surplus
   idColsA <- .idCols(x$areas)
   res <- x$areas[,append(mget(idColsA),
                          .(consumerSurplus = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD,
                            producerSurplus = `MRG. PRICE` * production - `OV. COST`,
-                           pspSurplus = `MRG. PRICE` * PSP))]
+                           rowBalanceSurplus = `MRG. PRICE` * `ROW BAL.`))]
 
   # Compute surplus of storage/flexibility
-
-  if (!is.null(vnodes)) {
-    storageVars <- attr(x, "virtualNodes")$storageFlexibility
-    if (!is.null(storageVars) && length(storageVars) > 0) {
-      storage <- rowSums(x$areas[,storageVars, with = FALSE])
-      res[, storageSurplus := pspSurplus + storage * x$areas$`MRG. PRICE`]
-    }
+  if (is.null(vnodes)) {
+    storageVars <- "PSP"
   } else {
-    res[, storageSurplus := pspSurplus]
+    storageVars <- c("PSP", attr(x, "virtualNodes")$storageFlexibility)
   }
+  storage <- rowSums(x$areas[,storageVars, with = FALSE])
+  res[, storageSurplus := storage * x$areas$`MRG. PRICE`]
 
   # Congestion fees
   links <- tstrsplit(neededLinks, split = " - ")
@@ -136,7 +137,8 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   res <- merge(res, cong, by = idColsA)
 
   # Global surplus
-  res[, globalSurplus := consumerSurplus + producerSurplus + storageSurplus + congestionFees]
+  res[, globalSurplus := consumerSurplus + producerSurplus + storageSurplus +
+                           congestionFees + rowBalanceSurplus]
   if (groupByDistrict) res <- .groupByDistrict(res, opts)
 
   # Set correct attributes to the result
