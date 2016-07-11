@@ -7,7 +7,7 @@
 #'   Object of class \code{antaresData} created with function
 #'   \code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
 #'   results for clusters and has to contain the columns
-#'   \code{mustRunModulation}.
+#'   \code{minGenModulation}.
 #' @inheritParams surplus
 #' @inheritParams surplusClusters
 #'
@@ -52,15 +52,15 @@ loadFactor <- function(x, timeStep = "annual", synthesis = FALSE,
                        clusterDesc = NULL) {
 
   .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
-  x <- .checkColumns(x, list(clusters = c("production", "NODU", "mustRunModulation")))
-  x$cluster[is.na(mustRunModulation), mustRunModulation := 0]
+  x <- .checkColumns(x, list(clusters = c("production", "NODU", "minGenModulation")))
+  x$cluster[is.na(minGenModulation), minGenModulation := 0]
   opts <- simOptions(x)
   idVars <- .idCols(x$clusters)
 
   if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
   .fillClusterDesc(clusterDesc, min.stable.power = 0, spinning = 0)
 
-  tmp <- merge(x$cluster[, c(idVars, "production", "NODU", "mustRunModulation"), with = FALSE],
+  tmp <- merge(x$cluster[, c(idVars, "production", "NODU", "minGenModulation"), with = FALSE],
                clusterDesc[, .(area, cluster, min.stable.power, nominalcapacity, unitcount, spinning)],
                by = c("area", "cluster"))
 
@@ -68,7 +68,7 @@ loadFactor <- function(x, timeStep = "annual", synthesis = FALSE,
     loadFactor = production / (nominalcapacity * unitcount),
     propHoursMinGen = ifelse(
       production > 0 & production == pmax(min.stable.power * NODU,
-                                          mustRunModulation * nominalcapacity * unitcount),
+                                          minGenModulation * nominalcapacity * unitcount),
       1,
       0
     ),
