@@ -160,8 +160,7 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   # For a given cluster, Pmin is the maximum of Min Stable Power and partial
   # must run.
   if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
-  if (is.null(clusterDesc$min.stable.power)) clusterDesc[, min.stable.power := 0]
-  clusterDesc[is.na(min.stable.power), min.stable.power := 0]
+  .fillClusterDesc(clusterDesc, min.stable.power = 0)
 
   clusters <- merge(clusters, clusterDesc[, .(area, cluster, min.stable.power,unitcount)],
                     by = c("area", "cluster"))

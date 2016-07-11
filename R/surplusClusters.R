@@ -93,13 +93,7 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
 
   # Get marginal, fixed and startup cost of the clusters
   if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
-  clusterDesc[is.na(marginal.cost), marginal.cost := 0]
-
-  if(is.null(clusterDesc$fixed.cost)) clusterDesc$fixed.cost <- 0
-  clusterDesc[is.na(fixed.cost), fixed.cost := 0]
-
-  if(is.null(clusterDesc$startup.cost)) clusterDesc$startup.cost <- 0
-  clusterDesc[is.na(startup.cost), startup.cost := 0]
+  .fillClusterDesc(clusterDesc, marginal.cost = 0, fixed.cost = 0, startup.cost = 0)
 
   idVars <- .idCols(x$clusters)
 
@@ -121,7 +115,8 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
 
   tmp[, `:=`(surplusPerUnit = (`MRG. PRICE` * production - opCost - startupCost) / unitcount,
              totalSurplus = `MRG. PRICE` * production - opCost - startupCost,
-             loadFactor = production / (unitcount * nominalcapacity))]
+             loadFactor = production / (unitcount * nominalcapacity),
+             nbHoursPMax = production == round(nominalcapacity * unitcount))]
 
   tmp[, economicGradient := surplusPerUnit / nominalcapacity]
 
