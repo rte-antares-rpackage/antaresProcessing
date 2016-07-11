@@ -66,7 +66,8 @@ surplus(mydata, synthesis = TRUE, groupByDistrict = TRUE)
 mydata <- readAntares(areas = "all", links = "all", synthesis = FALSE,
                       select = c("LOAD", "MRG. PRICE", "OV. COST", "CONG. FEE (ALG.)",
                                  "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
-                                 "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR"))
+                                 "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR",
+                                 "MISC. NDG", "PSP", "ROW BAL."))
 surplus(mydata)
 }
 
