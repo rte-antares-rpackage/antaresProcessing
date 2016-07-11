@@ -48,11 +48,6 @@
 #'   Surplus of all units of the cluster.\cr
 #'   formula = `MRG. PRICE` * production - opCost - startupCost
 #' }
-#' \item{loadFactor}{
-#'   Average proportion of the installed capacity of a cluster that is
-#'   effectively used.\cr
-#'   formula = mean(production) / (unitcount * nominalcapacity)
-#' }
 #' \item{economicGradient}{
 #'   Economic gradient of a cluster. It is equal to
 #'   the surplus per unit divided by the capacity of a unit.\cr
@@ -115,7 +110,6 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
 
   tmp[, `:=`(surplusPerUnit = (`MRG. PRICE` * production - opCost - startupCost) / unitcount,
              totalSurplus = `MRG. PRICE` * production - opCost - startupCost,
-             loadFactor = production / (unitcount * nominalcapacity),
              nbHoursPMax = production == round(nominalcapacity * unitcount))]
 
   tmp[, economicGradient := surplusPerUnit / nominalcapacity]
@@ -124,18 +118,18 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
     tmp[, prodLastUnit := pmax(0, (NODU == availableUnits) * (production - nominalcapacity * (NODU - 1)))]
     tmp[, surplusLastUnit := (prodLastUnit > 0) * (`MRG. PRICE` * prodLastUnit - opCost / pmax(1, NODU) - startup.cost * (startupCost > 0))]
     res <- tmp[, c(idVars, "surplusPerUnit", "surplusLastUnit", "totalSurplus",
-                   "loadFactor", "economicGradient"),
+                   "economicGradient"),
                with = FALSE]
   } else {
     res <- tmp[, c(idVars, "variableCost", "fixedCost", "startupCost", "surplusPerUnit",
-                   "totalSurplus","loadFactor", "economicGradient"),
+                   "totalSurplus", "economicGradient"),
                with = FALSE]
   }
 
   # Set correct attributes to the result
   res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "surplusClusters")
 
-  res <- changeTimeStep(res, timeStep, fun = c("sum", "sum", "sum", "sum", "sum", "mean", "sum"))
+  res <- changeTimeStep(res, timeStep)
   if (synthesis) res <- .aggregateMcYears(res)
 
   res
