@@ -1,3 +1,12 @@
+Changes in version 0.4 (2016-07-18)
+
+NEW FEATURES:
+* Function 'surplusClusters' now returns fixed and variable costs of production.
+* Function "surplusSectors" now returns columns "sector", "surplus" and "cost" instead of one column per sector.
+* ROW balance is now included in the computation of the surplus of an area. A new column "rowBalanceSurplus is non available."
+*New function "loadFactor". It returns the load factor of a cluster and the time at Pmin and at Pmax.
+
+
 Changes in version 0.3 (2016-07-04)
 
 BREAKING CHANGES:

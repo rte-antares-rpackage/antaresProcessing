@@ -1,8 +1,8 @@
 Package: antaresProcessing
 Type: Package
 Title: Antares results processing
-Version: 0.3.0
-Date: 2016-07-04
+Version: 0.4.0
+Date: 2016-07-18
 Author: Francois Guillem <francois.guillem@rte-france.com>
 Maintainer: Francois Guillem <francois.guillem@rte-france.com>
 Description:
@@ -11,7 +11,7 @@ Description:
 License: rte
 LazyData: TRUE
 Depends:
-    antaresRead (>= 0.9.0)
+    antaresRead (>= 0.10.0)
 Imports:
     data.table
 Suggests:
