@@ -8,15 +8,16 @@
 #' @param x
 #'   an object of class \code{antaresData} created with
 #'   \code{\link[antaresRead]{readAntares}} and containing detailed results of
-#'   an Antares simulation
+#'   an Antares simulation.
 #' @param ...
 #'   Additional parameters indicating which additional statistics to produce.
-#'   See details to see how to specify them
+#'   See details to see how to specify them.
 #'
 #' @return
 #' Synthetic version of the input data. It has the same structure as \code{x}
 #' except that column \code{mcYear} has been removed. All variables are
-#' averaged across Monte-Carlo scenarios.
+#' averaged across Monte-Carlo scenarios and eventually some additional columns
+#' have been added corresponding to the requested custom statistics.
 #'
 #' @details
 #' Additional statistics can be asked in three different ways:
@@ -69,7 +70,7 @@ synthesize <- function(x, ...) {
 
   if (is(x, "antaresDataList")) {
     for (n in names(x)) {
-      x[[n]] <- synthetise(x[[n]], ...)
+      x[[n]] <- synthesize(x[[n]], ...)
     }
     return(x)
   }
@@ -80,23 +81,28 @@ synthesize <- function(x, ...) {
   variables <- setdiff(names(x), idVars)
   attrs <- attributes(x)
 
-  # Compute average of each column
-  res <- x[, lapply(.SD, mean), by = idVars]
-  .addClassAndAttributes(res, synthesis = FALSE, timeStep = attrs$timeStep,
+  # Compute average values of each column
+  res <- suppressWarnings(x[, lapply(.SD, mean), by = idVars])
+  .addClassAndAttributes(res, synthesis = TRUE, timeStep = attrs$timeStep,
                          opts = attrs$opts, type = attrs$type)
 
-  # Compute custom statistics
+  # Determine the list of custom statistics to compute for each variable in the
+  # input data. aggFun contains one element per variable which is a named list
+  # of variables
   args <- list(...)
 
   if (length(args) == 0) return(res)
 
   aggFun <- vector("list", length(variables))
   names(aggFun) <- variables
+
+  # When arguments are named, the name of the argument is used as a prefix for
+  # the corresponding custom variable
   functionNames <- names(args)
   if (is.null(functionNames)) functionNames <- rep("", length(args))
 
+  # Register a custom statistic function for a set of variables.
   addFunction <- function(fun, prefix, to) {
-    if(is.null(to) || is.na(to)) to <- variables
     for (v in to) {
       if (is.null(aggFun[[v]])) {
         aggFun[[v]] <<- list()
@@ -105,6 +111,7 @@ synthesize <- function(x, ...) {
     }
   }
 
+  # Loop over arguments
   for (i in 1:length(args)) {
     f <- args[[i]]
     if (is.character(f)) {
@@ -135,21 +142,26 @@ synthesize <- function(x, ...) {
     }
   }
 
+  # Keep only variables for wich we want to compute custom statistics.
   empty <- sapply(aggFun, is.null)
   aggFun <- aggFun[!empty]
 
+  # Name of the custom columns: prefix + "_" + variable name
   varNames <- lapply(names(aggFun), function(n) paste0(names(aggFun[[n]]), n))
   varNames <- do.call(c, varNames)
 
+  # Compute the custom statistics
   customStats <- x[, as.list(do.call(c, mapply(function(v, funs) {lapply(funs, function(f) f(v))},
                                                v = .SD, funs = aggFun))),
                    keyby = idVars, .SDcols = names(aggFun)]
 
   setnames(customStats, names(customStats), c(idVars, varNames))
 
+  # Merge with average statistics
   res <- merge(res, customStats, by = idVars)
 
-  # Modify order of the column
+  # Modify order of the columns in order to group columns corresponding to the
+  # same variable.
   colnames <- lapply(variables, function(n) {
     paste0(c("", names(aggFun[[n]])), n)
   })
