@@ -10,7 +10,7 @@ loadFactor(x, timeStep = "annual", synthesis = FALSE, clusterDesc = NULL)
 \item{x}{Object of class \code{antaresData} created with function
 \code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
 results for clusters and has to contain the columns
-\code{mustRunModulation}.}
+\code{minGenModulation}.}
 
 \item{timeStep}{Desired time step for the result.}
 
