@@ -83,7 +83,7 @@ loadFactor <- function(x, timeStep = "annual", synthesis = FALSE,
   res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "loadFactor")
 
   res <- changeTimeStep(res, timeStep, fun = "mean")
-  if (synthesis) res <- .aggregateMcYears(res)
+  if (synthesis) res <- synthesize(res)
 
   res
 }

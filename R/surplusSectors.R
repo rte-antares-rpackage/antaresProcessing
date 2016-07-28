@@ -104,7 +104,7 @@ surplusSectors <- function(x, sectors = c("thermal", "renewable"),
 
   res <- changeTimeStep(res, timeStep)
 
-  if (synthesis) res <- .aggregateMcYears(res)
+  if (synthesis) res <- synthesize(res)
 
   res
 }
