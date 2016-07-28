@@ -30,17 +30,20 @@ scenarios and eventually other aggregated statistics
 Additional statistics can be asked in three different ways:
 
 \enumerate{
-  \item A character string in "min", "max", "std", or "median". It will add
+  \item A character string in "min", "max", "std", "median" or "qXXX" where
+    "XXX" is a real number between 0 and 100. It will add
     for each column respectively the minimum or maximum value, the standard
-    deviation or the median of the variable.
+    deviation, the median or a quantile.
 
-  \item A named argument whose value is a function. For instance
-    \code{med = median} will calculate the median of each variable. The name
-    of the resulting column will be prefixed by "med_".
+  \item A named argument whose value is a function or one of the previous
+    aliases. For instance \code{med = median} will calculate the median of
+    each variable. The name of the resulting column will be prefixed by
+    "med_". Similarly, \code{l = "q5"} will compute the 5%% quantile of
+    each variable and put the result in a column with name prefixed by "l_"
 
   \item A named argument whose value is a list. It has to contain an element
-  \code{fun} equal to a function and optionally an element \code{only}
-  containing the names of the columns to which to apply the function.
+  \code{fun} equal to a function or an alias and optionally an element
+  \code{only} containing the names of the columns to which to apply the function.
   For instance \code{med = list(fun = median, only = c("LOAD", "MRG. PRICE"))}
   will compute the median of variables "LOAD" and "MRG. PRICE". The result
   will be stored in columns "med_LOAD" and "med_MRG. PRICE".
@@ -60,12 +63,22 @@ synthesize(mydata)
 synthesize(mydata, "min", "max")
 
 # Compute a custom statistic for all columns
-synthesize(mydata, log = function(x) mean(log(x)))
+synthesize(mydata, log = function(x) mean(log(1 + x)))
+
+# Same but only for column "LOAD"
+synthesize(mydata,
+           log = list(fun = function(x) mean(log(1 + x)),
+                      only = "LOAD"))
+
+# Compute the proportion of time balance is positive
+
+synthesize(mydata, propPos = list(fun = function(x) mean(x > 0),
+                                  only = "BALANCE"))
 
 # Compute 95\% confidence interval for the marginal price
 synthesize(mydata,
-           l = list(fun = function(x) quantile(x, 0.025), only = "MRG. PRICE"),
-           u = list(fun = function(x) quantile(x, 0.975), only = "MRG. PRICE"))
+           l = list(fun = "q2.5", only = "MRG. PRICE"),
+           u = list(fun = "q97.5", only = "MRG. PRICE"))
 }
 
 }

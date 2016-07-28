@@ -37,10 +37,25 @@ describe("synthesize", {
   })
 
   it("computes custom variables asked using lists", {
-    sumdata <- synthesize(mydata$areas, log = list(fun = function(x) mean(log(1+x)),
-                                                   only = "NUCLEAR"))
+    sumdata <- synthesize(mydata$areas, log = list(fun = function(x) mean(log(1+x))))
     expect_true("log_NUCLEAR" %in% names(sumdata))
-    expect_false("log_LIGNITE" %in% names(sumdata))
+    expect_true("log_LIGNITE" %in% names(sumdata))
+  })
+
+  it("can compute custom statistics for only some columns", {
+    sumdata <- synthesize(mydata$areas, log = list(fun = function(x) mean(log(1+x)),
+                                                   only = "LIGNITE"))
+    expect_false("log_NUCLEAR" %in% names(sumdata))
+    expect_true("log_LIGNITE" %in% names(sumdata))
+
+    sumdata <- synthesize(mydata, log = list(fun = function(x) mean(log(1+x)),
+                                             only = "LIGNITE"))
+    expect_false("log_NUCLEAR" %in% names(sumdata$areas))
+    expect_true("log_LIGNITE" %in% names(sumdata$areas))
+
+    # Check that averages are still computed for links
+    expect_equal(nrow(sumdata$links), nrow(mydata$links) / length(opts$mcYears))
+
   })
 
 })

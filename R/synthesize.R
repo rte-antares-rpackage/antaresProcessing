@@ -23,17 +23,20 @@
 #' Additional statistics can be asked in three different ways:
 #'
 #' \enumerate{
-#'   \item A character string in "min", "max", "std", or "median". It will add
+#'   \item A character string in "min", "max", "std", "median" or "qXXX" where
+#'     "XXX" is a real number between 0 and 100. It will add
 #'     for each column respectively the minimum or maximum value, the standard
-#'     deviation or the median of the variable.
+#'     deviation, the median or a quantile.
 #'
-#'   \item A named argument whose value is a function. For instance
-#'     \code{med = median} will calculate the median of each variable. The name
-#'     of the resulting column will be prefixed by "med_".
+#'   \item A named argument whose value is a function or one of the previous
+#'     aliases. For instance \code{med = median} will calculate the median of
+#'     each variable. The name of the resulting column will be prefixed by
+#'     "med_". Similarly, \code{l = "q5"} will compute the 5%% quantile of
+#'     each variable and put the result in a column with name prefixed by "l_"
 #'
 #'   \item A named argument whose value is a list. It has to contain an element
-#'   \code{fun} equal to a function and optionally an element \code{only}
-#'   containing the names of the columns to which to apply the function.
+#'   \code{fun} equal to a function or an alias and optionally an element
+#'   \code{only} containing the names of the columns to which to apply the function.
 #'   For instance \code{med = list(fun = median, only = c("LOAD", "MRG. PRICE"))}
 #'   will compute the median of variables "LOAD" and "MRG. PRICE". The result
 #'   will be stored in columns "med_LOAD" and "med_MRG. PRICE".
@@ -53,12 +56,22 @@
 #' synthesize(mydata, "min", "max")
 #'
 #' # Compute a custom statistic for all columns
-#' synthesize(mydata, log = function(x) mean(log(x)))
+#' synthesize(mydata, log = function(x) mean(log(1 + x)))
+#'
+#' # Same but only for column "LOAD"
+#' synthesize(mydata,
+#'            log = list(fun = function(x) mean(log(1 + x)),
+#'                       only = "LOAD"))
+#'
+#' # Compute the proportion of time balance is positive
+#'
+#' synthesize(mydata, propPos = list(fun = function(x) mean(x > 0),
+#'                                   only = "BALANCE"))
 #'
 #' # Compute 95% confidence interval for the marginal price
 #' synthesize(mydata,
-#'            l = list(fun = function(x) quantile(x, 0.025), only = "MRG. PRICE"),
-#'            u = list(fun = function(x) quantile(x, 0.975), only = "MRG. PRICE"))
+#'            l = list(fun = "q2.5", only = "MRG. PRICE"),
+#'            u = list(fun = "q97.5", only = "MRG. PRICE"))
 #' }
 #'
 #'@export
@@ -103,6 +116,16 @@ synthesize <- function(x, ...) {
 
   # Register a custom statistic function for a set of variables.
   addFunction <- function(fun, prefix, to) {
+    if (is.character(fun)) {
+      if (grepl("^q\\d+(\\.\\d+)?$", fun)) {
+        q <- as.numeric(substring(fun, 2))
+        fun <- function(x) quantile(x, probs = q / 100)
+      } else {
+        fun <- switch(f, std = sd, min = min, max = max, median = median,
+                      stop("Unknown alias ", f))
+      }
+    }
+
     for (v in to) {
       if (is.null(aggFun[[v]])) {
         aggFun[[v]] <<- list()
@@ -114,18 +137,20 @@ synthesize <- function(x, ...) {
   # Loop over arguments
   for (i in 1:length(args)) {
     f <- args[[i]]
-    if (is.character(f)) {
+    # if (is.character(f)) {
+    #   if (grepl("^q\\d+(\\.\\d+)?$", f)) {
+    #     q <- as.numeric(substring(f, 2))
+    #   }
+    #
+    #
+    #   addFunction(fun, f, to = variables)
+    #
+    # } else if (is.function(f)) {
+    #
+    #   if (functionNames[i] == "") stop("Custom functions must be passed as a named argument.")
+    #   addFunction(f, functionNames[i], to = variables)
 
-      fun <- switch(f, std = sd, min = min, max = max, median = median,
-                    stop("Unknown alias ", f))
-      addFunction(fun, f, to = variables)
-
-    } else if (is.function(f)) {
-
-      if (functionNames[i] == "") stop("Custom functions must be passed as a named argument.")
-      addFunction(f, functionNames[i], to = variables)
-
-    } else if (is.list(f)) {
+    if (is.list(f)) {
 
       if (functionNames[i] == "") stop("Custom functions must be passed as a named argument.")
       if (is.null(f$only)) {
@@ -137,35 +162,45 @@ synthesize <- function(x, ...) {
         }
       }
 
-    } else {
-      stop("Invalid argument")
-    }
+    } else if (functionNames[i] != "" & (is.character(f) | is.function(f))) {
+
+      addFunction(f, functionNames[i], to = variables)
+
+    } else if (is.character(f)) {
+
+      addFunction(f, f, to = variables)
+
+    } else stop("Invalid argument")
   }
 
   # Keep only variables for wich we want to compute custom statistics.
   empty <- sapply(aggFun, is.null)
   aggFun <- aggFun[!empty]
+  aggFun <- aggFun[names(aggFun) %in% variables]
 
-  # Name of the custom columns: prefix + "_" + variable name
-  varNames <- lapply(names(aggFun), function(n) paste0(names(aggFun[[n]]), n))
-  varNames <- do.call(c, varNames)
+  if (length(aggFun) > 0) {
+    # Name of the custom columns: prefix + "_" + variable name
+    varNames <- lapply(names(aggFun), function(n) paste0(names(aggFun[[n]]), n))
+    varNames <- do.call(c, varNames)
 
-  # Compute the custom statistics
-  customStats <- x[, as.list(do.call(c, mapply(function(v, funs) {lapply(funs, function(f) f(v))},
-                                               v = .SD, funs = aggFun))),
-                   keyby = idVars, .SDcols = names(aggFun)]
+    # Compute the custom statistics
+    customStats <- x[, unname(as.list(do.call(c, mapply(function(v, funs) {lapply(funs, function(f) f(v))},
+                                                 v = .SD, funs = aggFun)))),
+                     keyby = idVars, .SDcols = names(aggFun)]
 
-  setnames(customStats, names(customStats), c(idVars, varNames))
+    setnames(customStats, names(customStats), c(idVars, varNames))
 
-  # Merge with average statistics
-  res <- merge(res, customStats, by = idVars)
+    # Merge with average statistics
+    res <- merge(res, customStats, by = idVars)
 
-  # Modify order of the columns in order to group columns corresponding to the
-  # same variable.
-  colnames <- lapply(variables, function(n) {
-    paste0(c("", names(aggFun[[n]])), n)
-  })
-  colnames <- c(idVars, unlist(colnames))
-  setcolorder(res, colnames)
+    # Modify order of the columns in order to group columns corresponding to the
+    # same variable.
+    colnames <- lapply(variables, function(n) {
+      paste0(c("", names(aggFun[[n]])), n)
+    })
+    colnames <- c(idVars, unlist(colnames))
+    setcolorder(res, colnames)
+  }
+
   res
 }
