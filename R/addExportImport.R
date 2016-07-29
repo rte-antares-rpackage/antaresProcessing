@@ -34,6 +34,7 @@ addExportImport <- function(x) {
     areas <- unique(x$areas$area)
     vnodes <- unlist(attr(x, "virtualNodes"))
 
+    opts <- simOptions(x)
     neededLinks <- getLinks(areas, exclude = vnodes, opts = opts)
 
     links <- unique(x$links$link)
@@ -124,6 +125,7 @@ addExportImport <- function(x) {
 .addExportImportDistrict<- function(x, neededLinks) {
 
   #get the districts and areas
+  opts <- simOptions(x)
   districts <- intersect(unique(x$districts$district), opts$districtsDef$district)
   districtsDef <- split(opts$districtsDe$area, opts$districtsDef$district)
 
@@ -145,7 +147,6 @@ addExportImport <- function(x) {
   dataExportImportArea<-copyForDistrict$areas[,.(export=export, import=import), by=c(.idCols(copyForDistrict$areas))]
 
   #get the values agreged by districts
-  opts <- simOptions(x)
   valueForDistrict<-.groupByDistrict(dataExportImportArea,opts)
 
   x$districts <- merge(x$districts, valueForDistrict, by = .idCols(x$districts))
