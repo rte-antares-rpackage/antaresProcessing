@@ -12,6 +12,9 @@
 #' @param ...
 #'   Additional parameters indicating which additional statistics to produce.
 #'   See details to see how to specify them.
+#' @param prefixForMeans
+#'   Prefix to add to the columns containing average values. If it is different
+#'   than "", a "_" is automatically added.
 #'
 #' @return
 #' Synthetic version of the input data. It has the same structure as \code{x}
@@ -76,7 +79,7 @@
 #'
 #'@export
 #'
-synthesize <- function(x, ...) {
+synthesize <- function(x, ..., prefixForMeans = "") {
   if (!is(x, "antaresData")) stop("'x' must be an object of class 'antaresData' created with ''readAntares()'")
 
   if (attr(x, "synthesis") == TRUE) return(x)
@@ -96,6 +99,9 @@ synthesize <- function(x, ...) {
 
   # Compute average values of each column
   res <- suppressWarnings(x[, lapply(.SD, mean), by = idVars])
+  if (prefixForMeans != "") {
+    setnames(res, variables, paste0(prefixForMeans, "_", variables))
+  }
   .addClassAndAttributes(res, synthesis = TRUE, timeStep = attrs$timeStep,
                          opts = attrs$opts, type = attrs$type)
 
@@ -196,7 +202,9 @@ synthesize <- function(x, ...) {
     # Modify order of the columns in order to group columns corresponding to the
     # same variable.
     colnames <- lapply(variables, function(n) {
-      paste0(c("", names(aggFun[[n]])), n)
+      prefMean <- if (prefixForMeans == "") "" else paste0(prefixForMeans, "_")
+      prefixes <- c(prefMean, names(aggFun[[n]]))
+      paste0(prefixes, n)
     })
     colnames <- c(idVars, unlist(colnames))
     setcolorder(res, colnames)

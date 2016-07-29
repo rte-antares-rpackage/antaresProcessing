@@ -4,7 +4,7 @@
 \alias{synthesize}
 \title{Synthesize Monte-Carlo scenarios}
 \usage{
-synthesize(x, ...)
+synthesize(x, ..., prefixForMeans = "")
 }
 \arguments{
 \item{x}{an object of class \code{antaresData} created with
@@ -13,6 +13,9 @@ an Antares simulation.}
 
 \item{...}{Additional parameters indicating which additional statistics to produce.
 See details to see how to specify them.}
+
+\item{prefixForMeans}{Prefix to add to the columns containing average values. If it is different
+than "", a "_" is automatically added.}
 }
 \value{
 Synthetic version of the input data. It has the same structure as \code{x}

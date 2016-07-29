@@ -156,13 +156,9 @@ modulation <- function(x, timeStep = "annual", synthesis = FALSE,
 
   if (synthesis) {
 
-    res <- synthesize(res, "max")
+    res <- synthesize(res, "max", prefixForMeans = "avg")
     res <- changeTimeStep(res, timeStep,
                           fun = c("mean", "max", "mean", "max", "mean", "max"))
-
-    setnames(res,
-             c("upwardModulation", "downwardModulation", "absoluteModulation"),
-             c("avg_upwardModulation", "avg_downwardModulation", "avg_absoluteModulation"))
 
   } else if (timeStep != "hourly") {
 

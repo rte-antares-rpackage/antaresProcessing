@@ -83,16 +83,16 @@ netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun
   x <- .addClassAndAttributes(x, FALSE, "hourly", opts, type = "netLoadRamp")
 
   if (synthesis) {
-    x <- synthesize(x, "min", "max")
+
+    x <- synthesize(x, "min", "max", prefixForMeans = "avg")
 
     x <- changeTimeStep(x, timeStep,
                         fun = c("mean", "min", "max",
                                 "mean", "min", "max",
                                 "mean", "min", "max"))
-    setnames(x,
-             c("netLoadRamp", "balanceRamp", "areaRamp"),
-             c("avg_netLoadRamp", "avg_balanceRamp", "avg_areaRamp"))
+
   } else if (timeStep != "hourly") {
+
     x[, `:=`(
       min_netLoadRamp = netLoadRamp,
       min_balanceRamp = balanceRamp,
