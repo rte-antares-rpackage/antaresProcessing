@@ -1,4 +1,4 @@
-#' Export and import of areas
+#' Export and import of areas or districts
 #'
 #' This function computes the export and import of areas or districts and add it to an
 #' \code{antaresData} object.
@@ -6,8 +6,22 @@
 #'@param x
 #'   an object of class "antaresDataList" created with the function
 #'   \code{readAntares}. It has to contain some areas and all the links that are
-#'   connected to these areas. Moreover the function (\code{\link{removeVirtualAreas}} must be call before.
+#'   connected to these areas. Moreover the function \code{\link{removeVirtualAreas}} must be call before.
 #'
+#' @examples
+#' \dontrun{
+#' mydata <- readAntares(areas = "all", links="all", districts ="all" , synthesis = FALSE)
+#'
+#' dataRemVir<-removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")), production = getAreas("off") )
+#' rm(mydata)
+#'
+#' dataWitExpImp<-addExportImport(dataRemVir)
+#' rm(dataRemVir)
+#'
+#' names(dataWitExpImp$areas)
+#' names(dataWitExpImp$districts)
+#'
+#' }
 #' @export
 #'
 
@@ -28,8 +42,7 @@ addExportImport <- function(x) {
                                        paste(missingLinks, collapse = ", "))
 
     if (!is.null(x$areas)) x<-.addExportImportArea(x, neededLinks)
-    #TO DO
-    #if (!is.null(x$districts)) addExportImport(x$districts)
+    if (!is.null(x$districts)) x<-.addExportImportDistrict(x, neededLinks)
     return(x)
   }
 
@@ -96,8 +109,46 @@ addExportImport <- function(x) {
 
   #merge with the data of an area
   dataAreas <- merge(dataAreas, flowLinksWithFromAndTo, by = .idCols(dataAreas))
+
+  #when the fonction is call twice (like for districts) we must deleted the previous result
+  if("export.x" %in% names(dataAreas) | "import.x" %in% names(dataAreas)  ){
+    dataAreas<-dataAreas[,':=' (export=export.y, import=import.y)]
+    dataAreas[ , c("export.x", "export.y", "import.x","import.y" ):=NULL]
+  }
   x$areas<-dataAreas
 
   x
 
+}
+
+.addExportImportDistrict<- function(x, neededLinks) {
+
+  #get the districts and areas
+  districts <- intersect(unique(x$districts$district), opts$districtsDef$district)
+  districtsDef <- split(opts$districtsDe$area, opts$districtsDef$district)
+
+  #delete links if they are internal to a district
+  #get links not internal to a district
+  ListInternalDistrict <- vector()
+  i=1
+  for(d in districts){
+    ListInternalDistrict[i]<-getLinks(area=districtsDef[d][[1]], internalOnly = TRUE)
+    i=i+1
+  }
+
+  neededLinksForDistricts<-setdiff(neededLinks, ListInternalDistrict)
+
+  #get the values of export and import of areas (without implication of links internal)
+  copyForDistrict<-copy(x)
+  copyForDistrict<-.addExportImportArea(copyForDistrict, neededLinksForDistricts)
+
+  dataExportImportArea<-copyForDistrict$areas[,.(export=export, import=import), by=c(.idCols(copyForDistrict$areas))]
+
+  #get the values agreged by districts
+  opts <- simOptions(x)
+  valueForDistrict<-.groupByDistrict(dataExportImportArea,opts)
+
+  x$districts <- merge(x$districts, valueForDistrict, by = .idCols(x$districts))
+
+  x
 }
