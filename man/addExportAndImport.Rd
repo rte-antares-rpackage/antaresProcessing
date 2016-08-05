@@ -4,12 +4,14 @@
 \alias{addExportAndImport}
 \title{Export and import of areas or districts}
 \usage{
-addExportAndImport(x)
+addExportAndImport(x, addCapacity = FALSE)
 }
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
 \code{readAntares}. It has to contain some areas and all the links that are
 connected to these areas. Moreover the function \code{\link{removeVirtualAreas}} must be call before.}
+
+\item{addCapacities}{If \code{TRUE}, export and import capacities are added.}
 }
 \description{
 This function computes the export and import of areas or districts and add it to an
@@ -21,7 +23,7 @@ mydata <- readAntares(areas = "all", links="all", districts ="all" , synthesis =
 
 mydata<-removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")), production = getAreas("off") )
 
-mydata<-addExportImport(mydata)
+mydata<-addExportAndImport(mydata)
 
 names(mydata$areas)
 names(mydata$districts)
