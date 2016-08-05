@@ -14,7 +14,7 @@
 #'
 #' mydata<-removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")), production = getAreas("off") )
 #'
-#' mydata<-addExportImport(mydata)
+#' mydata<-addExportAndImport(mydata)
 #'
 #' names(mydata$areas)
 #' names(mydata$districts)
@@ -40,23 +40,23 @@ addExportAndImport <- function(x) {
     if (length(missingLinks) > 0) stop("The following links are needed but missing: ",
                                        paste(missingLinks, collapse = ", "))
 
-    if (!is.null(x$areas)) x<-.addExportImportForArea(x, neededLinks)
-    if (!is.null(x$districts)) x<-..addExportImportForDistrict(x, neededLinks)
+    if (!is.null(x$areas)) x<-.addExportImportForArea(x, neededLinks, FALSE)
+    if (!is.null(x$districts)) x<-.addExportImportForDistrict(x, neededLinks)
     return(x)
   }
 
 }
 
-.addExportImportForArea<- function(x, neededLinks) {
+.addExportImportForArea<- function(x, neededLinks, bool) {
 
   dataAreas<-x$areas
   dataLinks<-x$links
+  CalledByAddExportImportForDistrict<-bool
 
-  #TO DO
   if(! attr(dataAreas, "type") %in% c("areas", "links")) stop("'x' does not contain area or links data")
 
-  if (!is.null(dataAreas$export)) {
-    #stop("Input already contains column 'export' and 'import")
+  if (!is.null(dataAreas$export) & !CalledByAddExportImportForDistrict) {
+    stop("Input already contains column 'export' and 'import' ")
   }
 
   # get the direction of links
@@ -122,6 +122,12 @@ addExportAndImport <- function(x) {
 
 .addExportImportForDistrict<- function(x, neededLinks) {
 
+  if (!is.null(x$districts$export)) {
+    stop("Input already contains column 'export' and 'import' ")
+  }
+
+  if(! attr(x$districts, "type") %in% c("districts")) stop("'x' does not contain districts data")
+
   #get the districts and areas
   opts <- simOptions(x)
   districts <- intersect(unique(x$districts$district), opts$districtsDef$district)
@@ -133,21 +139,40 @@ addExportAndImport <- function(x) {
   i=1
   for(d in districts){
     ListInternalDistrict[i]<-getLinks(area=districtsDef[d][[1]], internalOnly = TRUE)
+    LinksWithOutInternalLinksDistrict<-setdiff(neededLinks, ListInternalDistrict[i])
+
+    #delete links not rattached in an area of the district
+    # get the direction of links
+    linksDirection <- tstrsplit(LinksWithOutInternalLinksDistrict, split = " - ")
+    linksDirection <- data.table(link = LinksWithOutInternalLinksDistrict, from = linksDirection[[1]], to = linksDirection[[2]])
+    linksDirection<- linksDirection[ from %in% districtsDef[d][[1]] | to %in% districtsDef[d][[1]] , ]
+
+    #get the needed links for the district
+    neededLinksForADistrict<-linksDirection$link
+
+    #get the values of export and import of areas (without implication of links internal)
+    copyForDistrict<-copy(x)
+    copyForDistrict<-.addExportImportForArea(copyForDistrict, neededLinksForADistrict, TRUE)
+
+    dataExportImportArea<-copyForDistrict$areas[,.(export=export, import=import), by=c(.idCols(copyForDistrict$areas))]
+
+    #get the values agreged for districts
+    valueForDistrictsInt<-.groupByDistrict(dataExportImportArea,opts)
+
+    #get the values only for the district that concerns us
+    valueForDistrict<-valueForDistrictsInt[district==d, ]
+
+    #get the values for all distritcs
+    if(d==districts[[1]]) {valueForAllDistricts<-valueForDistrict}
+    valueForAllDistricts<-rbind(valueForDistrict,valueForAllDistricts)
+
     i=i+1
   }
 
-  neededLinksForDistricts<-setdiff(neededLinks, ListInternalDistrict)
+  x$districts <- merge(x$districts, valueForAllDistricts, by = .idCols(x$districts))
 
-  #get the values of export and import of areas (without implication of links internal)
-  copyForDistrict<-copy(x)
-  copyForDistrict<-.addExportImportForArea(copyForDistrict, neededLinksForDistricts)
-
-  dataExportImportArea<-copyForDistrict$areas[,.(export=export, import=import), by=c(.idCols(copyForDistrict$areas))]
-
-  #get the values agreged by districts
-  valueForDistrict<-.groupByDistrict(dataExportImportArea,opts)
-
-  x$districts <- merge(x$districts, valueForDistrict, by = .idCols(x$districts))
+  #remove duplicated row
+  x$districts<-unique(x$districts)
 
   x
 }
