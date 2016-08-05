@@ -23,7 +23,7 @@
 #' @export
 #'
 
-addExportImport <- function(x) {
+addExportAndImport <- function(x) {
   if (!is(x, "antaresData")) stop("'x' is not an 'antaresData' object")
 
   if (is(x, "antaresDataList")) {
