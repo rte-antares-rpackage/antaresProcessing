@@ -7,6 +7,8 @@
 #'   an object of class "antaresDataList" created with the function
 #'   \code{readAntares}. It has to contain some areas and all the links that are
 #'   connected to these areas. Moreover the function \code{\link{removeVirtualAreas}} must be call before.
+#' @param addCapacity
+#'   If \code{TRUE}, capacities direct and indirect are added.
 #'
 #' @examples
 #' \dontrun{
@@ -23,7 +25,7 @@
 #' @export
 #'
 
-addExportAndImport <- function(x) {
+addExportAndImport <- function(x, addCapacity = FALSE) {
   if (!is(x, "antaresData")) stop("'x' is not an 'antaresData' object")
 
   if (is(x, "antaresDataList")) {
@@ -40,14 +42,14 @@ addExportAndImport <- function(x) {
     if (length(missingLinks) > 0) stop("The following links are needed but missing: ",
                                        paste(missingLinks, collapse = ", "))
 
-    if (!is.null(x$areas)) x<-.addExportImportForArea(x, neededLinks, FALSE)
-    if (!is.null(x$districts)) x<-.addExportImportForDistrict(x, neededLinks)
+    if (!is.null(x$areas)) x<-.addExportImportForArea(x, neededLinks, FALSE,addCapacity)
+    if (!is.null(x$districts)) x<-.addExportImportForDistrict(x, neededLinks,addCapacity)
     return(x)
   }
 
 }
 
-.addExportImportForArea<- function(x, neededLinks, bool) {
+.addExportImportForArea<- function(x, neededLinks, bool, addCapacity) {
 
   dataAreas<-x$areas
   dataLinks<-x$links
@@ -63,9 +65,19 @@ addExportAndImport <- function(x) {
   linksDirection <- tstrsplit(neededLinks, split = " - ")
   linksDirection <- data.table(link = neededLinks, from = linksDirection[[1]], to = linksDirection[[2]])
 
-  #get the values of flow
+  #get the values of flow and capacities if needed
   idColsL <- .idCols(dataLinks)
-  flowLinks <- dataLinks[, append(mget(idColsL), .(`FLOW LIN.`=`FLOW LIN.`))]
+  if(addCapacity){
+
+    if("transCapacityIndirect" %in% names(dataLinks)) {
+      flowLinks<-dataLinks[, .(`FLOW LIN.`, transCapacityDirect, transCapacityIndirect), by=idColsL]
+    }else{
+      stop("x does not contain transCapacityDirect or transCapacityIndirect data ")
+    }
+
+  }else{
+    flowLinks <- dataLinks[, .(`FLOW LIN.`), by=idColsL]
+  }
 
   flowLinks <- merge(linksDirection, flowLinks, by = "link", allow.cartesian = TRUE)
   flowLinks[`FLOW LIN.`>0 , ':=' (exportFrom=as.double(`FLOW LIN.`), importFrom=as.double(0),exportTo=as.double(0), importTo=as.double(`FLOW LIN.`) )]
@@ -79,10 +91,15 @@ addExportAndImport <- function(x) {
   setnames(flowLinksFrom, "from", "area")
   setnames(flowLinksFrom, "exportFrom", "export")
   setnames(flowLinksFrom, "importFrom", "import")
-  flowLinksFrom<-flowLinksFrom[ , .(export=sum(export),import=sum(import)), by=eval(.idCols(dataAreas))]
+
+
+  if(addCapacity){
+    flowLinksFrom<-flowLinksFrom[ , .(export=sum(export),import=sum(import), capExport=sum(transCapacityDirect), capImport=sum(transCapacityIndirect)), by=eval(.idCols(dataAreas))]
+  }else{
+    flowLinksFrom<-flowLinksFrom[ , .(export=sum(export),import=sum(import)), by=eval(.idCols(dataAreas))]
+  }
 
   flowLinksFrom[ , c("link", "to", "`FLOW LIN.`"):=NULL]
-  flowLinksFrom[ , `FLOW LIN.`:=NULL]
 
   #get the values for export and import when the area is "to"
   flowLinksTo<-copy(flowLinks)
@@ -91,10 +108,14 @@ addExportAndImport <- function(x) {
   setnames(flowLinksTo, "to", "area")
   setnames(flowLinksTo, "exportTo", "export")
   setnames(flowLinksTo, "importTo", "import")
-  flowLinksTo<-flowLinksTo[ , .(export=sum(export),import=sum(import)), by=eval(.idCols(dataAreas))]
+
+  if(addCapacity){
+    flowLinksTo<-flowLinksTo[ , .(export=sum(export),import=sum(import), capExport=sum(transCapacityIndirect), capImport=sum(transCapacityDirect)), by=eval(.idCols(dataAreas))]
+  }else{
+    flowLinksTo<-flowLinksTo[ , .(export=sum(export),import=sum(import)), by=eval(.idCols(dataAreas))]
+  }
 
   flowLinksTo[ , c("link", "to", "`FLOW LIN.`"):=NULL]
-  flowLinksTo[ , `FLOW LIN.`:=NULL]
 
   #merge the data import and export
   flowLinksWithFromAndTo<-merge(flowLinksFrom,flowLinksTo, all=TRUE, by=.idCols(dataAreas), sort=TRUE)
@@ -106,6 +127,15 @@ addExportAndImport <- function(x) {
   flowLinksWithFromAndTo<-flowLinksWithFromAndTo[,':=' (export=export.x+export.y, import=import.x+import.y)]
   flowLinksWithFromAndTo[ , c("export.x", "export.y", "import.x","import.y" ):=NULL]
 
+  if(addCapacity){
+    flowLinksWithFromAndTo[is.na(capExport.x), capExport.x:=0]
+    flowLinksWithFromAndTo[is.na(capExport.y), capExport.y:=0]
+    flowLinksWithFromAndTo[is.na(capImport.x), capImport.x:=0]
+    flowLinksWithFromAndTo[is.na(capImport.y), capImport.y:=0]
+    flowLinksWithFromAndTo<-flowLinksWithFromAndTo[,':=' (capExport=capExport.x+capExport.y, capImport=capImport.x+capImport.y)]
+    flowLinksWithFromAndTo[ , c("capExport.x", "capExport.y", "capImport.x","capImport.y" ):=NULL]
+  }
+
   #merge with the data of an area
   dataAreas <- merge(dataAreas, flowLinksWithFromAndTo, by = .idCols(dataAreas))
 
@@ -113,6 +143,12 @@ addExportAndImport <- function(x) {
   if("export.x" %in% names(dataAreas) | "import.x" %in% names(dataAreas)  ){
     dataAreas<-dataAreas[,':=' (export=export.y, import=import.y)]
     dataAreas[ , c("export.x", "export.y", "import.x","import.y" ):=NULL]
+
+    #we must to the same for values capacities
+    if(addCapacity){
+      dataAreas<-dataAreas[,':=' (capExport=capExport.y, capImport=capImport.y)]
+      dataAreas[ , c("capExport.x", "capExport.y", "capImport.x","capImport.y" ):=NULL]
+    }
   }
   x$areas<-dataAreas
 
@@ -120,7 +156,7 @@ addExportAndImport <- function(x) {
 
 }
 
-.addExportImportForDistrict<- function(x, neededLinks) {
+.addExportImportForDistrict<- function(x, neededLinks, addCapacity) {
 
   if (!is.null(x$districts$export)) {
     stop("Input already contains column 'export' and 'import' ")
@@ -152,9 +188,13 @@ addExportAndImport <- function(x) {
 
     #get the values of export and import of areas (without implication of links internal)
     copyForDistrict<-copy(x)
-    copyForDistrict<-.addExportImportForArea(copyForDistrict, neededLinksForADistrict, TRUE)
+    copyForDistrict<-.addExportImportForArea(copyForDistrict, neededLinksForADistrict, TRUE, addCapacity)
 
-    dataExportImportArea<-copyForDistrict$areas[,.(export=export, import=import), by=c(.idCols(copyForDistrict$areas))]
+    if(addCapacity){
+      dataExportImportArea<-copyForDistrict$areas[,.(export=export, capExport=capExport, import=import, capImport=capImport), by=c(.idCols(copyForDistrict$areas))]
+    }else{
+      dataExportImportArea<-copyForDistrict$areas[,.(export=export, import=import), by=c(.idCols(copyForDistrict$areas))]
+    }
 
     #get the values agreged for districts
     valueForDistrictsInt<-.groupByDistrict(dataExportImportArea,opts)
