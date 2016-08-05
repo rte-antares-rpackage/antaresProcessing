@@ -25,7 +25,7 @@
   # Check that all nodes from a district are in the data
   areasInData <- unique(x$area)
   districts <- intersect(x$district, opts$districtsDef$district)
-  districtsDef <- split(opts$districtsDe$area, opts$districtsDef$district)
+  districtsDef <- split(opts$districtsDef$area, opts$districtsDef$district)
 
   for (d in districts) {
     missingAreas <- setdiff(districtsDef[[d]], areasInData)
