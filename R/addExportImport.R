@@ -12,14 +12,12 @@
 #' \dontrun{
 #' mydata <- readAntares(areas = "all", links="all", districts ="all" , synthesis = FALSE)
 #'
-#' dataRemVir<-removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")), production = getAreas("off") )
-#' rm(mydata)
+#' mydata<-removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")), production = getAreas("off") )
 #'
-#' dataWitExpImp<-addExportImport(dataRemVir)
-#' rm(dataRemVir)
+#' mydata<-addExportImport(mydata)
 #'
-#' names(dataWitExpImp$areas)
-#' names(dataWitExpImp$districts)
+#' names(mydata$areas)
+#' names(mydata$districts)
 #'
 #' }
 #' @export
@@ -42,14 +40,14 @@ addExportImport <- function(x) {
     if (length(missingLinks) > 0) stop("The following links are needed but missing: ",
                                        paste(missingLinks, collapse = ", "))
 
-    if (!is.null(x$areas)) x<-.addExportImportArea(x, neededLinks)
-    if (!is.null(x$districts)) x<-.addExportImportDistrict(x, neededLinks)
+    if (!is.null(x$areas)) x<-.addExportImportForArea(x, neededLinks)
+    if (!is.null(x$districts)) x<-..addExportImportForDistrict(x, neededLinks)
     return(x)
   }
 
 }
 
-.addExportImportArea<- function(x, neededLinks) {
+.addExportImportForArea<- function(x, neededLinks) {
 
   dataAreas<-x$areas
   dataLinks<-x$links
@@ -122,7 +120,7 @@ addExportImport <- function(x) {
 
 }
 
-.addExportImportDistrict<- function(x, neededLinks) {
+.addExportImportForDistrict<- function(x, neededLinks) {
 
   #get the districts and areas
   opts <- simOptions(x)
@@ -142,7 +140,7 @@ addExportImport <- function(x) {
 
   #get the values of export and import of areas (without implication of links internal)
   copyForDistrict<-copy(x)
-  copyForDistrict<-.addExportImportArea(copyForDistrict, neededLinksForDistricts)
+  copyForDistrict<-.addExportImportForArea(copyForDistrict, neededLinksForDistricts)
 
   dataExportImportArea<-copyForDistrict$areas[,.(export=export, import=import), by=c(.idCols(copyForDistrict$areas))]
 

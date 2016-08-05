@@ -19,14 +19,12 @@ This function computes the export and import of areas or districts and add it to
 \dontrun{
 mydata <- readAntares(areas = "all", links="all", districts ="all" , synthesis = FALSE)
 
-dataRemVir<-removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")), production = getAreas("off") )
-rm(mydata)
+mydata<-removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")), production = getAreas("off") )
 
-dataWitExpImp<-addExportImport(dataRemVir)
-rm(dataRemVir)
+mydata<-addExportImport(mydata)
 
-names(dataWitExpImp$areas)
-names(dataWitExpImp$districts)
+names(mydata$areas)
+names(mydata$districts)
 
 }
 }
