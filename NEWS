@@ -1,3 +1,9 @@
+Changes in version 0.5 (2016-08-01)
+
+NEW FEATURES:
+* New function 'synthesize' that sinthesizes different Monte-Carlo scenarios. It computes the average of every variable but can also compute custom statistics like minimum, maximum, median, quantiles, etc.
+
+
 Changes in version 0.4 (2016-07-18)
 
 NEW FEATURES:
