@@ -1,3 +1,9 @@
+Changes in version 0.6 (2016-08-22)
+
+NEW FEATURES:
+* New function addExportAndImport() adds import, export and link capacity to areas and districts.
+
+
 Changes in version 0.5 (2016-08-01)
 
 NEW FEATURES:
