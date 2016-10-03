@@ -121,35 +121,10 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   if(!is.null(attr(x, "virtualNodes")) &&
      !is.null(attr(x, "virtualNodes")$storageFlexibility)) {
 
-    x <- .checkColumns(x, list(links = c("transCapacityDirect", "transCapacityIndirect")))
-    vareas <- attr(x, "virtualNodes")$storageFlexibility
-    pspLinks <- x$links[link %in% getLinks(vareas)]
+    x <- .checkColumns(x, list(areas = c("storageCapacity", "pumpingCapacity")))
 
-    linksFromTo <- tstrsplit(pspLinks$link, split = " - ")
-    pspLinks$area <- linksFromTo[[1]]
-    pspLinks$to <- linksFromTo[[2]]
-
-    # If the link connects a virtual node to a real node, we reverse it, so that
-    # all links have the same direction: real node to virtual node.
-    pspLinks[area %in% vareas,
-             `:=`(
-               area = to,
-               to = area,
-               transCapacityDirect = transCapacityIndirect,
-               transCapacityIndirect = transCapacityDirect
-             )]
-
-    # Users tend to use a transmission capacity of 1 instead of 0 to avoid warnings.
-    # The following lines correct this.
-    pspLinks[transCapacityIndirect == 1, transCapacityIndirect := 0]
-    pspLinks[transCapacityDirect == 1, transCapacityDirect := 0]
-
-    # Aggregate transmissions capacities
-    stepCapacity <- pspLinks[, .(pumping = sum(transCapacityDirect),
-                                 storage = sum(transCapacityIndirect)),
-                             by = idVars]
-
-    stepCapacity[is.na(pumping), c("pumping", "storage") := 0]
+    stepCapacity <- x$areas[, c(idVars, "storageCapacity", "pumpingCapacity"),
+                            with = FALSE]
 
   } else {
     stepCapacity <- NULL
@@ -173,7 +148,7 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   if (!is.null(stepCapacity)) {
     intermediaryData <- merge(intermediaryData, stepCapacity, by = idVars, all = TRUE)
   } else {
-    intermediaryData[, c("pumping", "storage") := 0]
+    intermediaryData[, c("pumpingCapacity", "storageCapacity") := 0]
   }
 
   # Effective computation of the margins. The function .computeMargins is
@@ -213,13 +188,13 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   # Add intermediary data
   data <- merge(data, additionalDT, by = idVars, all.x = TRUE)
   data[is.na(thermalAvailability), thermalAvailability := 0]
-  data[is.na(pumping), c("pumping", "storage") := 0]
+  data[is.na(pumpingCapacity), c("pumpingCapacity", "storageCapacity") := 0]
   data[is.na(thermalPmin), thermalPmin := 0]
 
   # Compute margins
   data[,`:=`(
-    isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD,
-    isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+    isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storageCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD,
+    isolatedDownwardMargin = thermalPmin - pumpingCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
   )]
 
   data[, `:=`(
@@ -227,7 +202,8 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
     interconnectedDownwardMargin = isolatedDownwardMargin + BALANCE
   )]
 
-  data[, c(idVars, "thermalAvailability", "thermalPmin", "pumping", "storage",
+  data[, c(idVars, "thermalAvailability", "thermalPmin",
+           "pumpingCapacity", "storageCapacity",
            "isolatedUpwardMargin", "isolatedDownwardMargin",
            "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
        with = FALSE]
