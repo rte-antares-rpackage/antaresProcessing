@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' aggregate a data.table by district
 #'
 #' @param x

@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Load factors of clusters
 #'
 #' This function computes the load factor and other related statistics

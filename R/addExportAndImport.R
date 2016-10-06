@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Export and import of areas or districts
 #'
 #' This function computes the export and import of areas or districts and add it to an
