@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Compute the surplus of clusters
 #'
 #' This function computes the surplus of clusters of interest. The surplus of a
@@ -130,7 +132,7 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
   res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "surplusClusters")
 
   res <- changeTimeStep(res, timeStep)
-  if (synthesis) res <- .aggregateMcYears(res)
+  if (synthesis) res <- synthesize(res)
 
   res
 }

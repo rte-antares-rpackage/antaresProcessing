@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 .neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE")
 
 #' Upward and downward margins for an area

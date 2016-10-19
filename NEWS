@@ -1,3 +1,21 @@
+Copyright © 2016 RTE Réseau de transport d’électricité
+
+Changes in version 0.7 (2016-10-06)
+BREAKING CHANGES:
+* add a file LICENSE and copyright to sources files
+
+Changes in version 0.6 (2016-08-22)
+
+NEW FEATURES:
+* New function addExportAndImport() adds import, export and link capacity to areas and districts.
+
+
+Changes in version 0.5 (2016-08-01)
+
+NEW FEATURES:
+* New function 'synthesize' that sinthesizes different Monte-Carlo scenarios. It computes the average of every variable but can also compute custom statistics like minimum, maximum, median, quantiles, etc.
+
+
 Changes in version 0.4 (2016-07-18)
 
 NEW FEATURES:

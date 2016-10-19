@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Compute the modulation of cluster units
 #'
 #' This function computes the modulation of cluster units or of sectors.
@@ -146,19 +148,39 @@ modulation <- function(x, timeStep = "annual", synthesis = FALSE,
 
   # Modulations
   res <- x[, append(mget(.idCols(x)),
-                    .(meanUpwardModulation = pmax(0, production - shiftProd) / unitcount,
-                      meanDownwardModulation = pmax(0, shiftProd - production) / unitcount,
-                      meanAbsoluteModulation = abs(production - shiftProd) / unitcount))]
-  res[, maxUpwardModulation := meanUpwardModulation]
-  res[, maxDownwardModulation := meanDownwardModulation]
-  res[, maxAbsoluteModulation := meanAbsoluteModulation]
+                    .(upwardModulation = pmax(0, production - shiftProd) / unitcount,
+                      downwardModulation = pmax(0, shiftProd - production) / unitcount,
+                      absoluteModulation = abs(production - shiftProd) / unitcount))]
 
-  # Set correct attributes to the result and aggregate
   res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "modulations")
 
-  res <- changeTimeStep(res, timeStep, fun = c("mean", "mean", "mean", "max", "max", "max"))
+  # Aggregation
 
-  if (synthesis) res <- .aggregateMcYears(res, fun = c(mean, mean, mean, max, max, max))
+  if (synthesis) {
+
+    res <- synthesize(res, "max", prefixForMeans = "avg")
+    res <- changeTimeStep(res, timeStep,
+                          fun = c("mean", "max", "mean", "max", "mean", "max"))
+
+  } else if (timeStep != "hourly") {
+
+    res[, max_upwardModulation := upwardModulation]
+    res[, max_downwardModulation := downwardModulation]
+    res[, max_absoluteModulation := absoluteModulation]
+
+    res <- changeTimeStep(res, timeStep,
+                          fun = c("mean", "mean", "mean", "max", "max", "max"))
+
+    setcolorder(res, c(.idCols(res),
+                       "upwardModulation", "max_upwardModulation",
+                       "downwardModulation", "max_downwardModulation",
+                       "absoluteModulation", "max_absoluteModulation"))
+
+    setnames(res,
+             c("upwardModulation", "downwardModulation", "absoluteModulation"),
+             c("avg_upwardModulation", "avg_downwardModulation", "avg_absoluteModulation"))
+
+  }
 
   res
 }

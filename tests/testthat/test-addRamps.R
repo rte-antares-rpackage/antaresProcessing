@@ -27,13 +27,13 @@ describe("netLoadRamp", {
 
   it("creates min and max columns only if timeStep is not hourly or synthesis is true", {
     s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE)
-    expect_true(is.null(s$minAreaRamp))
+    expect_true(is.null(s$min_areaRamp))
 
     s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE, synthesis = TRUE)
-    expect_false(is.null(s$minAreaRamp))
+    expect_false(is.null(s$min_areaRamp))
 
     s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE, timeStep = "monthly")
-    expect_false(is.null(s$minAreaRamp))
+    expect_false(is.null(s$min_areaRamp))
   })
 
 

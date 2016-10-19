@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Net load of areas
 #'
 #' This function computes the net load of areas or districts and add it to an

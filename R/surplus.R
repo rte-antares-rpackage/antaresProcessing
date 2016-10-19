@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Compute economic surplus
 #'
 #' This function computes the economic surplus for the consumers, the producers
@@ -78,14 +80,9 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
 
   # Check that necessary links are present in the object
   areas <- unique(x$areas$area)
-  neededLinks <- getLinks(areas, regexpSelect = FALSE, opts = opts)
-
-  # Remove links connected to virtualNodes from necessary links
   vnodes <- unlist(attr(x, "virtualNodes"))
-  if (!is.null(vnodes)) {
-    linksToRemove <- getLinks(vnodes, regexpSelect = FALSE, opts = opts)
-    neededLinks <- setdiff(neededLinks, linksToRemove)
-  }
+
+  neededLinks <- getLinks(areas, exclude = vnodes, opts = opts)
 
   links <- unique(x$links$link)
   missingLinks <- setdiff(neededLinks, links)
@@ -147,7 +144,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
 
   res <- changeTimeStep(res, timeStep)
 
-  if (synthesis) res <- .aggregateMcYears(res)
+  if (synthesis) res <- synthesize(res)
 
   res
 }

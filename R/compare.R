@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Compare the surpluses of two simulations
 #'
 #' \code{compare} has been designed to compare two surpluses created with function

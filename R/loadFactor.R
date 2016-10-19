@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Load factors of clusters
 #'
 #' This function computes the load factor and other related statistics
@@ -83,7 +85,7 @@ loadFactor <- function(x, timeStep = "annual", synthesis = FALSE,
   res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "loadFactor")
 
   res <- changeTimeStep(res, timeStep, fun = "mean")
-  if (synthesis) res <- .aggregateMcYears(res)
+  if (synthesis) res <- synthesize(res)
 
   res
 }

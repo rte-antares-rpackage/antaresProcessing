@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Ramp of an area
 #'
 #' This function computes the ramp of the consumption and the balance of areas
@@ -82,14 +84,24 @@ netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun
 
   x <- .addClassAndAttributes(x, FALSE, "hourly", opts, type = "netLoadRamp")
 
-  if (timeStep != "hourly" | synthesis) {
+  if (synthesis) {
+
+    x <- synthesize(x, "min", "max", prefixForMeans = "avg")
+
+    x <- changeTimeStep(x, timeStep,
+                        fun = c("mean", "min", "max",
+                                "mean", "min", "max",
+                                "mean", "min", "max"))
+
+  } else if (timeStep != "hourly") {
+
     x[, `:=`(
-      minNetLoadRamp = netLoadRamp,
-      minBalanceRamp = balanceRamp,
-      minAreaRamp = areaRamp,
-      maxNetLoadRamp = netLoadRamp,
-      maxBalanceRamp = balanceRamp,
-      maxAreaRamp = areaRamp
+      min_netLoadRamp = netLoadRamp,
+      min_balanceRamp = balanceRamp,
+      min_areaRamp = areaRamp,
+      max_netLoadRamp = netLoadRamp,
+      max_balanceRamp = balanceRamp,
+      max_areaRamp = areaRamp
     )]
 
     x <- changeTimeStep(x, timeStep,
@@ -97,9 +109,14 @@ netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun
                                 "min", "min", "min",
                                 "max", "max", "max"))
 
-    if (synthesis) x <- .aggregateMcYears(x, c(mean, mean, mean,
-                                               min, min, min,
-                                               max, max, max))
+    setcolorder(x, c(.idCols(x),
+                     "netLoadRamp", "min_netLoadRamp", "max_netLoadRamp",
+                     "balanceRamp", "min_balanceRamp", "max_balanceRamp",
+                     "areaRamp", "min_areaRamp", "max_areaRamp"))
+
+    setnames(x,
+             c("netLoadRamp", "balanceRamp", "areaRamp"),
+             c("avg_netLoadRamp", "avg_balanceRamp", "avg_areaRamp"))
   }
 
   x

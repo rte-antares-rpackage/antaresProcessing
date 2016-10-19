@@ -4,11 +4,13 @@ source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 describe("margins", {
-  mydata <- readAntares(areas = "all", clusters = "all", districts = "all",
-                        mustRun = TRUE,
-                        thermalAvailabilities = TRUE,
-                        hydroStorageMaxPower = TRUE,
-                        showProgress = FALSE, timeStep = "annual")
+  mydata <- suppressWarnings({
+    readAntares(areas = "all", clusters = "all", districts = "all",
+                mustRun = TRUE,
+                thermalAvailabilities = TRUE,
+                hydroStorageMaxPower = TRUE,
+                showProgress = FALSE, timeStep = "annual")
+    })
 
   areasOnly <- mydata
   areasOnly$districts <- NULL

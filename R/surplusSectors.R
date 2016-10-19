@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Compute the surplus of sectors
 #'
 #' This function computes the surplus of sectors for each area and time step.
@@ -104,7 +106,7 @@ surplusSectors <- function(x, sectors = c("thermal", "renewable"),
 
   res <- changeTimeStep(res, timeStep)
 
-  if (synthesis) res <- .aggregateMcYears(res)
+  if (synthesis) res <- synthesize(res)
 
   res
 }
