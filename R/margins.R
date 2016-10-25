@@ -1,6 +1,6 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-.neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE")
+.neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "AVL DTG")
 
 #' Upward and downward margins for an area
 #'
@@ -84,8 +84,9 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   # Check that x contains the needed variables
   if(is.null(x$areas) & is.null(x$districts)) stop("'x' has to contain 'area' and/or 'district' data")
 
+  neededCol<-list()
   if (!is.null(x$areas)) {
-    neededCol <- list(areas = .neededColArea)
+    neededCol$areas <- .neededColArea
   }
 
   if (!is.null(x$districts)) neededCol$districts <- .neededColArea
@@ -110,11 +111,6 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
     clusters <- x$clusters[, c(idVars, "cluster", "NODU",
                                "mustRunTotal"), with = FALSE]
   }
-
-  # Construt the required intermediary tables
-  #
-  # Cluster available power
-  available <- x$areas[, .(`AVL DTG`), by=idVars]
 
   #Step disponibility
   #
@@ -174,7 +170,8 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   thermalPmin <- clusters[, .(thermalPmin = sum(thermalPmin)), by = idVars]
 
   # Put all together !
-  intermediaryData <- merge(available, thermalPmin, by = idVars, all = TRUE)
+  intermediaryData <- thermalPmin
+
   if (!is.null(stepCapacity)) {
     intermediaryData <- merge(intermediaryData, stepCapacity, by = idVars, all = TRUE)
   } else {
