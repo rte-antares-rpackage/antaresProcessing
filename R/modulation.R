@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Compute the modulation of cluster units
 #'
 #' This function computes the modulation of cluster units or of sectors.

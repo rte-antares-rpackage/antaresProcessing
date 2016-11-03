@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Private function that fills missing values in tables created with
 #' readClusterDesc.
 #'

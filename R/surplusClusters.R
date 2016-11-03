@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Compute the surplus of clusters
 #'
 #' This function computes the surplus of clusters of interest. The surplus of a

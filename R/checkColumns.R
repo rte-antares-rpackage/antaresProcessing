@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Private function that tests a list of columns are present in an antaresData
 #' object
 #'

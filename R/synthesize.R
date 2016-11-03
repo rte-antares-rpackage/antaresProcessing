@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Synthesize Monte-Carlo scenarios
 #'
 #' This function takes as input an object of class \code{antaresData} containing

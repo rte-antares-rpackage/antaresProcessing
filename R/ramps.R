@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Ramp of an area
 #'
 #' This function computes the ramp of the consumption and the balance of areas

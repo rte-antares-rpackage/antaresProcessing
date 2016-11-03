@@ -1,3 +1,5 @@
+#Copyright © 2016 RTE Réseau de transport d’électricité
+
 #' Compute economic surplus
 #'
 #' This function computes the economic surplus for the consumers, the producers
