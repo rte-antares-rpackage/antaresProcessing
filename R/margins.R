@@ -1,6 +1,6 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-.neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE")
+.neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "AVL DTG")
 
 #' Upward and downward margins for an area
 #'
@@ -14,9 +14,9 @@
 #'   An object created with function \code{\link[antaresRead]{readAntares}}. It
 #'   must contain data for areas and for clusters. More specifically this
 #'   function requires the columns \code{hstorPMaxAvg},
-#'   \code{thermalAvailability} and \code{mustRunPartial}. To get these columns,
+#'   and \code{mustRunPartial}. To get these columns,
 #'   one has to invoke \code{\link[antaresRead]{readAntares}} with parameters:
-#'   \code{mustRun = TRUE, thermalAvailabilities = TRUE, hydroStorageMaxPower = TRUE}.
+#'   \code{mustRun = TRUE, hydroStorageMaxPower = TRUE}.
 #'   (see examples).
 #' @param ignoreMustRun
 #'   Should must run productions be ignored in the computation? It should be
@@ -28,18 +28,21 @@
 #' \item{area}{Area name.}
 #' \item{timeId}{Time id and other time columns.}
 #' \item{thermalAvailability}{Sum of thermal availabilities of all cluster of an area.\cr
-#'                      formula = sum(thermalAvailability) }
+#'                      formula = x$areas[, .(`AVL DTG`)]
+#' }
 #' \item{thermalPmin}{
 #'   Sum of thermal minimum power of all clusters of an area. The minimum power
 #'   of a cluster is defined as the maximum of the partial must run and the
 #'   minimum stable power of the cluster. If \code{ignoreMustRun = TRUE}, it
 #'   is simply equal to the minimum stable power of the cluster.\cr
-#'                      formula = pmax(min.stable.power*unitcount, mustRunPartial)
+#'                      formula = pmax(min.stable.power*NODU, mustRunTotal)
 #' }
-#' \item{pumping}{}
-#' \item{storage}{}
+#' \item{pumping}{
+#' }
+#' \item{storage}{
+#' }
 #' \item{isolatedUpwardMargin}{\cr
-#'   formula = thermalAvailability + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+#'   formula = `AVL DTG` + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
 #' }
 #' \item{isolatedDownwardMargin}{\cr
 #'   formula = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
@@ -54,7 +57,6 @@
 #' @examples
 #' \dontrun{
 #' mydata <- readAntares(areas = "all", clusters = "all", mustRun = TRUE,
-#'                       thermalAvailabilities = TRUE,
 #'                       hydroStorageMaxPower = TRUE)
 #' margins(mydata)
 #'
@@ -62,13 +64,11 @@
 #' # data importation and computations
 #'
 #' mydata <- readAntares(areas = "all", clusters = "all",
-#'                       thermalAvailabilities = TRUE,
 #'                       hydroStorageMaxPower = TRUE)
 #' margins(mydata, ignoreMustRun = TRUE)
 #'
 #' # Example that minimises the data imported
 #' mydata <- readAntares(areas = "all", clusters = "all",
-#'                       thermalAvailabilities = TRUE,
 #'                       hydroStorageMaxPower = TRUE,
 #'                       select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG",
 #'                                  "LOAD", "BALANCE"))
@@ -82,12 +82,17 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   if (!is(x, "antaresDataList")) stop ("'x' is not an object of class 'antaresDataList'")
 
   # Check that x contains the needed variables
-  neededCol <- list(clusters = c("thermalAvailability"))
-  if (!ignoreMustRun) neededCol$clusters <- append(neededCol$clusters, "mustRunPartial")
-
   if(is.null(x$areas) & is.null(x$districts)) stop("'x' has to contain 'area' and/or 'district' data")
-  if (!is.null(x$areas)) neededCol$areas <- .neededColArea
+
+  neededCol<-list()
+  if (!is.null(x$areas)) {
+    neededCol$areas <- .neededColArea
+  }
+
   if (!is.null(x$districts)) neededCol$districts <- .neededColArea
+  if (!ignoreMustRun) {
+    neededCol$clusters <- c("mustRunTotal")
+  }
 
   x <- .checkColumns(x, neededCol)
 
@@ -100,18 +105,12 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   }
 
   if (ignoreMustRun) {
-    clusters <- x$clusters[, c(idVars, "cluster", "thermalAvailability"), with = FALSE]
-    clusters$mustRunPartial <- 0
+    clusters <- x$clusters[, c(idVars, "cluster", "NODU"), with = FALSE]
+    clusters$mustRunTotal <- 0
   } else {
-    clusters <- x$clusters[, c(idVars, "cluster", "thermalAvailability",
-                               "mustRunPartial"), with = FALSE]
+    clusters <- x$clusters[, c(idVars, "cluster", "NODU",
+                               "mustRunTotal"), with = FALSE]
   }
-
-  # Construt the required intermediary tables
-  #
-  # Cluster available power
-  available <- clusters[, .(thermalAvailability = sum(thermalAvailability)),
-                        by = idVars]
 
   #Step disponibility
   #
@@ -139,14 +138,15 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
   .fillClusterDesc(clusterDesc, min.stable.power = 0)
 
-  clusters <- merge(clusters, clusterDesc[, .(area, cluster, min.stable.power,unitcount)],
+  clusters <- merge(clusters, clusterDesc[, .(area, cluster, min.stable.power)],
                     by = c("area", "cluster"))
-  clusters[, thermalPmin := pmax(min.stable.power*unitcount, mustRunPartial)]
+  clusters[, thermalPmin := pmax(min.stable.power*NODU, mustRunTotal)]
 
   thermalPmin <- clusters[, .(thermalPmin = sum(thermalPmin)), by = idVars]
 
   # Put all together !
-  intermediaryData <- merge(available, thermalPmin, by = idVars, all = TRUE)
+  intermediaryData <- thermalPmin
+
   if (!is.null(stepCapacity)) {
     intermediaryData <- merge(intermediaryData, stepCapacity, by = idVars, all = TRUE)
   } else {
@@ -189,14 +189,15 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
 
   # Add intermediary data
   data <- merge(data, additionalDT, by = idVars, all.x = TRUE)
-  data[is.na(thermalAvailability), thermalAvailability := 0]
-  data[is.na(pumpingCapacity), c("pumpingCapacity", "storageCapacity") := 0]
+
+  data[is.na(pumping), c("pumping", "storage") := 0]
+
   data[is.na(thermalPmin), thermalPmin := 0]
 
   # Compute margins
   data[,`:=`(
-    isolatedUpwardMargin = thermalAvailability + hstorPMaxAvg + storageCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD,
-    isolatedDownwardMargin = thermalPmin - pumpingCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+    isolatedUpwardMargin = `AVL DTG` + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD,
+    isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
   )]
 
   data[, `:=`(
@@ -204,11 +205,9 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
     interconnectedDownwardMargin = isolatedDownwardMargin + BALANCE
   )]
 
-  data[, c(idVars, "thermalAvailability", "thermalPmin",
-           "pumpingCapacity", "storageCapacity",
+
+  data[, c(idVars, "AVL DTG", "thermalPmin", "pumping", "storage",
            "isolatedUpwardMargin", "isolatedDownwardMargin",
            "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
        with = FALSE]
 }
-
-
