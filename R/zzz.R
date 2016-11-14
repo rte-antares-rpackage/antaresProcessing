@@ -5,4 +5,5 @@
 
 .idCols <- antaresRead:::.idCols
 .addClassAndAttributes <- antaresRead:::.addClassAndAttributes
+.groupByDistrict<-antaresRead:::.groupByDistrict
 pkgEnv <- antaresRead:::pkgEnv

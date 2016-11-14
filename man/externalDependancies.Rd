@@ -49,24 +49,27 @@ have no spilled energy.
 \examples{
 \dontrun{
 mydata <- readAntares(areas = "all",
-                      hydroStorageMaxPower = TRUE)
+                      hydroStorageMaxPower = TRUE, mustRun = TRUE)
+addNetLoad(mydata)
 externalDependancies(mydata)
 
 mydata <- readAntares(districts = "all",
-                      hydroStorageMaxPower = TRUE)
+                      hydroStorageMaxPower = TRUE, mustRun = TRUE)
+addNetLoad(mydata)
 externalDependancies(mydata)
 
 # if there are some virtual areas, include link and linkCapacity
 mydata <- readAntares(areas = "all", link = "all", linkCapacity=TRUE,
-                      hydroStorageMaxPower = TRUE)
+                      hydroStorageMaxPower = TRUE, mustRun = TRUE)
+addNetLoad(mydata)
 removeVirtalAreas(mydata)
 externalDependancies(mydata, ignoreMustRun = TRUE)
 
 # Example that minimises the data imported
 mydata <- readAntares(areas = "all", TODO = ...,
                       select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG",
-                                 "LOAD", "BALANCE"))
-
+                                 "LOAD", "BALANCE"), mustRun = TRUE)
+addNetLoad(mydata)
 externalDependancies(mydata)
 }
 
