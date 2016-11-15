@@ -3,7 +3,11 @@ Copyright © 2016 RTE Réseau de transport d’électricité
 Changes in version 0.8 (2016-11-14)
 
 BUGFIXES:
-* Compatibility with version 0.14 of antaresRead
+* Compatibility with version 0.14 of antaresRead.
+* The definition of downward margins was inexact and has been corrected.
+
+NEW FEATURES:
+* New function addLoadFactorLink() to compute the load factor of links.
 
 
 Changes in version 0.7 (2016-10-06)
@@ -21,7 +25,7 @@ NEW FEATURES:
 Changes in version 0.5 (2016-08-01)
 
 NEW FEATURES:
-* New function 'synthesize' that sinthesizes different Monte-Carlo scenarios. It computes the average of every variable but can also compute custom statistics like minimum, maximum, median, quantiles, etc.
+* New function 'synthesize' that synthesizes different Monte-Carlo scenarios. It computes the average of every variable but can also compute custom statistics like minimum, maximum, median, quantiles, etc.
 
 
 Changes in version 0.4 (2016-07-18)
