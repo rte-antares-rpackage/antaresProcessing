@@ -178,7 +178,7 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
 #'   an antaresDataTable obkect containing areas or districts.
 #' @param additionalDT
 #'   data.table with the same id columns and the same number of rows. It must
-#'   contain columns thermalPmin, pumping, storage and thermalAvailability.
+#'   contain columns thermalPmin, pumpingCapacity, storage and thermalAvailability.
 #'
 #' @noRd
 .computeMargins <- function(mainDT, additionalDT) {
@@ -190,14 +190,14 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   # Add intermediary data
   data <- merge(data, additionalDT, by = idVars, all.x = TRUE)
 
-  data[is.na(pumping), c("pumping", "storage") := 0]
+  data[is.na(pumpingCapacity), c("pumpingCapacity", "storageCapacity") := 0]
 
   data[is.na(thermalPmin), thermalPmin := 0]
 
   # Compute margins
   data[,`:=`(
-    isolatedUpwardMargin = `AVL DTG` + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD,
-    isolatedDownwardMargin = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+    isolatedUpwardMargin = `AVL DTG` + hstorPMaxAvg + storageCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD,
+    isolatedDownwardMargin = thermalPmin - pumpingCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
   )]
 
   data[, `:=`(
@@ -206,7 +206,7 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   )]
 
 
-  data[, c(idVars, "AVL DTG", "thermalPmin", "pumping", "storage",
+  data[, c(idVars, "AVL DTG", "thermalPmin", "pumpingCapacity", "storageCapacity",
            "isolatedUpwardMargin", "isolatedDownwardMargin",
            "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
        with = FALSE]

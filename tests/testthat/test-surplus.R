@@ -4,6 +4,7 @@ source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 data <- readAntares(areas="all", links = "all", showProgress = FALSE,
+                    linkCapacity = TRUE,
                     synthesis = FALSE, mcYears = 1)
 
 describe("surplus", {
