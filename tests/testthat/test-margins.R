@@ -33,5 +33,15 @@ describe("margins", {
     expect_is(s, "antaresDataList")
   })
 
+  it("column 'thermalPmin' and 'AVL DTG' must be positive", {
+    s <- margins(areasOnly)
+    expect_gt(min(s$`AVL DTG`), -1)
+    expect_gt(min(s$thermalPmin), -1)
+
+    s <- margins(districtsOnly)
+    expect_gt(min(s$`AVL DTG`), -1)
+    expect_gt(min(s$thermalPmin), -1)
+  })
+
 })
 
