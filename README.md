@@ -1,0 +1,79 @@
+# The 'antaresProcessing' R package
+
+
+The `antaresProcessing` package provides functions that uses data created with package `antaresRead` to compute standard aggregate like customer surplus or sector surplus. This document demonstrates how to use the main functions of the package.
+
+## Installation
+
+To install the package from Github, you will need to create a personal access token (PAT) here: https://github.com/settings/tokens . You must check "repo".
+
+```r
+# Install dependencies
+install.packages(c("data.table", "plyr", "lubridate", "devtools", "digest"))
+library(devtools)
+install_github("rte-antares-rpackage/antares-rpackageRead", auth_token = "your_pat")
+install_github("rte-antares-rpackage/antares-rpackageProcessing", auth_token = "your_pat")
+```
+
+If you are behind a proxy, you need to first run this code:
+```r
+library(httr)
+set_config(use_proxy("XXX.XXX.XX.XX", port=XXXX, username="proxy_user", password="passwd"))
+```
+
+To install the last development version:
+```r
+install_github("rte-antares-rpackage/antares-rpackageProcessing", 
+               auth_token = "your_pat", ref ="develop")
+```
+
+To display the help of the package and see all the functions it provides, type:
+```r 
+help(package="antaresProcessing")
+```
+
+## Basic usage
+
+The usage of the package is quite straightforward. First one has to read data from an antares study with `readAntares` and then pass it to a function of `antaresProcessing`. Each function requires different type of data (areas, links...) and different level of detail. Generally, functions that perform non-linear calculations require hourly data for each Monte-Carlo scenario but they have arguments to then aggregate the results at the desired level of detail. On the contrary, functions that do linear calculations accept every level of detail and their output has the same level of detail as their input.
+
+The following table sums up the required data and the output of the different functions. For more details, one can look at the help file of each function. Especially, each help page contains an example that minimizes the amount of data read. 
+
+Function        | Description | requires |time step | works on synthesis
+----------------|-------------|:--------:|:--------:|:-----------------:
+surplus         | Consumer and producer surplus | areas, links | hourly | no
+surplusClusters | Surplus of clusters | clusters, areas | hourly | no
+surplusSectors  | Surplus of sectors of production | areas, clusters | hourly | no
+addNetLoad      | Net load | areas and/or districts | all | yes
+netLoadRamp     | Ramp of net load | areas and/or districts | hourly | no
+margins         | Downward and upward margins of an area    | areas, clusters | all | yes
+modulation      | modulation of cluster units or sectors | areas or districts or clusters | all | yes
+
+There is also a `compare` function that can be used to compare two tables with same shape. It is useful to compare the results of two simulations. 
+
+```r
+studyPath <- "path/to/study"
+
+setSimulationPath(studyPath, 1)
+data1 <- readAntares(areas = "all", links = "all", synthesis = FALSE)
+surplus1 <- surplus(data1,  timeStep = "annual", synthesis = TRUE) 
+
+setSimulationPath(studyPath, 2)
+data2 <- readAntares(areas = "all", links = "all", synthesis = FALSE)
+surplus2 <- surplus(data2,  timeStep = "annual", synthesis = TRUE)
+
+compare(surplus1, surplus2)
+
+## 'antaresDataTable' object with dimension 72 x 8
+## Type: surplusComparison
+## TimeStep: annual
+## Synthesis: TRUE
+##                area timeId time consumerSurplus producerSurplus storageSurplus ...
+## 1:            01_pt Annual 2017       -57046.01       10371.915              0
+## 2:            02_es Annual 2017      -956371.65      517675.155              0
+## 3:            03_es Annual 2017      2435946.66    -1978004.005              0
+## 4:            04_fr Annual 2017       -70700.07      110701.300              0
+## ...
+
+```
+
+By default, `compare` computes the difference between two tables, but it can also compute a ratio or a variation rate.
