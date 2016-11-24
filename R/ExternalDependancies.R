@@ -46,24 +46,27 @@
 #' @examples
 #' \dontrun{
 #' mydata <- readAntares(areas = "all",
-#'                       hydroStorageMaxPower = TRUE)
+#'                       hydroStorageMaxPower = TRUE, mustRun = TRUE)
+#' addNetLoad(mydata)
 #' externalDependancies(mydata)
 #'
 #' mydata <- readAntares(districts = "all",
-#'                       hydroStorageMaxPower = TRUE)
+#'                       hydroStorageMaxPower = TRUE, mustRun = TRUE)
+#' addNetLoad(mydata)
 #' externalDependancies(mydata)
 #'
 #' # if there are some virtual areas, include link and linkCapacity
 #' mydata <- readAntares(areas = "all", link = "all", linkCapacity=TRUE,
-#'                       hydroStorageMaxPower = TRUE)
+#'                       hydroStorageMaxPower = TRUE, mustRun = TRUE)
+#' addNetLoad(mydata)
 #' removeVirtalAreas(mydata)
 #' externalDependancies(mydata, ignoreMustRun = TRUE)
 #'
 #' # Example that minimises the data imported
 #' mydata <- readAntares(areas = "all", TODO = ...,
 #'                       select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG",
-#'                                  "LOAD", "BALANCE"))
-#'
+#'                                  "LOAD", "BALANCE"), mustRun = TRUE)
+#' addNetLoad(mydata)
 #' externalDependancies(mydata)
 #' }
 #'
@@ -80,10 +83,6 @@ externalDependancies <- function(x , timeStep = "annual", synthesis = FALSE) {
   }
 
   if (!is(x, "antaresData")) stop("'x' is not an 'antaresData' object")
-
-
-
-
 
   #check if x have the
   x <- .checkAttrs(x, timeStep = "hourly")
@@ -115,38 +114,14 @@ externalDependancies <- function(x , timeStep = "annual", synthesis = FALSE) {
   if(!is.null(attr(x, "virtualNodes")) &&
      !is.null(attr(x, "virtualNodes")$storageFlexibility)) {
 
-    x <- .checkColumns(x, list(links = c("transCapacityDirect", "transCapacityIndirect")))
-    vareas <- attr(x, "virtualNodes")$storageFlexibility
-    pspLinks <- x$links[link %in% getLinks(vareas)]
+    if(!is.null(x$areas)){
+      x <- .checkColumns(x, list(areas = c("pumpingCapacity", "storageCapacity")))
+    }
 
-    linksFromTo <- tstrsplit(pspLinks$link, split = " - ")
-    pspLinks$area <- linksFromTo[[1]]
-    pspLinks$to <- linksFromTo[[2]]
+    if(!is.null(x$districts)){
+      x <- .checkColumns(x, list(districts = c("pumpingCapacity", "storageCapacity")))
+    }
 
-    # If the link connects a virtual node to a real node, we reverse it, so that
-    # all links have the same direction: real node to virtual node.
-    pspLinks[area %in% vareas,
-             `:=`(
-               area = to,
-               to = area,
-               transCapacityDirect = transCapacityIndirect,
-               transCapacityIndirect = transCapacityDirect
-             )]
-
-    # Users tend to use a transmission capacity of 1 instead of 0 to avoid warnings.
-    # The following lines correct this.
-    pspLinks[transCapacityIndirect == 1, transCapacityIndirect := 0]
-    pspLinks[transCapacityDirect == 1, transCapacityDirect := 0]
-
-    # Aggregate transmissions capacities
-    stepCapacity <- pspLinks[, .(pumping = sum(transCapacityDirect),
-                                 storage = sum(transCapacityIndirect)),
-                             by = idVars]
-
-    stepCapacity[is.na(pumping), c("pumping", "storage") := 0]
-
-  } else {
-    stepCapacity <- NULL
   }
 
   # Effective computation of the externalDepancies. The function .computeExternalDependancies is
@@ -154,17 +129,12 @@ externalDependancies <- function(x , timeStep = "annual", synthesis = FALSE) {
   res <- list()
 
   if (!is.null(x$areas)) {
-    res$areas <- .computeExternalDependancies(x$areas, timeStep, synthesis, stepCapacity)
+    res$areas <- .computeExternalDependancies(x$areas, timeStep, synthesis)
     attr(res$areas, "type") <- "areaExternalDependancies"
   }
 
   if (!is.null(x$districts)) {
-    if(!is.null(stepCapacity)){
-      res$districts <- .computeExternalDependancies(x$districts, timeStep, synthesis, .groupByDistrict(stepCapacity, opts))
-    }else {
-      res$districts <- .computeExternalDependancies(x$districts, timeStep, synthesis, stepCapacity)
-    }
-
+    res$districts <- .computeExternalDependancies(x$districts, timeStep, synthesis)
     attr(res$districts, "type") <- "districtExternalDependancies"
   }
 
@@ -175,32 +145,24 @@ externalDependancies <- function(x , timeStep = "annual", synthesis = FALSE) {
 
 #' Private function used in function "externalDependancies".
 #'
-#' @param mainDT
+#' @param dataInput
 #'   an antaresDataTable object containing areas or districts.
-#' @param additionalDT
-#'   data.table with the same id columns and the same number of rows. It must
-#'   contain columns pumping and storage .
 #'
 #' @noRd
-.computeExternalDependancies <- function(mainDT, timeStep, synthesis, additionalDT) {
-  idVars <- .idCols(mainDT)
+.computeExternalDependancies <- function(dataInput, timeStep, synthesis) {
+  idVars <- .idCols(dataInput)
 
   # Create the main table that will be used to compute the margins
-  data <- mainDT[, c(idVars, .neededColAreaExternalDepandancies), with = FALSE]
+  data <- dataInput[, c(idVars, .neededColAreaExternalDepandancies), with = FALSE]
 
-  # Add intermediary data
-  if(!is.null(additionalDT)){
-    data <- merge(data, additionalDT, by = idVars, all.x = TRUE)
-    data[is.na(pumping), c("pumping", "storage") := 0]
-  }else {
-    data[ , c("pumping", "storage") := 0]
+  #if we don't have pumpingCapacity and storageCapacity, we add columns empty
+  if(is.null(data$pumpingCapacity)){
+    data[ , c("pumpingCapacity", "storageCapacity") := 0]
   }
-
-
   # Compute externalDependanciesLevel
   data[,`:=`(
-    exportsLevel = netLoad + pumping,
-    importsLevel = netLoad - `AVL DTG` - hstorPMaxAvg - storage
+    exportsLevel = netLoad + pumpingCapacity,
+    importsLevel = netLoad - `AVL DTG` - hstorPMaxAvg - storageCapacity
   )]
   # Compute externalDependanciesFrequency
   #init
@@ -212,8 +174,6 @@ externalDependancies <- function(x , timeStep = "annual", synthesis = FALSE) {
   #compute
   data[importsLevel > 0 ,`:=`(importsFrequency = 1)]
   data[exportsLevel < 0 ,`:=`(exportsFrequency = 1)]
-
-  #data[externalDependanceInImportsLevel>0,  ]
 
   data<-data[, c(idVars, "exportsLevel", "importsLevel", "exportsFrequency", "importsFrequency" ),with = FALSE]
 
