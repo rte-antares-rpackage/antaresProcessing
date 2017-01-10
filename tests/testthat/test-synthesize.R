@@ -4,7 +4,7 @@ source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 mydata <- readAntares(areas = "all", links = "all", timeStep = "annual",
-                      synthesis = FALSE, showProgress = FALSE,
+                      mcYears = "all", showProgress = FALSE,
                       select = c("NUCLEAR", "LIGNITE",
                                  "FLOW LIN.", "UCAP LIN."))
 
@@ -61,8 +61,7 @@ describe("synthesize", {
 })
 
 test_that("Using synthesize() or import synthetic data should be equivalent", {
-  importedSumData <- readAntares(areas = "all", links = "all", timeStep = "annual",
-                                 synthesis = TRUE, showProgress = FALSE,
+  importedSumData <- readAntares(areas = "all", links = "all", timeStep = "annual", showProgress = FALSE,
                                  select = c("NUCLEAR", "LIGNITE",
                                             "FLOW LIN.", "UCAP LIN."))
   sumData <- synthesize(mydata)

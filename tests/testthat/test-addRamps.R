@@ -5,8 +5,7 @@ opts <- setSimulationPath(studyPath)
 
 describe("netLoadRamp", {
 
-  mydata <- readAntares(areas = "all", districts = "all", links = "all",
-                        synthesis = FALSE, showProgress = FALSE)
+  mydata <- readAntares(areas = "all", districts = "all", links = "all", showProgress = FALSE, mcYears = "all")
 
   it("returns an antaresDataTable with correct number of lines and columns", {
     s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE)
@@ -43,7 +42,7 @@ describe("netLoadRamp", {
 
 
   it("stops if some 'necesary'BALANCE' column is missing", {
-    mydata <- readAntares(areas="all", showProgress = FALSE, select = "LOAD", synthesis = FALSE)
+    mydata <- readAntares(areas="all", showProgress = FALSE, select = "LOAD", mcYears = "all")
     expect_error(netLoadRamp(mydata, ignoreMustRun = TRUE), "missing")
   })
 

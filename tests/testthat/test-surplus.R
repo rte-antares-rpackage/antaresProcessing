@@ -3,21 +3,20 @@ context("Function surplus")
 source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
-data <- readAntares(areas="all", links = "all", showProgress = FALSE,
-                    linkCapacity = TRUE,
-                    synthesis = FALSE, mcYears = 1)
+data <- suppressWarnings(readAntares(areas="all", links = "all", showProgress = FALSE,
+                    linkCapacity = TRUE, mcYears = 1))
 
 describe("surplus", {
 
   it("stops if some links are missing", {
     data2 <- readAntares(areas="all", links = "a - b", showProgress = FALSE,
-                         synthesis = FALSE)
+                         mcYears = "all")
     expect_error(surplus(data2), "missing")
   })
 
   it("stops if time step is not hourly", {
     data2 <- readAntares(areas="all", links = "a - b", timeStep = "annual",
-                         showProgress = FALSE, synthesis = FALSE)
+                         showProgress = FALSE, mcYears = "all")
     expect_error(surplus(data2), "hourly")
   })
 

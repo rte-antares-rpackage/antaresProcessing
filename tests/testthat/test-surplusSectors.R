@@ -4,7 +4,7 @@ source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 mydata <- readAntares(areas="all", clusters = "all",
-                      showProgress = FALSE, synthesis = FALSE)
+                      showProgress = FALSE, mcYears = "all")
 
 s <- surplusSectors(mydata)
 

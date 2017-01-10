@@ -3,7 +3,7 @@ context("Function modulation")
 source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
-mydata <- readAntares(clusters = "all", showProgress = FALSE, synthesis = FALSE)
+mydata <- readAntares(clusters = "all", showProgress = FALSE, mcYears = "all")
 m <- modulation(mydata)
 
 describe("modulation", {

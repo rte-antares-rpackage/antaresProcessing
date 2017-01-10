@@ -8,13 +8,13 @@ describe("externalDependancies", {
 
   it("stops if time step is not hourly", {
     data2 <- suppressWarnings(readAntares(areas="all", timeStep = "annual",
-                         showProgress = FALSE, synthesis = FALSE, hydroStorageMaxPower = TRUE))
+                         showProgress = FALSE, mcYears = "all", hydroStorageMaxPower = TRUE))
     addNetLoad(data2, ignoreMustRun = TRUE)
     expect_error(externalDependancies(data2), "hourly")
   })
 
   it("stops if frequency exceeds a level ", {
-    data2 <- suppressWarnings(readAntares(areas="all", showProgress = FALSE, synthesis = TRUE, hydroStorageMaxPower = TRUE))
+    data2 <- suppressWarnings(readAntares(areas="all", showProgress = FALSE, hydroStorageMaxPower = TRUE))
     addNetLoad(data2, ignoreMustRun = TRUE)
     resH<-externalDependancies(data2, timeStep = "hourly")
     expect_lte(max(resH$exportsFrequency), 1)

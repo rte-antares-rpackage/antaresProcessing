@@ -4,19 +4,19 @@ source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 data <- readAntares(areas="all", clusters = "all", select = "MRG. PRICE",
-                    showProgress = FALSE, synthesis = FALSE,
+                    showProgress = FALSE, mcYears = "all",
                     thermalAvailabilities = TRUE)
 
 describe("surplusClusters", {
 
   it("stops if synthetic or not hourly results", {
     tmp <- readAntares(areas="all", clusters = "all", select = "MRG. PRICE",
-                       showProgress = FALSE, synthesis = TRUE,
+                       showProgress = FALSE,
                        thermalAvailabilities = TRUE)
     expect_error(surplusClusters(tmp), "synthetic")
 
     tmp <- readAntares(areas="all", clusters = "all", select = "MRG. PRICE",
-                       showProgress = FALSE, synthesis = FALSE, timeStep = "annual",
+                       showProgress = FALSE, mcYears = "all", timeStep = "annual",
                        thermalAvailabilities = TRUE)
     expect_error(surplusClusters(tmp), "hourly")
   })

@@ -4,7 +4,7 @@ source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 mydata <- readAntares(clusters = "all", thermalModulation = TRUE,
-                      synthesis = FALSE, showProgress = FALSE)
+                      mcYears = "all", showProgress = FALSE)
 
 describe("loadFactor", {
 
