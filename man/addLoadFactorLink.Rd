@@ -8,14 +8,13 @@ addLoadFactorLink(x)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function
-\code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
-results for link and has to contain the columns
+\code{\link[antaresRead]{readAntares}}. It must contain the columns
 \code{transCapacityDirect} and \code{transCapacityIndirect}.}
 }
 \value{
-\code{addLoadFactorLink} modifies its input by adding to it a column "loadFactorLink". For
+\code{addLoadFactorLink} modifies its input by adding to it a column "loadFactor". For
 convenience, it invisibly returns the modified input.
-  loadFactorLink represent the proportion of
+  loadFactor represent the proportion of
   the installed capacity of a link that is effectively used\cr
   Formula: `FLOW LIN` / transCapacity
 }
