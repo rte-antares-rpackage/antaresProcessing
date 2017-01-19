@@ -7,14 +7,13 @@
 #'
 #' @param x
 #'   Object of class \code{antaresData} created with function
-#'   \code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
-#'   results for link and has to contain the columns
+#'   \code{\link[antaresRead]{readAntares}}. It must contain the columns
 #'   \code{transCapacityDirect} and \code{transCapacityIndirect}.
 #'
 #' @return
-#' \code{addLoadFactorLink} modifies its input by adding to it a column "loadFactorLink". For
+#' \code{addLoadFactorLink} modifies its input by adding to it a column "loadFactor". For
 #' convenience, it invisibly returns the modified input.
-#'   loadFactorLink represent the proportion of
+#'   loadFactor represent the proportion of
 #'   the installed capacity of a link that is effectively used\cr
 #'   Formula: `FLOW LIN` / transCapacity
 #'
@@ -36,15 +35,17 @@ addLoadFactorLink <- function(x) {
 
   if (!is(x, "antaresData")) stop("'x' is not an 'antaresData' object")
 
+  #check when x is an antaresDataList
    if (is(x, "antaresDataList")) {
     if(! c("links") %in% attr(x, "names")) stop("'x' does not contain link data")
     if (!is.null(x$links)) addLoadFactorLink(x$links)
     return("loadFactorLink added")
    }
 
+  #check when x is an antaresData
   if(! attr(x, "type") %in% c("links")  ) stop("'x' does not contain link data")
 
-  if (!is.null(x$addLoadFactorLink)) {
+  if (!is.null(x$loadFactor)) {
     stop("Input already contains column 'netLoad'")
   }
 
@@ -55,11 +56,20 @@ addLoadFactorLink <- function(x) {
     stop("The following columns are needed but missing: ", paste(missingCols, collapse = ", "))
   }
 
-  x[ `FLOW LIN.`>0 & transCapacityDirect != 0, loadFactorLink:=as.integer(`FLOW LIN.`/transCapacityDirect)]
+  x[ `FLOW LIN.`>0 & transCapacityDirect != 0, `:=` (
+    loadFactor=as.double(`FLOW LIN.`/transCapacityDirect),
+    congestion=as.integer(`FLOW LIN.`/transCapacityDirect)
+    )]
 
-  x[ `FLOW LIN.`<0 & transCapacityIndirect != 0, loadFactorLink:=-as.integer(`FLOW LIN.`/transCapacityIndirect)]
+  x[ `FLOW LIN.`<0 & transCapacityIndirect != 0, `:=` (
+    loadFactor=-as.double(-`FLOW LIN.`/transCapacityIndirect),
+    congestion=as.integer(-`FLOW LIN.`/transCapacityIndirect)
+    )]
 
-  x[ `FLOW LIN.`==0 , loadFactorLink:=0]
+  x[ `FLOW LIN.`==0 , `:=` (
+    loadFactor=0,
+    congestion=0
+  )]
 
 
   invisible(x)
