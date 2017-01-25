@@ -1,10 +1,12 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
-Changes in version 0.3 XXXX-XX-XX
+Changes in version 0.9 (2017-01-25)
 
 NEW FEATURES:
-* function addLoadFactorLink() now add two column loadFactor and congestion
+* function addLoadFactorLink() now adds two columns: "loadFactor" and "congestion".
 
+BUG FIXES:
+* Minor bugfixes due to evolution of "antaresRead""
 
 Changes in version 0.8 (2016-11-14)
 

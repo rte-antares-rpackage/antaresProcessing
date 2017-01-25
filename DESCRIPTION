@@ -1,16 +1,19 @@
 Package: antaresProcessing
 Type: Package
 Title: Antares results processing
-Version: 0.8.0
-Date: 2016-10-06
+Version: 0.9.0
+Date: 2017-01-25
 Authors@R: c(
     person("Francois", "Guillem", , "francois.guillem@rte-france.com", role = c("aut", "cre")),
     person("Jalal-Edine", "ZAWAM", , "jalal-edine.zawam@rte-france.com", role = "ctb"),
     person("RTE", role = "cph")
     )
+Maintainer: Francois Guillem <francois.guillem@rte-france.com>
 Description:
     Process the results of an Antares simulation, compute agregate
     statistics like surpluses, modulations and compare different simulation.
+Url: https://github.com/rte-antares-rpackage/antares-rpackageProcessing
+BugReports: https://github.com/rte-antares-rpackage/antares-rpackageProcessing/issues
 License: GPL (>= 2) + file LICENSE
 LazyData: TRUE
 Depends:
