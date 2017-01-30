@@ -1,8 +1,5 @@
 context("add Load Factor Link")
 
-#TO DO in this file
-
-source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 describe("addLoadFactorLink", {

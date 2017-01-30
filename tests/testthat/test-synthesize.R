@@ -1,6 +1,5 @@
 context("Function synthesize")
 
-source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 mydata <- readAntares(areas = "all", links = "all", timeStep = "annual",

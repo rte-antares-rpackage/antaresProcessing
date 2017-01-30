@@ -4,7 +4,7 @@
 \alias{addExportAndImport}
 \title{Export and import of areas or districts}
 \usage{
-addExportAndImport(x, addCapacity = FALSE)
+addExportAndImport(x, addCapacities = FALSE)
 }
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
@@ -21,7 +21,11 @@ This function computes the export and import of areas or districts and add it to
 \dontrun{
 mydata <- readAntares(areas = "all", links="all", districts ="all" , synthesis = FALSE)
 
-mydata<-removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")), production = getAreas("off") )
+mydata<-removeVirtualAreas(
+  mydata,
+  storageFlexibility = c(getAreas("psp"),getAreas("hub")),
+  production = getAreas("offshore")
+)
 
 mydata<-addExportAndImport(mydata)
 
