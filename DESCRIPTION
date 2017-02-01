@@ -26,5 +26,8 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
+Remotes:
+    rte-antares-rpackage/antares-rpackageRead,
+    rte-antares-rpackage/antares-rpackageProcessing
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr

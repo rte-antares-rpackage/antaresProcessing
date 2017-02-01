@@ -6,7 +6,7 @@ NEW FEATURES:
 * function addLoadFactorLink() now adds two columns: "loadFactor" and "congestion".
 
 BUG FIXES:
-* Minor bugfixes due to evolution of "antaresRead""
+* Minor bugfixes due to evolution of "antaresRead"
 
 Changes in version 0.8 (2016-11-14)
 
