@@ -1,6 +1,5 @@
 context("Function .fillClusterDesc")
 
-source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 clusterDesc <- readClusterDesc()

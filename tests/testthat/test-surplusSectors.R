@@ -1,6 +1,5 @@
 context("Surplus of sectors")
 
-source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 mydata <- readAntares(areas="all", clusters = "all",

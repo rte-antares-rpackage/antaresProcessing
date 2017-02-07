@@ -1,6 +1,5 @@
 context("Function .checkColumns")
 
-source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 dataList <- readAntares(areas="all", links = "all", timeStep = "annual",

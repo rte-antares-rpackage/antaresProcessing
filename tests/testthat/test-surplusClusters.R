@@ -1,6 +1,5 @@
 context("Surplus of clusters")
 
-source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 data <- readAntares(areas="all", clusters = "all", select = "MRG. PRICE",

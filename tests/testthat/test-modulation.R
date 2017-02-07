@@ -1,6 +1,5 @@
 context("Function modulation")
 
-source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 mydata <- readAntares(clusters = "all", showProgress = FALSE, mcYears = "all")

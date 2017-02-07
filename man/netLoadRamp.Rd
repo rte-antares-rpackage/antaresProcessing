@@ -16,6 +16,9 @@ districts. It must contain the column \code{BALANCE}  and either the column
 
 \item{synthesis}{If TRUE, average surpluses are returned. Else the function returns surpluses
 per Monte-Carlo scenario.}
+
+\item{ignoreMustRun}{Should the must run production be ignored in the computation of the net
+load?}
 }
 \value{
 \code{addRamps} returns a data.table or a list of data.tables with the

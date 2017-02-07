@@ -1,6 +1,5 @@
 context("Function netLoadRamp")
 
-source("setup_test_case.R")
 opts <- setSimulationPath(studyPath)
 
 describe("netLoadRamp", {
@@ -10,7 +9,7 @@ describe("netLoadRamp", {
   it("returns an antaresDataTable with correct number of lines and columns", {
     s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE)
     expect_is(s, "antaresDataTable")
-    expect_equal(nrow(s) / length(simOptions()$mcYears) / (24 * 7 * 52),
+    expect_equal(nrow(s) / length(simOptions()$mcYears) / (24 * 7 * nweeks),
                  nrow(unique(mydata$areas[, .(area)])))
   })
 

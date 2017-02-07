@@ -9,6 +9,9 @@
 #'   Object of class \code{antaresData} containing data for areas and/or
 #'   districts. It must contain the column \code{BALANCE}  and either the column
 #'   "netLoad" or the columns needed to compute the net load.
+#' @param ignoreMustRun
+#'   Should the must run production be ignored in the computation of the net
+#'   load?
 #' @inheritParams surplus
 #'
 #' @return

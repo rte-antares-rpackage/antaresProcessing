@@ -16,7 +16,11 @@
 #' \dontrun{
 #' mydata <- readAntares(areas = "all", links="all", districts ="all" , synthesis = FALSE)
 #'
-#' mydata<-removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")), production = getAreas("off") )
+#' mydata<-removeVirtualAreas(
+#'   mydata,
+#'   storageFlexibility = c(getAreas("psp"),getAreas("hub")),
+#'   production = getAreas("offshore")
+#' )
 #'
 #' mydata<-addExportAndImport(mydata)
 #'
@@ -27,7 +31,7 @@
 #' @export
 #'
 
-addExportAndImport <- function(x, addCapacity = FALSE) {
+addExportAndImport <- function(x, addCapacities = FALSE) {
   if (!is(x, "antaresData")) stop("'x' is not an 'antaresData' object")
 
   if (is(x, "antaresDataList")) {
@@ -44,14 +48,14 @@ addExportAndImport <- function(x, addCapacity = FALSE) {
     if (length(missingLinks) > 0) stop("The following links are needed but missing: ",
                                        paste(missingLinks, collapse = ", "))
 
-    if (!is.null(x$areas)) .addExportImportForArea(x$areas, x$links, neededLinks, addCapacity)
-    if (!is.null(x$district)) .addExportImportForArea(x$districts, x$links, neededLinks, addCapacity)
+    if (!is.null(x$areas)) .addExportImportForArea(x$areas, x$links, neededLinks, addCapacities)
+    if (!is.null(x$district)) .addExportImportForArea(x$districts, x$links, neededLinks, addCapacities)
     invisible(x)
   }
 
 }
 
-.addExportImportForArea<- function(dataAreas, dataLinks, neededLinks, addCapacity) {
+.addExportImportForArea <- function(dataAreas, dataLinks, neededLinks, addCapacities) {
 
   opts <- simOptions(dataAreas)
   idColsL <- .idCols(dataLinks)
@@ -76,7 +80,7 @@ addExportAndImport <- function(x, addCapacity = FALSE) {
   }
 
   #get the values of flow and capacities if needed
-  if(addCapacity){
+  if(addCapacities){
 
     if("transCapacityIndirect" %in% names(dataLinks)) {
       flowLinks<-dataLinks[, c(idColsL, "FLOW LIN.", "transCapacityDirect", "transCapacityIndirect"),
@@ -95,7 +99,7 @@ addExportAndImport <- function(x, addCapacity = FALSE) {
     import = pmax(0, - direction * `FLOW LIN.`)
   )]
 
-  if (addCapacity) {
+  if (addCapacities) {
     flowLinks[, `:=`(
       capExport = ifelse(direction == 1, transCapacityDirect, transCapacityIndirect),
       capImport = ifelse(direction == -1, transCapacityIndirect, transCapacityDirect)
@@ -104,7 +108,7 @@ addExportAndImport <- function(x, addCapacity = FALSE) {
 
   # Names of the columns to add
   v <- c("import", "export")
-  if (addCapacity) v <- append(v, "capExport", "capImport")
+  if (addCapacities) v <- append(v, "capExport", "capImport")
 
   # Aggregate flows and capacities by area (or district)
   flowAreas <- flowLinks[, lapply(.SD, sum), keyby = idColsA, .SDcols = v]
