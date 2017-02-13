@@ -1,5 +1,10 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
+Changes in version 0.10 (2017-XX-XX)
+
+NEW FEATURES:
+* update doc of addLoadFactorLink().
+
 Changes in version 0.9 (2017-01-25)
 
 NEW FEATURES:

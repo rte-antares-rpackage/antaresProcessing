@@ -17,6 +17,11 @@
 #'   the installed capacity of a link that is effectively used\cr
 #'   Formula: `FLOW LIN` / transCapacity
 #'
+#'   congestion represent the use of the link\cr
+#'   when congestion is greater than 1 the link is congested
+#'   Formula:  as.integer(`FLOW LIN` / transCapacity)
+#'
+#'
 #' @examples
 #' \dontrun{
 #' mydata <- readAntares(link = "all", linkCapacity=TRUE)
@@ -46,7 +51,7 @@ addLoadFactorLink <- function(x) {
   if(! attr(x, "type") %in% c("links")  ) stop("'x' does not contain link data")
 
   if (!is.null(x$loadFactor)) {
-    stop("Input already contains column 'netLoad'")
+    stop("Input already contains column 'loadFactor'")
   }
 
   missingCols <- setdiff(c("FLOW LIN.", "transCapacityDirect", "transCapacityIndirect"),
