@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org/rte-antares-rpackage/antares-rpackageProcessing.svg?branch=master)](https://travis-ci.org/rte-antares-rpackage/antares-rpackageProcessing)[![Coverage Status](https://img.shields.io/codecov/c/github/rte-antares-rpackage/antares-rpackageProcessing/master.svg)](https://codecov.io/github/rte-antares-rpackage/antares-rpackageProcessing?branch=master)
+
 # The 'antaresProcessing' R package
 
 
