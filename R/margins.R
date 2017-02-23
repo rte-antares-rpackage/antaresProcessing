@@ -138,10 +138,7 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
   .fillClusterDesc(clusterDesc, min.stable.power = 0)
 
-  clusters <- clusters[clusterDesc[, .(area, cluster, min.stable.power)], thermalPmin := pmax(min.stable.power*NODU, mustRunTotal),  on = c("area", "cluster")][, .(thermalPmin = sum(thermalPmin)), by = idVars]
-
-  # Put all together !
-  intermediaryData <- thermalPmin
+  intermediaryData <- clusters[clusterDesc[, .(area, cluster, min.stable.power)], thermalPmin := pmax(min.stable.power*NODU, mustRunTotal),  on = c("area", "cluster")][, .(thermalPmin = sum(thermalPmin)), by = idVars]
 
   if (!is.null(stepCapacity)) {
     intermediaryData <- merge(intermediaryData, stepCapacity, by = idVars, all = TRUE)
