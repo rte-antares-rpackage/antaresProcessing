@@ -105,8 +105,7 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   }
 
   if (ignoreMustRun) {
-    clusters <- x$clusters[, c(idVars, "cluster", "NODU"), with = FALSE]
-    clusters$mustRunTotal <- 0
+    clusters <- x$clusters[, c(idVars, "cluster", "NODU"), with = FALSE][, mustRunTotal:=0]
   } else {
     clusters <- x$clusters[, c(idVars, "cluster", "NODU",
                                "mustRunTotal"), with = FALSE]
