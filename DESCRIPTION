@@ -25,7 +25,8 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    covr
 Remotes:
     rte-antares-rpackage/antares-rpackageRead,
     rte-antares-rpackage/antares-rpackageProcessing
