@@ -180,12 +180,11 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   data <- mainDT[, c(idVars, .neededColArea), with = FALSE]
 
   # Add intermediary data
-  data <- merge(data, additionalDT, by = idVars, all.x = TRUE)
+  data <- additionalDT[data, on=idVars]
 
   data[is.na(pumpingCapacity), c("pumpingCapacity", "storageCapacity") := 0]
 
   data[is.na(thermalPmin), thermalPmin := 0]
-
   # Compute margins
   data[,`:=`(
     isolatedUpwardMargin = `AVL DTG` + hstorPMaxAvg + storageCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD,
