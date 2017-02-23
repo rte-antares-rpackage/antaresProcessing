@@ -121,10 +121,14 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   if(!is.null(attr(x, "virtualNodes")) &&
      !is.null(attr(x, "virtualNodes")$storageFlexibility)) {
 
-    x <- .checkColumns(x, list(areas = c("storageCapacity", "pumpingCapacity")))
+    if (!is.null(x$areas)){
+      x <- .checkColumns(x, list(areas = c("storageCapacity", "pumpingCapacity")))
+      stepCapacity <- x$areas[, c(idVars, "storageCapacity", "pumpingCapacity"),
+                                with = FALSE]
+    }else{
+      stop("when there is virtual areas 'x' has to contain 'area'")
+    }
 
-    stepCapacity <- x$areas[, c(idVars, "storageCapacity", "pumpingCapacity"),
-                            with = FALSE]
 
   } else {
     stepCapacity <- NULL
