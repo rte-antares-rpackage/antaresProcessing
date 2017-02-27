@@ -4,7 +4,7 @@
 \alias{margins}
 \title{Upward and downward margins for an area}
 \usage{
-margins(x, ignoreMustRun = FALSE, clusterDesc = NULL)
+margins(x, type = "upward", ignoreMustRun = FALSE, clusterDesc = NULL)
 }
 \arguments{
 \item{x}{An object created with function \code{\link[antaresRead]{readAntares}}. It
@@ -14,6 +14,11 @@ and \code{mustRunPartial}. To get these columns,
 one has to invoke \code{\link[antaresRead]{readAntares}} with parameters:
 \code{mustRun = TRUE, hydroStorageMaxPower = TRUE}.
 (see examples).}
+
+\item{type}{Type of margins to compute. Possibilities : \cr
+both = upward and downward margins are computed\cr
+upward = only upward margins\cr
+downward = only downward margins\cr}
 
 \item{ignoreMustRun}{Should must run productions be ignored in the computation? It should be
 \code{TRUE} only if the studied areas have no clusters in must run.}
@@ -83,4 +88,3 @@ margins(mydata, ignoreMustRun = TRUE)
 }
 
 }
-

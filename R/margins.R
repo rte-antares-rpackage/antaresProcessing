@@ -1,6 +1,12 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-.neededColArea <- c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "AVL DTG")
+.neededColAreaBoth<-c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "AVL DTG")
+.neededColAreaUp<-c("hstorPMaxAvg", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "AVL DTG")
+.neededColAreaDown<-c("H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE")
+.neededColSTEP<-c("storageCapacity", "pumpingCapacity")
+.typeBoth<-"both"
+.typeUpward<-"upward"
+.typeDownward<-"downward"
 
 #' Upward and downward margins for an area
 #'
@@ -21,6 +27,13 @@
 #' @param ignoreMustRun
 #'   Should must run productions be ignored in the computation? It should be
 #'   \code{TRUE} only if the studied areas have no clusters in must run.
+#'
+#' @param type
+#'   Type of margins to compute. Possibilities : \cr
+#'   both = upward and downward margins are computed\cr
+#'   upward = only upward margins\cr
+#'   downward = only downward margins\cr
+#'
 #' @inheritParams surplusClusters
 #'
 #' @return
@@ -78,7 +91,7 @@
 #'
 #' @export
 #'
-margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
+margins <- function(x, type = "upward", ignoreMustRun = FALSE, clusterDesc = NULL) {
   if (!is(x, "antaresDataList")) stop ("'x' is not an object of class 'antaresDataList'")
 
   # Check that x contains the needed variables
@@ -86,10 +99,26 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
 
   neededCol<-list()
   if (!is.null(x$areas)) {
-    neededCol$areas <- .neededColArea
+    if(type==.typeUpward){
+      neededCol$areas <- .neededColAreaUp
+    }else if(type==.typeDownward){
+      neededCol$areas <- .neededColAreaDown
+    }else{
+      neededCol$areas <- .neededColAreaBoth
+    }
   }
 
-  if (!is.null(x$districts)) neededCol$districts <- .neededColArea
+  #TODO : a factoriser avec la condition "areas"
+  if (!is.null(x$districts)) {
+    if(type==.typeUpward){
+      neededCol$districts <- .neededColAreaUp
+    }else if(type==.typeDownward){
+      neededCol$districts <- .neededColAreaDown
+    }else{
+      neededCol$districts <- .neededColAreaBoth
+    }
+  }
+
   if (!ignoreMustRun) {
     neededCol$clusters <- c("mustRunTotal")
   }
@@ -98,17 +127,19 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
 
   opts <- simOptions(x)
 
-  if (!is.null(x$areas)) idVars <- .idCols(x$areas)
+  if (!is.null(x$areas)) idVars <- getIdCols(x$areas)
   else {
-    idVars <- .idCols(x$districts)
+    idVars <- getIdCols(x$districts)
     idVars[idVars == "district"] <- "area"
   }
 
-  if (ignoreMustRun) {
+  if (ignoreMustRun & type %in% c(.typeDownward, .typeBoth)) {
     clusters <- x$clusters[, c(idVars, "cluster", "NODU"), with = FALSE][, mustRunTotal:=0]
-  } else {
+  }else if(!ignoreMustRun & type %in% c(.typeDownward, .typeBoth)){
     clusters <- x$clusters[, c(idVars, "cluster", "NODU",
                                "mustRunTotal"), with = FALSE]
+  }else{
+    clusters<-NULL
   }
 
   #Step disponibility
@@ -122,14 +153,12 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
      !is.null(attr(x, "virtualNodes")$storageFlexibility)) {
 
     if (!is.null(x$areas)){
-      x <- .checkColumns(x, list(areas = c("storageCapacity", "pumpingCapacity")))
-      stepCapacity <- x$areas[, c(idVars, "storageCapacity", "pumpingCapacity"),
+      x <- .checkColumns(x, list(areas=.neededColSTEP ))
+      stepCapacity <- x$areas[, c(idVars, .neededColSTEP),
                                 with = FALSE]
     }else{
       stop("when there is virtual areas 'x' has to contain 'area'")
     }
-
-
   } else {
     stepCapacity <- NULL
   }
@@ -138,15 +167,23 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   #
   # For a given cluster, Pmin is the maximum of Min Stable Power and partial
   # must run.
-  if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
-  .fillClusterDesc(clusterDesc, min.stable.power = 0)
+  if (is.null(clusterDesc) & type %in% c(.typeDownward, .typeBoth)) clusterDesc <- readClusterDesc(opts)
 
-  intermediaryData <- clusters[clusterDesc[, .(area, cluster, min.stable.power)], thermalPmin := pmax(min.stable.power*NODU, mustRunTotal),  on = c("area", "cluster")][, .(thermalPmin = sum(thermalPmin)), by = idVars]
+  if(type %in% c(.typeDownward, .typeBoth)){
+    .fillClusterDesc(clusterDesc, min.stable.power = 0)
+    intermediaryData <- clusters[clusterDesc[, .(area, cluster, min.stable.power)], thermalPmin := pmax(min.stable.power*NODU, mustRunTotal),  on = c("area", "cluster")][, .(thermalPmin = sum(thermalPmin)), by = idVars]
+  }else{
+    intermediaryData<-NULL
+  }
 
-  if (!is.null(stepCapacity)) {
+  if (!is.null(stepCapacity) & !is.null(intermediaryData)){
     intermediaryData <- merge(intermediaryData, stepCapacity, by = idVars, all = TRUE)
-  } else {
-    intermediaryData[, c("pumpingCapacity", "storageCapacity") := 0]
+  }else if(!is.null(stepCapacity) & is.null(intermediaryData)){
+    intermediaryData <- stepCapacity
+  }else if(is.null(stepCapacity) & !is.null(intermediaryData)){
+    intermediaryData<-intermediaryData
+  }else{
+      intermediaryData<-NULL
   }
 
   # Effective computation of the margins. The function .computeMargins is
@@ -154,12 +191,17 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
   res <- list()
 
   if (!is.null(x$areas)) {
-    res$areas <- .computeMargins(x$areas, intermediaryData)
+    res$areas <- .computeMargins(x$areas, intermediaryData, type)
     attr(res$areas, "type") <- "areaMargins"
   }
 
   if (!is.null(x$districts)) {
-    res$districts <- .computeMargins(x$districts, .groupByDistrict(intermediaryData, opts))
+    if(!is.null(intermediaryData)){
+      intermediaryDataDistrict<-.groupByDistrict(intermediaryData, opts)
+    }else{
+      intermediaryDataDistrict<-NULL
+    }
+    res$districts <- .computeMargins(x$districts, intermediaryDataDistrict, type)
     attr(res$districts, "type") <- "districtMargins"
   }
 
@@ -171,38 +213,101 @@ margins <- function(x, ignoreMustRun = FALSE, clusterDesc = NULL) {
 #' Private function used in function "margins".
 #'
 #' @param mainDT
-#'   an antaresDataTable obkect containing areas or districts.
+#'   an antaresDataTable object containing areas or districts.
 #' @param additionalDT
 #'   data.table with the same id columns and the same number of rows. It must
 #'   contain columns thermalPmin, pumpingCapacity, storage and thermalAvailability.
 #'
 #' @noRd
-.computeMargins <- function(mainDT, additionalDT) {
+.computeMargins <- function(mainDT, additionalDT, type) {
   idVars <- .idCols(mainDT)
 
+  if(type==.typeUpward){
+    neededColMaintDT <- .neededColAreaUp
+  }else if(type==.typeDownward){
+    neededColMaintDT <- .neededColAreaDown
+  }else{
+    neededColMaintDT <- .neededColAreaBoth
+  }
+
   # Create the main table that will be used to compute the margins
-  data <- mainDT[, c(idVars, .neededColArea), with = FALSE]
+  myData <- mainDT[, c(idVars, neededColMaintDT), with = FALSE]
 
   # Add intermediary data
-  data <- additionalDT[data, on=idVars]
+  if(!is.null(additionalDT)){
+    myData <- additionalDT[myData, on=idVars]
+    if(!is.null(myData$pumpingCapacity)){
+      myData[is.na(pumpingCapacity),  eval(.neededColSTEP) := 0]
+    }
+    if(type %in% c(.typeDownward,.typeBoth)){
+      myData[is.na(thermalPmin), thermalPmin := 0]
+    }
+  }
 
-  data[is.na(pumpingCapacity), c("pumpingCapacity", "storageCapacity") := 0]
+  # Compute margins without STEP
+  if(type %in% c(.typeUpward,.typeBoth) & !is.null(myData$storageCapacity)){
+    myData[,`:=`(
+      isolatedUpwardMargin = `AVL DTG` + hstorPMaxAvg + storageCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+    )]
+    myData[,interconnectedUpwardMargin := isolatedUpwardMargin - BALANCE]
+  }
 
-  data[is.na(thermalPmin), thermalPmin := 0]
-  # Compute margins
-  data[,`:=`(
-    isolatedUpwardMargin = `AVL DTG` + hstorPMaxAvg + storageCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD,
-    isolatedDownwardMargin = thermalPmin - pumpingCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
-  )]
+  if(type %in% c(.typeDownward,.typeBoth) & !is.null(myData$pumpingCapacity)){
+    myData[,`:=`(
+      isolatedDownwardMargin = thermalPmin - pumpingCapacity + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+    )]
+    myData[,interconnectedDownwardMargin := isolatedDownwardMargin + BALANCE]
+  }
 
-  data[, `:=`(
-    interconnectedUpwardMargin = isolatedUpwardMargin - BALANCE,
-    interconnectedDownwardMargin = isolatedDownwardMargin + BALANCE
-  )]
+  # Compute margins with STEP
+  if(type %in% c(.typeUpward,.typeBoth)  & is.null(myData$storageCapacity)){
+    myData[,`:=`(
+      isolatedUpwardMargin = `AVL DTG` + hstorPMaxAvg + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+    )]
+    myData[,interconnectedUpwardMargin := isolatedUpwardMargin - BALANCE]
+  }
 
+  if(type %in% c(.typeDownward,.typeBoth)  & is.null(myData$pumpingCapacity)){
+    myData[,`:=`(
+      isolatedDownwardMargin = thermalPmin + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
+    )]
+    myData[,interconnectedDownwardMargin := isolatedDownwardMargin + BALANCE]
+  }
 
-  data[, c(idVars, "AVL DTG", "thermalPmin", "pumpingCapacity", "storageCapacity",
-           "isolatedUpwardMargin", "isolatedDownwardMargin",
-           "interconnectedUpwardMargin", "interconnectedDownwardMargin"),
-       with = FALSE]
+  if(type==.typeUpward  & !is.null(myData$storageCapacity)){
+    myData[, c(idVars, "AVL DTG", "hstorPMaxAvg", "storageCapacity",
+             "isolatedUpwardMargin",
+             "interconnectedUpwardMargin"),
+         with = FALSE]
+  }else if(type==.typeUpward  & is.null(myData$storageCapacity)){
+    myData[, c(idVars, "AVL DTG", "hstorPMaxAvg",
+             "isolatedUpwardMargin",
+             "interconnectedUpwardMargin"),
+         with = FALSE]
+  }else if(type==.typeDownward & !is.null(myData$pumpingCapacity)){
+    myData[, c(idVars, "thermalPmin", "pumpingCapacity",
+             "isolatedDownwardMargin",
+             "interconnectedDownwardMargin"),
+         with = FALSE]
+  }else if(type==.typeDownward & is.null(myData$pumpingCapacity)){
+    myData[, c(idVars, "thermalPmin",
+             "isolatedDownwardMargin",
+             "interconnectedDownwardMargin"),
+         with = FALSE]
+  }else if(type==.typeBoth & is.null(myData$storageCapacity) & is.null(myData$pumpingCapacity)){
+    myData[, c(idVars, "AVL DTG", "thermalPmin", "hstorPMaxAvg",
+             "isolatedUpwardMargin",
+             "interconnectedUpwardMargin",
+             "isolatedDownwardMargin",
+             "interconnectedDownwardMargin"),
+         with = FALSE]
+  }else{
+    myData[, c(idVars, "AVL DTG", "thermalPmin", "hstorPMaxAvg", "pumpingCapacity", "storageCapacity",
+             "isolatedUpwardMargin",
+             "interconnectedUpwardMargin",
+             "isolatedDownwardMargin",
+             "interconnectedDownwardMargin"),
+         with = FALSE]
+  }
+
 }

@@ -1,5 +1,10 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
+Changes in version 0.10 (XXXX-XX-XX)
+
+NEW FEATURES:
+* margins can now return margins upward and/or downward.
+
 Changes in version 0.9 (2017-01-25)
 
 NEW FEATURES:
