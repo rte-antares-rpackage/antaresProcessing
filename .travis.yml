@@ -3,4 +3,4 @@
 language: R
 sudo: false
 cache: packages
-r_github_packages: rte-antares-rpackage/antares-rpackageRead
+r_github_packages: rte-antares-rpackage/antares-rpackageRead/antaresRead
