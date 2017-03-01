@@ -23,6 +23,8 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    remotes
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
+Remotes: rte-antares-rpackage/antares-rpackageRead
