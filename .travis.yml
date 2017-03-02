@@ -5,6 +5,4 @@ sudo: false
 cache: packages
 r_github_packages:
  - hadley/devtools#1263
- - rte-antares-rpackage/manipulateWidget
- - rte-antares-rpackage/demo01
  - rte-antares-rpackage/antares-rpackageRead

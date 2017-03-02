@@ -27,4 +27,3 @@ Suggests:
     remotes
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
-Remotes: rte-antares-rpackage/antares-rpackageRead
