@@ -22,7 +22,8 @@ globalVariables(
     "startup.cost", "startupCost", "storageCapacity", "storageSurplus",
     "surplusPerUnit", "thermalPmin", "timeId", "to", "toDistrict",
     "totalSurplus", "transCapacityDirect", "transCapacityIndirect",
-    "unitcount", "upwardModulation", "variableCost"
+    "unitcount", "upwardModulation", "variableCost",
+    "interconnectedDownwardMargin", "interconnectedUpwardMargin"
   )
 )
 
