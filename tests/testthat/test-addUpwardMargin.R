@@ -1,11 +1,11 @@
 context("addUpwardMargin")
 
-library(data.table)
 opts <- setSimulationPath(studyPath)
 data <- suppressWarnings(readAntares(
   "all", "all",
   select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "AVL DTG",
-             "ROW BAL.", "hydroStorageMaxPower", "FLOW LIN.", "linkCapacity"),
+             "ROW BAL.", "FLOW LIN."),
+  hydroStorageMaxPower = TRUE, linkCapacity = TRUE,
   showProgress = FALSE
 ))
 dataCor <- removeVirtualAreas(data, getAreas(c("psp", "hub")))
