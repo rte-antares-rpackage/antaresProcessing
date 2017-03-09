@@ -1,3 +1,47 @@
+#' Add upward margin of areas
+#'
+#' This function computes isolated and interconnected upward margins of areas and
+#' add them to an antaresData object.
+#'
+#' @param x An object of class \code{antaresData} created with
+#'   \code{\link[antaresRead]{readAntares}}
+#'
+#' @return
+#' The function modifies its input by adding to it two new columns
+#' \code{isolatedUpwardMargin} and \code{interconnectedUpwardMargin}. For
+#' convenience it invisibly returns \code{x}.
+#'
+#' @details
+#' For a given area and time step, isolated upward margin is the difference
+#' between the available production capacity plus the fatal productions and the
+#' load. More formally it is equal to:
+#'
+#' \code{isolatedUpwardMargin = (`AVL DTG` + hstorPMaxAvg + storageCapacity) +\cr
+#'                              (`H. ROR` + WIND + SOLAR + `MISC. NDG`) - LOAD}
+#'
+#' The variable \code{storageCapacity} is automatically created when pumped
+#' storage areas are removed with function
+#' \code{\link[antaresRead]{removeVirtualAreas}}. If there is not any such area,
+#' \code{storageCapacity} is assumed to be equal to 0.
+#'
+#' Interconnected upward margin is the isolated upward margin plus the imports and
+#' minus the exports:
+#'
+#' \code{interconnectedUpwardMargin = isolatedUpwardMargin - BALANCE + `ROW BAL.`}
+#'
+#' @examples
+#' \dontrun{
+#' mydata <- readAntares(
+#'   areas = "all", links = "all",
+#'   select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "AVL DTG",
+#'              "ROW BAL.", "hydroStorageMaxPower", "FLOW LIN.", "linkCapacity")
+#' )
+#' mydata <- removeVirtualAreas(mydata, getAreas(c("pump", "stor")))
+#'
+#' addUpwardMargin(mydata)
+#' }
+#' @export
+#'
 addUpwardMargin <- function(x) {
   # Check class of 'x'
   if (!is(x, "antaresData")) stop("'x' needs to be an 'antaresData' object created with readAntares")

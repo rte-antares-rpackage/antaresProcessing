@@ -3,6 +3,7 @@
 export(addExportAndImport)
 export(addLoadFactorLink)
 export(addNetLoad)
+export(addUpwardMargin)
 export(compare)
 export(externalDependancies)
 export(loadFactor)
