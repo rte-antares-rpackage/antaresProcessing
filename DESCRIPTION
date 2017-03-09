@@ -28,7 +28,6 @@ Suggests:
     rmarkdown,
     covr
 Remotes:
-    rte-antares-rpackage/antares-rpackageRead,
-    rte-antares-rpackage/antares-rpackageProcessing
+    rte-antares-rpackage/antares-rpackageRead
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
