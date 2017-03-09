@@ -85,4 +85,3 @@ synthesize(mydata,
 }
 
 }
-

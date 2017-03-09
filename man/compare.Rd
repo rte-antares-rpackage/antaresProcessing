@@ -47,4 +47,3 @@ compare(surplus1, surplus2)
 }
 
 }
-

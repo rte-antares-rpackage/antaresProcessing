@@ -83,4 +83,3 @@ surplusClusters(mydata, surplusLastUnit = TRUE)
 }
 
 }
-

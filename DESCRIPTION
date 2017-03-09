@@ -29,5 +29,5 @@ Suggests:
     covr
 Remotes:
     rte-antares-rpackage/antares-rpackageRead
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.0
 VignetteBuilder: knitr

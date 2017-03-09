@@ -61,4 +61,3 @@ loadFactor(mydata, synthesis = TRUE)
 }
 
 }
-

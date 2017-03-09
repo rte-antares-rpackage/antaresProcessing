@@ -95,4 +95,3 @@ modulation(mydata, by = "sector")
 }
 
 }
-

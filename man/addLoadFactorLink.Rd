@@ -35,4 +35,3 @@ addLoadFactorLink(mydata)
 }
 
 }
-

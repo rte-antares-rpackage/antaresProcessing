@@ -60,4 +60,3 @@ surplusSectors(mydata, sectors = "thermal")
 }
 
 }
-
