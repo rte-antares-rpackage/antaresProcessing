@@ -1,5 +1,6 @@
 context("addUpwardMargin")
 
+library(data.table)
 opts <- setSimulationPath(studyPath)
 data <- suppressWarnings(readAntares(
   "all", "all",

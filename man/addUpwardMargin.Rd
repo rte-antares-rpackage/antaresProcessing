@@ -24,7 +24,7 @@ For a given area and time step, isolated upward margin is the difference
 between the available production capacity plus the fatal productions and the
 load. More formally it is equal to:
 
-\code{isolatedUpwardMargin = (`AVL DTG` + hstorPMaxAvg + storageCapacity) +\cr
+\code{isolatedUpwardMargin = (`AVL DTG` + hstorPMaxAvg + storageCapacity) +
                              (`H. ROR` + WIND + SOLAR + `MISC. NDG`) - LOAD}
 
 The variable \code{storageCapacity} is automatically created when pumped
