@@ -14,7 +14,8 @@
 #' \code{addLoadFactorLink} modifies its input by adding to it a column "loadFactor". For
 #' convenience, it invisibly returns the modified input.
 #'   loadFactor represent the proportion of
-#'   the installed capacity of a link that is effectively used\cr
+#'   the installed capacity of a link that is effectively used
+#'
 #'   Formula: `FLOW LIN` / transCapacity
 #'
 #' @examples

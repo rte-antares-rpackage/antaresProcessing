@@ -16,7 +16,7 @@ net load.}
 }
 \value{
 \code{addNetLoad} modifies its input by adding to it a column "netLoad". For
-convenience, it invisibly returns the modified input.\cr
+convenience, it invisibly returns the modified input.
              formula = LOAD - `ROW BAL.` - PSP - `MISC. NDG` - `H. ROR` - WIND - SOLAR - mustRunTotal
 }
 \description{
