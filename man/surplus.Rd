@@ -23,29 +23,36 @@ per Monte-Carlo scenario.}
 A data.table with the following columns:
 \item{area}{Name of the area.}
 \item{timeId}{timeId and other time columns.}
-\item{consumerSurplus}{The surplus of the consumers of some area.\cr
+\item{consumerSurplus}{The surplus of the consumers of some area.
+
                      formula = (unsupliedCost[area] - `MRG. PRICE`) * LOAD}
 \item{producerSurplus}{
-  The surplus of the producers of some area.\cr
-  formula = `MRG. PRICE` * production - `OV. COST` \cr
+  The surplus of the producers of some area.
+
+  formula = `MRG. PRICE` * production - `OV. COST`
+
   Production includes "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
   "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR" and "MISC. NDG"
 }
 \item{rowBalanceSurplus}{
-  Surplus of the ROW balance.\cr
+  Surplus of the ROW balance.
+
   Formula: `MRG. PRICE` * `ROW BAL.`
 }
 \item{storageSurplus}{
-  Surplus created by storage/flexibility areas.\cr
+  Surplus created by storage/flexibility areas.
+
   formula = storage * x$areas$`MRG. PRICE`
 }
 \item{congestionFees}{
   The congestion fees of a given area. It equals to half
-  the congestion fees of the links connected to that area.\cr
+  the congestion fees of the links connected to that area.
+
   formula = congestionFees / 2
  }
 \item{globalSurplus}{
-  Sum of the consumer surplus, the producer surplus and the congestion fees.\cr
+  Sum of the consumer surplus, the producer surplus and the congestion fees.
+
   formula = consumerSurplus + producerSurplus + storageSurplus + congestionFees + rowBalanceSurplus}
 }
 \description{

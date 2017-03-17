@@ -36,10 +36,12 @@
 #' \item{storage}{capacity of storage}
 #' \item{exportsLevel}{netLoad + pumping}
 #' \item{importsLevel}{netLoad - `AVL DTG` - hydroStorageMaxPower - storage > 0}
-#' \item{exportsFrequency}{number of time step where this criteria is satisfied\cr
+#' \item{exportsFrequency}{number of time step where this criteria is satisfied
+#'
 #'   criteria : netLoad + pumping < 0
 #' }
-#' \item{importsFrequency}{number of time step where this criteria is satisfied\cr
+#' \item{importsFrequency}{number of time step where this criteria is satisfied
+#'
 #'   criteria : netLoad - `AVL DTG` - hydroStorageMaxPower - storage > 0
 #' }
 #'

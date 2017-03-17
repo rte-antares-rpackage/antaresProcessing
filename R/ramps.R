@@ -17,12 +17,23 @@
 #' @return
 #' \code{addRamps} returns a data.table or a list of data.tables with the
 #' following columns:
-#' \item{netLoadRamp}{Ramp of the net load of an area. If \code{timeStep} is not hourly, then these columns contain the average value for the given time step.\cr
-#'                      formula = netLoad - shift(netLoad, fill = 0) }
-#' \item{balanceRamp}{Ramp of the balance of an area. If \code{timeStep} is not hourly, then these columns contain the average value for the given time step.\cr
-#'                      formula = BALANCE - shift(BALANCE, fill = 0) }
-#' \item{areaRamp}{Sum of the two previous columns. If \code{timeStep} is not hourly, then these columns contain the average value for the given time step.\cr
-#'                      formula = netLoadRamp + balanceRamp }
+#' \item{netLoadRamp}{
+#'   Ramp of the net load of an area. If \code{timeStep} is not hourly, then these
+#'   columns contain the average value for the given time step.
+#'   Formula = netLoad - shift(netLoad, fill = 0)
+#' }
+#' \item{balanceRamp}{
+#'   Ramp of the balance of an area. If \code{timeStep} is not hourly, then
+#'   these columns contain the average value for the given time step.
+#'
+#'   formula = BALANCE - shift(BALANCE, fill = 0)
+#' }
+#' \item{areaRamp}{
+#'   Sum of the two previous columns. If \code{timeStep} is not hourly, then
+#'   these columns contain the average value for the given time step.
+#'
+#'   formula = netLoadRamp + balanceRamp
+#' }
 #' \item{minNetLoadRamp}{Minimum ramp of the net load of an area.}
 #' \item{minBalanceRamp}{Minimum ramp of the balance of an area.}
 #' \item{minAreaRamp}{Minimum ramp sum of the sum of balance and net load.}

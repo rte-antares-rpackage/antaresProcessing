@@ -15,10 +15,13 @@ one has to invoke \code{\link[antaresRead]{readAntares}} with parameters:
 \code{mustRun = TRUE, hydroStorageMaxPower = TRUE}.
 (see examples).}
 
-\item{type}{Type of margins to compute. Possibilities : \cr
-both = upward and downward margins are computed\cr
-upward = only upward margins\cr
-downward = only downward margins\cr}
+\item{type}{Type of margins to compute. Possibilities :
+
+  \itemize{
+    \item{both}{upward and downward margins are computed}
+    \item{upward}{only upward margins}
+    \item{downward}{only downward margins}
+  }}
 
 \item{ignoreMustRun}{Should must run productions be ignored in the computation? It should be
 \code{TRUE} only if the studied areas have no clusters in must run.}
@@ -31,30 +34,32 @@ attemps to read the needed data in the same study as \code{x}.}
 A data.table of class \code{antaresDataTable} with the following columns:
 \item{area}{Area name.}
 \item{timeId}{Time id and other time columns.}
-\item{thermalAvailability}{Sum of thermal availabilities of all cluster of an area.\cr
+\item{thermalAvailability}{Sum of thermal availabilities of all cluster of an area.
+
                      formula = x$areas[, .(`AVL DTG`)]
 }
 \item{thermalPmin}{
   Sum of thermal minimum power of all clusters of an area. The minimum power
   of a cluster is defined as the maximum of the partial must run and the
   minimum stable power of the cluster. If \code{ignoreMustRun = TRUE}, it
-  is simply equal to the minimum stable power of the cluster.\cr
+  is simply equal to the minimum stable power of the cluster.
+
                      formula = pmax(min.stable.power*NODU, mustRunTotal)
 }
 \item{pumping}{
 }
 \item{storage}{
 }
-\item{isolatedUpwardMargin}{\cr
+\item{isolatedUpwardMargin}{
   formula = `AVL DTG` + hstorPMaxAvg + storage + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
 }
-\item{isolatedDownwardMargin}{\cr
+\item{isolatedDownwardMargin}{
   formula = thermalPmin - pumping + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD
 }
-\item{interconnectedUpwardMargin}{\cr
+\item{interconnectedUpwardMargin}{
   formula = isolatedUpwardMargin - BALANCE
 }
-\item{interconnectedDownwardMargin}{\cr
+\item{interconnectedDownwardMargin}{
   formula = isolatedDownwardMargin + BALANCE
 }
 }

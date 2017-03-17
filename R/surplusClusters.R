@@ -28,31 +28,37 @@
 #' \item{cluster}{Cluster name.}
 #' \item{timeId}{Time id and other time columns.}
 #' \item{variableCost}{
-#'   Proportional costs of production of the cluster\cr
+#'   Proportional costs of production of the cluster
+#'
 #'   Formula = marginal cost * production
 #' }
 #' \item{fixedCost}{
-#'   Fixed costs of production of the cluster\cr
+#'   Fixed costs of production of the cluster
+#'
 #'   Formula = NODU * fixed cost
 #' }
 #' \item{startupCost}{
 #'   Start up costs of the cluster.
 #' }
 #' \item{surplusPerUnit}{
-#'   Average surplus per unit of the cluster.\cr
+#'   Average surplus per unit of the cluster.
+#'
 #'   formula = (`MRG. PRICE` * production - opCost - startupCost) / unitcount
 #' }
 #' \item{surplusLastUnit}{
-#'   Surplus of the last unit of the cluster.\cr
+#'   Surplus of the last unit of the cluster.
+#'
 #'   formula = (`MRG. PRICE` * prodLastUnit - opCost / pmax(1, NODU) - startup.cost)
 #' }
 #' \item{totalSurplus}{
-#'   Surplus of all units of the cluster.\cr
+#'   Surplus of all units of the cluster.
+#'
 #'   formula = `MRG. PRICE` * production - opCost - startupCost
 #' }
 #' \item{economicGradient}{
 #'   Economic gradient of a cluster. It is equal to
-#'   the surplus per unit divided by the capacity of a unit.\cr
+#'   the surplus per unit divided by the capacity of a unit.
+#'
 #'   formula = surplusPerUnit / nominalcapacity
 #' }
 #'
