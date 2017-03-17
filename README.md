@@ -1,6 +1,4 @@
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/rte-antares-rpackage/antares-rpackageProcessing?branch=master&svg=true)](https://ci.appveyor.com/project/rte-antares-rpackage/antares-rpackageProcessing)
-
-[![Travis-CI Build Status](https://travis-ci.org/rte-antares-rpackage/antares-rpackageProcessing.svg?branch=master)](https://travis-ci.org/rte-antares-rpackage/antares-rpackageProcessing)
+[![Build status](https://ci.appveyor.com/api/projects/status/wujypo4gx7ihip80?svg=true)](https://ci.appveyor.com/project/rte-antares-rpackage/antares-rpackageprocessing)[![Travis-CI Build Status](https://travis-ci.com/rte-antares-rpackage/antares-rpackageProcessing.svg?token=CRi6fCsvtPQ99s7zLmhF&branch=master)](https://travis-ci.com/rte-antares-rpackage/antares-rpackageProcessing)
 
 # The 'antaresProcessing' R package
 
