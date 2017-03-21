@@ -1,5 +1,11 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
+setAlias(
+  "loadFactorLink",
+  "Data required by 'addLoadFactorLink()'",
+  c("links", "FLOW LIN.", "linkCapacity")
+)
+
 #' Load factors of link
 #'
 #' This function computes the load factor of link and add it to an
@@ -20,14 +26,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares(link = "all", linkCapacity=TRUE)
+#' # Data required by the function
+#' showAliases("loadFactorLink")
 #'
+#' mydata <- readAntares(select = "loadFactorLink")
 #' addLoadFactorLink(mydata)
 #' names(mydata)
-#'
-#' # Example that minimizes the quantity of data read
-#' mydata <- readAntares(links = "all", timeStep = "annual",select = c("FLOW LIN."), linkCapacity=TRUE)
-#' addLoadFactorLink(mydata)
 #' }
 #'
 #' @export

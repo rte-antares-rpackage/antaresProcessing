@@ -1,3 +1,11 @@
+# Copyright © 2016 RTE Réseau de transport d’électricité
+setAlias(
+  "downwardMargin",
+  "Data required by 'addDownwardMargin()'",
+  c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE",
+    "ROW BAL.", "linkCapacity", "mustRun")
+)
+
 #'Add downward margins of areas
 #'
 #' This function computes isolated and interconnected downward margins of areas and
@@ -31,14 +39,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares(
-#'   areas = "all", links = "all",
-#'   select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "AVL DTG",
-#'              "ROW BAL.", "FLOW LIN.", "linkCapacity", "mustRun")
-#' )
+#' # data required by the function
+#' showAliases("downwardMargin")
+#'
+#' mydata <- readAntares(select = "downwardMargin")
 #' mydata <- removeVirtualAreas(mydata, getAreas(c("pump", "stor")))
 #'
 #' addDownwardMargin(mydata)
+#' names(mydata$areas)
 #' }
 #' @export
 addDownwardMargin <- function(x) {

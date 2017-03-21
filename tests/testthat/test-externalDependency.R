@@ -1,30 +1,30 @@
-context("Function externalDependancies")
+context("Function externalDependency")
 
 
 opts <- setSimulationPath(studyPath)
 
-describe("externalDependancies", {
+describe("externalDependency", {
 
   it("stops if time step is not hourly", {
     data2 <- suppressWarnings(readAntares(areas="all", timeStep = "annual",
                          showProgress = FALSE, mcYears = "all", hydroStorageMaxPower = TRUE))
     addNetLoad(data2, ignoreMustRun = TRUE)
-    expect_error(externalDependancies(data2), "hourly")
+    expect_error(externalDependency(data2), "hourly")
   })
 
   it("stops if frequency exceeds a level ", {
     data2 <- suppressWarnings(readAntares(areas="all", showProgress = FALSE, hydroStorageMaxPower = TRUE))
     addNetLoad(data2, ignoreMustRun = TRUE)
-    resH<-externalDependancies(data2, timeStep = "hourly")
+    resH<-externalDependency(data2, timeStep = "hourly")
     expect_lte(max(resH$exportsFrequency), 1)
 
-    resW<-externalDependancies(data2, timeStep = "weekly")
+    resW<-externalDependency(data2, timeStep = "weekly")
     expect_lte(max(resW$exportsFrequency), 168)
 
-    resM<-externalDependancies(data2, timeStep = "monthly")
+    resM<-externalDependency(data2, timeStep = "monthly")
     expect_lte(max(resM$exportsFrequency), 744)
 
-    resA<-externalDependancies(data2, timeStep = "annual")
+    resA<-externalDependency(data2, timeStep = "annual")
     expect_lte(max(resA$exportsFrequency), 8736)
   })
 
@@ -34,7 +34,7 @@ describe("externalDependancies", {
     expect_is(mydata, "antaresDataList")
 
     addNetLoad(mydata, ignoreMustRun = TRUE)
-    res<-externalDependancies(mydata, timeStep = "hourly")
+    res<-externalDependency(mydata, timeStep = "hourly")
     expect_false(is.null(res$exportsLevel))
   })
 
@@ -44,7 +44,7 @@ describe("externalDependancies", {
     expect_is(mydata, "antaresDataList")
 
     addNetLoad(mydata, ignoreMustRun = TRUE)
-    res<-externalDependancies(mydata, timeStep = "hourly")
+    res<-externalDependency(mydata, timeStep = "hourly")
     expect_false(is.null(res$areas$exportsFrequency))
     expect_false(is.null(res$districts$exportsLevel))
   })
@@ -55,7 +55,7 @@ describe("externalDependancies", {
     expect_is(mydata, "antaresDataList")
 
     addNetLoad(mydata, ignoreMustRun = TRUE)
-    res<-externalDependancies(mydata, timeStep = "hourly")
+    res<-externalDependency(mydata, timeStep = "hourly")
     expect_true(is.null(res$links))
     expect_false(is.null(res$areas$exportsFrequency))
     expect_false(is.null(res$districts$exportsLevel))
@@ -71,7 +71,7 @@ describe("externalDependancies", {
     expect_false(is.null(attrMyDataCorrected$virtualNodes))
 
     addNetLoad(mydataCorrected, ignoreMustRun = TRUE)
-    res<-externalDependancies(mydataCorrected, timeStep = "hourly")
+    res<-externalDependency(mydataCorrected, timeStep = "hourly")
     expect_true(is.null(res$links))
     expect_false(is.null(res$areas$exportsFrequency))
     expect_false(is.null(res$districts$exportsLevel))

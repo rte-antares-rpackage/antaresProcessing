@@ -1,5 +1,14 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
+setAlias(
+  "surplus",
+  "Data required by function 'surplus()'",
+  c("areas", "links", "mcYears", "LOAD", "MRG. PRICE", "OV. COST",
+    "CONG. FEE (ALG.)", "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
+    "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "PSP",
+    "ROW BAL.")
+)
+
 #' Compute economic surplus
 #'
 #' This function computes the economic surplus for the consumers, the producers
@@ -55,21 +64,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares(areas = "all", links = "all", synthesis = FALSE)
+#' showAliases("surplus")
 #'
+#' mydata <- readAntares(select="surplus")
 #' surplus(mydata)
 #'
 #' surplus(mydata, synthesis = TRUE)
-#'
 #' surplus(mydata, synthesis = TRUE, groupByDistrict = TRUE)
-#'
-#' # Example that minimizes the quantity of data read
-#' mydata <- readAntares(areas = "all", links = "all", synthesis = FALSE,
-#'                       select = c("LOAD", "MRG. PRICE", "OV. COST", "CONG. FEE (ALG.)",
-#'                                  "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
-#'                                  "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR",
-#'                                  "MISC. NDG", "PSP", "ROW BAL."))
-#' surplus(mydata)
 #' }
 #'
 #'@export

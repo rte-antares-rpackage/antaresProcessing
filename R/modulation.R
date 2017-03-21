@@ -1,4 +1,10 @@
-#Copyright © 2016 RTE Réseau de transport d’électricité
+# Copyright © 2016 RTE Réseau de transport d’électricité
+setAlias(
+  "modulation",
+  "Data required by 'modulation()'",
+  c("areas", "clusters", "mcYears", "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
+    "MISC. DTG", "H. STOR", "H. ROR", "SOLAR", "WIND")
+)
 
 #' Compute the modulation of cluster units
 #'
@@ -56,28 +62,21 @@
 #'
 #' @examples
 #' \dontrun{
+#' # data required by the function
+#' showAliases("modulation")
+#'
+#' mydata <- readAntares(select="modulation")
 #'
 #' # Modulation of cluster units
-#' mydata <- readAntares(clusters = "all", synthesis = FALSE)
 #' modulation(mydata)
 #'
 #' # Aggregate Monte-Carlo scenarios
 #' modulation(mydata, synthesis = TRUE)
 #'
 #' # Modulation of sectors
-#' mydata <- readAntares(areas = "all", synthesis = FALSE)
 #' modulation(mydata, by = "sector")
 #'
 #' # Modulation of sectors per district
-#' mydata <- readAntares(districts = "all", synthesis = FALSE)
-#' modulation(mydata, by = "sector")
-#'
-#' # Example that minimizes the quantity of data read for getting the modulation
-#' # per area
-#' mydata <- readAntares(areas = "all", synthesis = FALSE,
-#'                       select = c("NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL",
-#'                                  "MIX. FUEL", "MISC. DTG", "H. STOR", "H. ROR",
-#'                                  "SOLAR", "WIND")) # Any subset is accepted
 #' modulation(mydata, by = "sector")
 #' }
 #'

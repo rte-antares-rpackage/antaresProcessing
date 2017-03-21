@@ -1,5 +1,9 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
-
+setAlias(
+  "loadFactor",
+  "Data required by 'loadFactor()'",
+  c("clusters", "thermalModulation", "mcYears")
+)
 #' Load factors of clusters
 #'
 #' This function computes the load factor and other related statistics
@@ -46,8 +50,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares(clusters = "all", thermalModulation = TRUE, synthesis = FALSE)
+#' # data required by the function
+#' showAliases("loadfactor")
 #'
+#' mydata <- readAntares(select = "loadfactor")
 #' loadFactor(mydata, synthesis = TRUE)
 #' }
 #'

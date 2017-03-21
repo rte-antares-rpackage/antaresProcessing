@@ -1,5 +1,11 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
+setAlias(
+  "surplusClusters",
+  "Data required by 'surplusClusters()'",
+  c("areas", "clusters", "mcYears", "MRG. PRICE")
+)
+
 #' Compute the surplus of clusters
 #'
 #' This function computes the surplus of clusters of interest. The surplus of a
@@ -64,17 +70,17 @@
 #'
 #' @examples
 #' \dontrun{
+#' # Data required by the function:
+#' showAliases("surplusClusters")
 #'
-#' mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE",
-#'                       synthesis = FALSE)
+#' mydata <- readAntares(select = "surplusClusters")
 #' surplusClusters(mydata)
 #'
 #' # Computing the surplus of the last unit of a cluster requires the additional
 #' # column "availableUnits". To add this column, one has to use parameter
 #' # "thermalAvailabilities = TRUE" in readAntares.
 #'
-#' mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE",
-#'                       thermalAvailabilities = TRUE, synthesis = FALSE)
+#' mydata <- readAntares(select = c("surplusClusters", "thermalAvailabilities"))
 #' surplusClusters(mydata, surplusLastUnit = TRUE)
 #'
 #' }

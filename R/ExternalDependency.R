@@ -1,32 +1,37 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
 .neededColAreaExternalDepandancies <- c("netLoad", "AVL DTG", "hstorPMaxAvg")
-
-#' External Dependancies in imports and exports
+setAlias(
+  "externalDependency",
+  "Data required by 'externalDependency()'",
+  c("areas", "links", "LOAD", "ROW BAL.", "PSP", "MISC. NDG", "H. ROR", "WIND",
+    "SOLAR", "AVL DTG", "FLOW LIN.", "mustRun", "linkCapacity", "hydroStorageMaxPower")
+)
+#' External Dependencies in imports and exports
 #'
-#' This function computes the depandance in imports and export for each area or districts at a
-#' given time step. Depandance in imports represents moments where imports are required
-#' to have no loss of load. Depandance in exports represents moments where exports are required to
+#' This function computes the dependency in imports and export for each area or districts at a
+#' given time step. Dependency in imports represents moments where imports are required
+#' to have no loss of load. Depandency in exports represents moments where exports are required to
 #' have no spilled energy.
 #'
 #' @param x
 #'   An object created with function \code{\link[antaresRead]{readAntares}}. It
 #'   must contain data for areas and/or distritcs . More specifically this
-#'   function requires the columns \code{hstorPMaxAvg},
-#'   and \code{netLoad}. To get these columns,
-#'   one has to invoke \code{\link[antaresRead]{readAntares}} with the parameter \code{hydroStorageMaxPower = TRUE}
-#'   and \code{\link[antaresProcessing]{addNetLoad}}
-#'   (see examples).
+#'   function requires the columns \code{hstorPMaxAvg}, and \code{netLoad}. To
+#'   get these columns, one has to invoke \code{\link[antaresRead]{readAntares}}
+#'   with the parameter \code{hydroStorageMaxPower = TRUE} and
+#'   \code{\link[antaresProcessing]{addNetLoad}} (see examples).
 #'
 #'   Moreover it needs to have a hourly time step.
 #'
-#'   This object must also contain linkCapacity if there was virtual areas remove by \code{\link[antaresRead]{removeVirtualAreas}}
-#'   to be able to calculate pumping and storage capacities.
+#'   This object must also contain linkCapacity if there was virtual areas
+#'   remove by \code{\link[antaresRead]{removeVirtualAreas}} to be able to
+#'   calculate pumping and storage capacities.
 #' @param timeStep
 #'   Desired time step for the result.
 #' @param synthesis
-#'   If TRUE, average external dependncies are returned. Else the function returns external dependncies
-#'   per Monte-Carlo scenario.
+#'   If TRUE, average external dependncies are returned. Else the function
+#'   returns external dependncies per Monte-Carlo scenario.
 #'
 #' @return
 #' A data.table of class \code{antaresDataTable} with the following columns:
@@ -47,41 +52,29 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares(areas = "all",
-#'                       hydroStorageMaxPower = TRUE, mustRun = TRUE)
-#' addNetLoad(mydata)
-#' externalDependancies(mydata)
+#' # Data required by the function
+#' showAliases("externalDependency")
 #'
-#' mydata <- readAntares(districts = "all",
-#'                       hydroStorageMaxPower = TRUE, mustRun = TRUE)
+#' mydata <- readAntares(select = "externalDependency")
 #' addNetLoad(mydata)
-#' externalDependancies(mydata)
+#' externalDependency(mydata)
 #'
-#' # if there are some virtual areas, include link and linkCapacity
-#' mydata <- readAntares(areas = "all", link = "all", linkCapacity=TRUE,
-#'                       hydroStorageMaxPower = TRUE, mustRun = TRUE)
-#' addNetLoad(mydata)
-#' removeVirtalAreas(mydata)
-#' externalDependancies(mydata, ignoreMustRun = TRUE)
-#'
-#' # Example that minimises the data imported
-#' mydata <- readAntares(areas = "all", TODO = ...,
-#'                       select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG",
-#'                                  "LOAD", "BALANCE"), mustRun = TRUE)
-#' addNetLoad(mydata)
-#' externalDependancies(mydata)
+#' # if there are some virtual pumping/storage areas, remove them with
+#' # removeVirtualAreas
+#' mydata <- removeVirtualAreas(mydata, c("pumping", "storage"))
+#' externalDependency(mydata, ignoreMustRun = TRUE)
 #' }
 #'
 #' @export
 #'
-externalDependancies <- function(x , timeStep = "annual", synthesis = FALSE) {
+externalDependency <- function(x , timeStep = "annual", synthesis = FALSE) {
 
   # Check that x contains is a antaresDataList
   if (is(x, "antaresDataList")) {
     # Check that x contains the needed variables
     if(is.null(x$areas) & is.null(x$districts)) stop("'x' has to contain 'area' and/or 'district' data")
-    if (!is.null(x$areas)) externalDependancies(x$areas,timeStep,synthesis)
-    if (!is.null(x$districts)) externalDependancies(x$districts,timeStep,synthesis)
+    if (!is.null(x$areas)) externalDependency(x$areas,timeStep,synthesis)
+    if (!is.null(x$districts)) externalDependency(x$districts,timeStep,synthesis)
   }
 
   if (!is(x, "antaresData")) stop("'x' is not an 'antaresData' object")
@@ -126,18 +119,18 @@ externalDependancies <- function(x , timeStep = "annual", synthesis = FALSE) {
 
   }
 
-  # Effective computation of the externalDepancies. The function .computeExternalDependancies is
+  # Effective computation of the externalDepancies. The function .computeexternalDependency is
   # defined below.
   res <- list()
 
   if (!is.null(x$areas)) {
-    res$areas <- .computeExternalDependancies(x$areas, timeStep, synthesis)
-    attr(res$areas, "type") <- "areaExternalDependancies"
+    res$areas <- .computeexternalDependency(x$areas, timeStep, synthesis)
+    attr(res$areas, "type") <- "areaexternalDependency"
   }
 
   if (!is.null(x$districts)) {
-    res$districts <- .computeExternalDependancies(x$districts, timeStep, synthesis)
-    attr(res$districts, "type") <- "districtExternalDependancies"
+    res$districts <- .computeexternalDependency(x$districts, timeStep, synthesis)
+    attr(res$districts, "type") <- "districtexternalDependency"
   }
 
   .addClassAndAttributes(res, attr(x, "synthesis"), attr(x, "timeStep"), opts, simplify = TRUE)
@@ -145,13 +138,13 @@ externalDependancies <- function(x , timeStep = "annual", synthesis = FALSE) {
 
 
 
-#' Private function used in function "externalDependancies".
+#' Private function used in function "externalDependency".
 #'
 #' @param dataInput
 #'   an antaresDataTable object containing areas or districts.
 #'
 #' @noRd
-.computeExternalDependancies <- function(dataInput, timeStep, synthesis) {
+.computeexternalDependency <- function(dataInput, timeStep, synthesis) {
   idVars <- .idCols(dataInput)
 
   # Create the main table that will be used to compute the margins
@@ -161,12 +154,12 @@ externalDependancies <- function(x , timeStep = "annual", synthesis = FALSE) {
   if(is.null(data$pumpingCapacity)){
     data[ , c("pumpingCapacity", "storageCapacity") := 0]
   }
-  # Compute externalDependanciesLevel
+  # Compute externalDependencyLevel
   data[,`:=`(
     exportsLevel = netLoad + pumpingCapacity,
     importsLevel = netLoad - `AVL DTG` - hstorPMaxAvg - storageCapacity
   )]
-  # Compute externalDependanciesFrequency
+  # Compute externalDependencyFrequency
   #init
   data[,`:=`(
     exportsFrequency = 0,
