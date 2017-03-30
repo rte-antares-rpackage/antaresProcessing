@@ -1,10 +1,4 @@
 # Copyright © 2016 RTE Réseau de transport d’électricité
-setAlias(
-  "downwardMargin",
-  "Data required by 'addDownwardMargin()'",
-  c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE",
-    "ROW BAL.", "linkCapacity", "mustRun")
-)
 
 #'Add downward margins of areas
 #'

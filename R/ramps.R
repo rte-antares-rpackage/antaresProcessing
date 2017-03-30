@@ -1,10 +1,5 @@
 # Copyright © 2016 RTE Réseau de transport d’électricité
-setAlias(
-  "netLoadRamp",
-  "Data required by function 'netLoadRamp()'",
-  c("areas", "mcYears","LOAD", "ROW BAL.", "PSP", "MISC. NDG", "H. ROR", "WIND",
-    "SOLAR", "BALANCE", "mustRun")
-)
+
 #' Ramp of an area
 #'
 #' This function computes the ramp of the consumption and the balance of areas

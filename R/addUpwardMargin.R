@@ -1,10 +1,4 @@
 # Copyright © 2016 RTE Réseau de transport d’électricité
-setAlias(
-  "upwardMargin",
-  "Data required by 'addUpwardMargin()'",
-  c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE",
-    "ROW BAL.", "AVL DTG", "linkCapacity", "hydroStorageMaxPower")
-)
 
 #' Add upward margin of areas
 #'
