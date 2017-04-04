@@ -1,12 +1,5 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-setAlias(
-  "surplusSectors",
-  "Data required by function 'surplusSectors()'",
-  c("areas", "clusters", "mcYears", "WIND", "SOLAR", "H. ROR", "H. STOR",
-    "MRG. PRICE")
-)
-
 #' Compute the surplus of sectors
 #'
 #' This function computes the surplus of sectors for each area and time step.

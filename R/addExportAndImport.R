@@ -1,9 +1,5 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
-setAlias(
-  "exportsImports",
-  "Data required by 'addExportAndImport()'",
-  c("areas", "links", "FLOW LIN.", "linkCapacity")
-)
+
 #' Export and import of areas or districts
 #'
 #' This function computes the export and import of areas or districts and add it to an

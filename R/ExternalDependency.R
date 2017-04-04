@@ -1,12 +1,7 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
 .neededColAreaExternalDepandancies <- c("netLoad", "AVL DTG", "hstorPMaxAvg")
-setAlias(
-  "externalDependency",
-  "Data required by 'externalDependency()'",
-  c("areas", "links", "LOAD", "ROW BAL.", "PSP", "MISC. NDG", "H. ROR", "WIND",
-    "SOLAR", "AVL DTG", "FLOW LIN.", "mustRun", "linkCapacity", "hydroStorageMaxPower")
-)
+
 #' External Dependencies in imports and exports
 #'
 #' This function computes the dependency in imports and export for each area or districts at a

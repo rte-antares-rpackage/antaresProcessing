@@ -1,10 +1,4 @@
 # Copyright © 2016 RTE Réseau de transport d’électricité
-setAlias(
-  "modulation",
-  "Data required by 'modulation()'",
-  c("areas", "clusters", "mcYears", "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
-    "MISC. DTG", "H. STOR", "H. ROR", "SOLAR", "WIND")
-)
 
 #' Compute the modulation of cluster units
 #'

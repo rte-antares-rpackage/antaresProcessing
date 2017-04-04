@@ -1,11 +1,5 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-setAlias(
-  "loadFactorLink",
-  "Data required by 'addLoadFactorLink()'",
-  c("links", "FLOW LIN.", "linkCapacity")
-)
-
 #' Load factors of link
 #'
 #' This function computes the load factor of link and add it to an
