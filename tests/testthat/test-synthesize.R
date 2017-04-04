@@ -17,6 +17,7 @@ describe("synthesize", {
     sumDataList <- synthesize(mydata)
     expect_is(sumDataList, "antaresDataList")
     expect_equal(names(sumDataList), names(mydata))
+    expect_equal(attr(sumDataList, "synthesis"), TRUE)
   })
 
   it("returns synthesized data", {

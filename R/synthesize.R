@@ -90,6 +90,7 @@ synthesize <- function(x, ..., prefixForMeans = "") {
     for (n in names(x)) {
       x[[n]] <- synthesize(x[[n]], ...)
     }
+    attr(x, "synthesis") <- TRUE
     return(x)
   }
 
