@@ -1,4 +1,4 @@
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/rte-antares-rpackage/antares-rpackageProcessing?branch=master&svg=true)](https://ci.appveyor.com/project/rte-antares-rpackage/antares-rpackageProcessing)
+[![Build status](https://ci.appveyor.com/api/projects/status/rnf5iejmgyu00j1i?svg=true)](https://ci.appveyor.com/project/rte-antares-rpackage/antaresprocessing)
 [![Travis-CI Build Status](https://travis-ci.org/rte-antares-rpackage/antares-rpackageProcessing.svg?branch=master)](https://travis-ci.org/rte-antares-rpackage/antares-rpackageProcessing)
 [![Coverage Status](https://img.shields.io/codecov/c/github/rte-antares-rpackage/antares-rpackageProcessing/master.svg)](https://codecov.io/github/rte-antares-rpackage/antares-rpackageProcessing?branch=master)
 
