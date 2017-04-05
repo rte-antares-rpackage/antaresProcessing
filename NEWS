@@ -1,9 +1,16 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
-Changes in version 0.10 (XXXX-XX-XX)
+Changes in version 0.10 (2017-04-05)
+
+BREAKING CHANGES:
+* Function margins() has been replaced by addUpwardMargin() and addDownwardMargin(). they are easier to use, add directly the new columns to the input data and are far more efficient.
 
 NEW FEATURES:
-* margins can now return margins upward and/or downward.
+* The package now adds new aliases to use in the parameter 'select' of antaresRead::readAntares. Each function has its own alias, so it is now easier for the user to read all data required by a given function. Use 'showAliases()' to see the list of aliases.
+
+BUGFIXES:
+* Function synthesize() set incorrect values for attributes of antaresDataList objects.
+
 
 Changes in version 0.9 (2017-01-25)
 

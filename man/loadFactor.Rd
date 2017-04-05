@@ -58,8 +58,10 @@ for cluster of a study.
 }
 \examples{
 \dontrun{
-mydata <- readAntares(clusters = "all", thermalModulation = TRUE, synthesis = FALSE)
+# data required by the function
+showAliases("loadfactor")
 
+mydata <- readAntares(select = "loadfactor")
 loadFactor(mydata, synthesis = TRUE)
 }
 

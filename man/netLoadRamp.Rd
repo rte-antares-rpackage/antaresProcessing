@@ -21,7 +21,7 @@ per Monte-Carlo scenario.}
 load?}
 }
 \value{
-\code{addRamps} returns a data.table or a list of data.tables with the
+\code{netLoadRamp} returns a data.table or a list of data.tables with the
 following columns:
 \item{netLoadRamp}{
   Ramp of the net load of an area. If \code{timeStep} is not hourly, then these
@@ -51,19 +51,15 @@ For convenience the function invisibly returns the modified input.
 }
 \description{
 This function computes the ramp of the consumption and the balance of areas
-and/or districts and add them to the data.
+and/or districts.
 }
 \examples{
 \dontrun{
+# data required by the function
+showAliases("netLoadRamp")
 
-  mydata <- readAntares(areas = "all", mustRun = TRUE, synthesis = FALSE)
-  addRamps(mydata, timeStep = "annual")
-
-  # Example that minimizes the quantity of data read
-  mydata <- readAntares(areas = "all", synthesis = FALSE,
-                        select = c("LOAD", "ROW BAL.", "PSP", "MISC. NDG",
-                                   "H. ROR", "WIND", "SOLAR", "BALANCE"))
-  netLoadRamp(mydata, timeStep = "annual", ignoreMustRun = TRUE)
+mydata <- readAntares(select="netLoadRamp")
+addRamps(mydata, timeStep = "annual")
 }
 
 }

@@ -42,12 +42,11 @@ are assumed to be equal to 0.
 }
 \examples{
 \dontrun{
-mydata <- readAntares(areas = "all", clusters = "all", synthesis = FALSE)
-surplusSectors(mydata)
 
-# Example that minimizes the quantity of data read
-mydata <- readAntares(areas = "all", clusters = "all", synthesis = FALSE,
-                      select = c("WIND", "SOLAR", "H. ROR", "H. STOR", "MRG. PRICE"))
+# Data required by the function:
+showAliases("surplusSectors")
+
+mydata <- readAntares(select = "surplusSectors")
 surplusSectors(mydata)
 
 # Note that if the parameter "sectors" is modified, the function can require

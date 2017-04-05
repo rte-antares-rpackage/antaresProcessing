@@ -27,16 +27,12 @@ production of clusters in must run mode is also subtracted by default.
 }
 \examples{
 \dontrun{
-mydata <- readAntares(areas = "all", synthesis = FALSE, mustRun= TRUE, select = "nostat")
+# Data required by the function
+showAliases("netLoad")
 
+mydata <- readAntares(select = "netLoad")
 addNetLoad(mydata)
-names("mydata")
-
-# Example that minimizes the quantity of data read
-mydata <- readAntares(areas = "all", timeStep = "annual",
-                      select = c("LOAD", "ROW BAL.", "PSP", "MISC. NDG",
-                                 "H. ROR", "WIND", "SOLAR"))
-addNetLoad(mydata, ignoreMustRun = TRUE)
+names(mydata)
 
 }
 

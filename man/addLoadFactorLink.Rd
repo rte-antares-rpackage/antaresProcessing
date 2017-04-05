@@ -25,14 +25,12 @@ This function computes the load factor of link and add it to an
 }
 \examples{
 \dontrun{
-mydata <- readAntares(link = "all", linkCapacity=TRUE)
+# Data required by the function
+showAliases("loadFactorLink")
 
+mydata <- readAntares(select = "loadFactorLink")
 addLoadFactorLink(mydata)
 names(mydata)
-
-# Example that minimizes the quantity of data read
-mydata <- readAntares(links = "all", timeStep = "annual",select = c("FLOW LIN."), linkCapacity=TRUE)
-addLoadFactorLink(mydata)
 }
 
 }

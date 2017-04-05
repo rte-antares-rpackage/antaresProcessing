@@ -19,18 +19,12 @@ This function computes the export and import of areas or districts and add it to
 }
 \examples{
 \dontrun{
-mydata <- readAntares(areas = "all", links="all", districts ="all" , synthesis = FALSE)
+# Data required by the function
+showAliases("exportsImports")
 
-mydata<-removeVirtualAreas(
-  mydata,
-  storageFlexibility = c(getAreas("psp"),getAreas("hub")),
-  production = getAreas("offshore")
-)
-
-mydata<-addExportAndImport(mydata)
-
+mydata <- readAntares(select = "exportsImports")
+addExportAndImport(mydata)
 names(mydata$areas)
-names(mydata$districts)
 
 }
 }

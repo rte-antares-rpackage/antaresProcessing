@@ -61,21 +61,13 @@ and the global surplus of an area.
 }
 \examples{
 \dontrun{
-mydata <- readAntares(areas = "all", links = "all", synthesis = FALSE)
+showAliases("surplus")
 
+mydata <- readAntares(select="surplus")
 surplus(mydata)
 
 surplus(mydata, synthesis = TRUE)
-
 surplus(mydata, synthesis = TRUE, groupByDistrict = TRUE)
-
-# Example that minimizes the quantity of data read
-mydata <- readAntares(areas = "all", links = "all", synthesis = FALSE,
-                      select = c("LOAD", "MRG. PRICE", "OV. COST", "CONG. FEE (ALG.)",
-                                 "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
-                                 "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR",
-                                 "MISC. NDG", "PSP", "ROW BAL."))
-surplus(mydata)
 }
 
 }

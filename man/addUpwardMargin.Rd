@@ -39,11 +39,10 @@ minus the exports:
 }
 \examples{
 \dontrun{
-mydata <- readAntares(
-  areas = "all", links = "all",
-  select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "AVL DTG",
-             "ROW BAL.", "hydroStorageMaxPower", "FLOW LIN.", "linkCapacity")
-)
+# Data required by the function
+showAliases("upwardMargin")
+
+mydata <- readAntares(select = "upwardMargin")
 mydata <- removeVirtualAreas(mydata, getAreas(c("pump", "stor")))
 
 addUpwardMargin(mydata)

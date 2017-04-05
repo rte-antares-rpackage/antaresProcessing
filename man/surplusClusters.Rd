@@ -73,17 +73,17 @@ belongs to minus variable, fixed and startup costs.
 }
 \examples{
 \dontrun{
+# Data required by the function:
+showAliases("surplusClusters")
 
-mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE",
-                      synthesis = FALSE)
+mydata <- readAntares(select = "surplusClusters")
 surplusClusters(mydata)
 
 # Computing the surplus of the last unit of a cluster requires the additional
 # column "availableUnits". To add this column, one has to use parameter
 # "thermalAvailabilities = TRUE" in readAntares.
 
-mydata <- readAntares(areas = "all", clusters = "all", select = "MRG. PRICE",
-                      thermalAvailabilities = TRUE, synthesis = FALSE)
+mydata <- readAntares(select = c("surplusClusters", "thermalAvailabilities"))
 surplusClusters(mydata, surplusLastUnit = TRUE)
 
 }
