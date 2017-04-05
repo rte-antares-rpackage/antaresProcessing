@@ -7,3 +7,9 @@ cache: packages
 r_github_packages:
  - hadley/devtools#1263
  - rte-antares-rpackage/antares-rpackageRead
+
+r_packages:
+  - covr
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
