@@ -1,6 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/rnf5iejmgyu00j1i?svg=true)](https://ci.appveyor.com/project/rte-antares-rpackage/antaresprocessing)
 [![Build Status](https://travis-ci.org/rte-antares-rpackage/antaresProcessing.svg?branch=master)](https://travis-ci.org/rte-antares-rpackage/antaresProcessing)
-[![Coverage Status](https://img.shields.io/codecov/c/github/rte-antares-rpackage/antares-rpackageProcessing/master.svg)](https://codecov.io/github/rte-antares-rpackage/antares-rpackageProcessing?branch=master)
+[![codecov](https://codecov.io/gh/rte-antares-rpackage/antaresProcessing/branch/master/graph/badge.svg)](https://codecov.io/gh/rte-antares-rpackage/antaresProcessing)
 
 # The 'antaresProcessing' R package
 
