@@ -1,5 +1,12 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
+
+Changes in version 0.10.2 (2017-05-24)
+
+BUGFIXES:
+* Function "synthesize()" was crashing when data contained non numeric columns.
+
+
 Changes in version 0.10.1 (2017-04-20)
 
 BUGFIXES:
