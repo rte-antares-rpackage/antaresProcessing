@@ -97,11 +97,15 @@ synthesize <- function(x, ..., prefixForMeans = "") {
   x <- copy(x)
   x$mcYear <- NULL
   idVars <- .idCols(x)
+  numvars <- lapply(x, is.numeric)
+  numvars <- names(numvars)[numvars == TRUE]
+
   variables <- setdiff(names(x), idVars)
+  variables <- intersect(variables, numvars)
   attrs <- attributes(x)
 
   # Compute average values of each column
-  res <- suppressWarnings(x[, lapply(.SD, mean), by = idVars])
+  res <- suppressWarnings(x[, lapply(.SD, mean), by = idVars, .SDcols = variables])
   if (prefixForMeans != "") {
     setnames(res, variables, paste0(prefixForMeans, "_", variables))
   }
