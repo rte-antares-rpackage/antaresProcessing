@@ -58,6 +58,13 @@ describe("synthesize", {
 
   })
 
+  it ("skips non numeric variables", {
+    mydata$areas[, charColumn := sample(c("a", "b"), .N, TRUE)]
+    expect_silent(sumdata <- synthesize(mydata))
+    expect_false("chartColumn" %in% names(sumdata$areas))
+    mydata$areas[, charColumn := NULL]
+  })
+
 })
 
 test_that("Using synthesize() or import synthetic data should be equivalent", {
