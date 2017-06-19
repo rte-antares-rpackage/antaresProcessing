@@ -11,26 +11,37 @@
 #' @param variable
 #'   a variable of data
 #'
-#' @param mcYear
+#' @param mcyear
 #'  set of mcYear
 #'
 #' @examples
 #' \dontrun{
 #'
-#' mydata <- readAntares(areas="all", select="LOAD")
-#' getVariableAntares(mydata, variable="LOAD")
-#' names(mydata$areas)
+#' mydata <- readAntares(areas="all",clusters="all", select="LOAD")
+#' getValues(mydata$areas, variable="LOAD")
+#' getValues(myData$clusters, variable = "production")
 #'
 #' }
 #' @export
 #'
 
-getValues<-function(data=NULL, variable=NULL, mcYear="all"){
+getValues<-function(data=NULL, variable=NULL, mcyear="all"){
 
   if (!is(data, "antaresData")) stop("'data' is not an 'antaresData' object")
   if (is.null(variable)) stop("'variable' is NULL")
-  if (is.null(variable)) stop("'variable' is not a character")
-  if (is.null(mcYear)) stop("'mcYear' is not a numeric")
+  if (!is.character(variable)) stop("'variable' is not a character")
+  if (!is.numeric(mcyear) & mcyear!="all") stop("'mcyear' is not a numeric")
 
-  TRUE
+  IdCols<-getIdCols(data)
+  #without mcYear
+  IdColsWM<-IdCols[IdCols!="mcYear"]
+  toGet<-c(IdCols,variable)
+
+  res<-data[, toGet, with=FALSE ]
+  if(mcyear!="all") res<-res[mcYear %in% mcyear]
+
+  myFormula<-sprintf("%s ~ mcYear",paste(IdColsWM, collapse = "+") )
+  res<-dcast(data = res, as.formula(myFormula), value.var=variable)
+  res
+
 }
