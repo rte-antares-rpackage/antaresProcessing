@@ -8,6 +8,11 @@ r_github_packages:
  - hadley/devtools#1263
  - rte-antares-rpackage/antares-rpackageRead
 
+include:
+  - r: release
+  - r: oldrel
+  - r: devel
+
 r_packages:
   - covr
 
