@@ -67,7 +67,7 @@ A data.table of class \code{antaresDataTable} with the following columns:
 \item{totalSurplusWOSPerMW}{
   Surplus of all units of the cluster.
 
-  formula = totalSurplusWOS/(unitcount*nominalcapacity)
+  formula = round(totalSurplusWOS/nominalcapacity * unitcount))
 }
 \item{economicGradient}{
   Economic gradient of a cluster. It is equal to

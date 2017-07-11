@@ -63,7 +63,7 @@
 #' \item{totalSurplusWOSPerMW}{
 #'   Surplus of all units of the cluster.
 #'
-#'   formula = totalSurplusWOS/(unitcount*nominalcapacity)
+#'   formula = round(totalSurplusWOS/nominalcapacity * unitcount))
 #' }
 #' \item{economicGradient}{
 #'   Economic gradient of a cluster. It is equal to
@@ -132,7 +132,7 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
              nbHoursPMax = production == round(nominalcapacity * unitcount))]
 
   tmp[, `:=`(economicGradient = surplusPerUnit / nominalcapacity,
-             totalSurplusWOSPerMW = totalSurplusWOS/round(nominalcapacity * unitcount))]
+             totalSurplusWOSPerMW = round(totalSurplusWOS/nominalcapacity * unitcount))]
 
   if (surplusLastUnit) {
     tmp[, prodLastUnit := pmax(0, (NODU == availableUnits) * (production - nominalcapacity * (NODU - 1)))]
