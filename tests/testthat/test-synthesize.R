@@ -65,6 +65,13 @@ describe("synthesize", {
     mydata$areas[, charColumn := NULL]
   })
 
+  it ("synthesizes logical values", {
+    mydata$areas[, boolColumn := sample(c(TRUE, FALSE), .N, TRUE)]
+    expect_silent(sumdata <- synthesize(mydata))
+    expect_true("boolColumn" %in% names(sumdata$areas))
+    mydata$areas[, boolColumn := NULL]
+  })
+
 })
 
 test_that("Using synthesize() or import synthetic data should be equivalent", {
