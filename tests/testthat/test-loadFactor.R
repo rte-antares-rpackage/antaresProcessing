@@ -23,4 +23,12 @@ describe("loadFactor", {
     expect_true(all(lf[, propHoursMinGen + propHoursMaxGen] %between% c(0, 1)))
   })
 
+  mydata <- readAntares(clusters = "all", thermalModulation = TRUE,
+                        mcYears = "all", showProgress = FALSE, thermalAvailabilities = TRUE)
+  lfA <- loadFactor(mydata, loadFactorAvailable = TRUE)
+
+  it("returns values between 0 and 1", {
+    expect_true(all(lfA$loadFactorAvailable %between% c(0, 1)))
+  })
+
 })

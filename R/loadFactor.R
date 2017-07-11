@@ -10,6 +10,10 @@
 #'   \code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
 #'   results for clusters and has to contain the columns
 #'   \code{minGenModulation}.
+#'
+#'  @param loadFactorAvailable
+#'   Should loadFactorAvailable be added to the result
+#'
 #' @inheritParams surplus
 #' @inheritParams surplusClusters
 #'
@@ -25,6 +29,12 @@
 #'   the installed capacity of a cluster that is effectively generate
 #'
 #'   Formula: production / (unitcount * nominalcapacity)
+#' }
+#' #' \item{loadFactorAvailable}{
+#'   Load factor of the cluster. It represent the proportion of
+#'   the capacity available of a cluster that is effectively generate
+#'
+#'   Formula: production / thermalAvailability
 #' }
 #' \item{propHoursMinGen}{
 #'   Proportion of hours when production is positive and
@@ -56,10 +66,17 @@
 #' @export
 #'
 loadFactor <- function(x, timeStep = "annual", synthesis = FALSE,
-                       clusterDesc = NULL) {
+                       clusterDesc = NULL, loadFactorAvailable = FALSE) {
 
   .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
-  x <- .checkColumns(x, list(clusters = c("production", "NODU", "minGenModulation")))
+
+  if(loadFactorAvailable){
+    clList<-list(clusters = c("production", "NODU", "minGenModulation", "thermalAvailability"))
+  }else {
+    clList<-list(clusters = c("production", "NODU", "minGenModulation"))
+  }
+
+  x <- .checkColumns(x, clList)
   x$cluster[is.na(minGenModulation), minGenModulation := 0]
   opts <- simOptions(x)
   idVars <- .idCols(x$clusters)
@@ -67,9 +84,14 @@ loadFactor <- function(x, timeStep = "annual", synthesis = FALSE,
   if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
   .fillClusterDesc(clusterDesc, min.stable.power = 0, spinning = 0)
 
-  tmp <- merge(x$cluster[, c(idVars, "production", "NODU", "minGenModulation"), with = FALSE],
+  tmp <- merge(x$cluster[, c(idVars, clList$clusters), with = FALSE],
                clusterDesc[, .(area, cluster, min.stable.power, nominalcapacity, unitcount, spinning)],
                by = c("area", "cluster"))
+
+  if(loadFactorAvailable){
+    tmp[, `:=`(
+      loadFactorAvailable = ifelse(production==0, 0, production / thermalAvailability))]
+  }
 
   tmp[, `:=`(
     loadFactor = production / (nominalcapacity * unitcount),
@@ -86,7 +108,12 @@ loadFactor <- function(x, timeStep = "annual", synthesis = FALSE,
     )
   )]
 
-  res <- tmp[, c(idVars, "loadFactor", "propHoursMinGen", "propHoursMaxGen"), with = FALSE]
+  if(loadFactorAvailable){
+    colRes<-c("loadFactor","loadFactorAvailable", "propHoursMinGen", "propHoursMaxGen")
+  }else{
+    colRes<-c("loadFactor", "propHoursMinGen", "propHoursMaxGen")
+  }
+  res <- tmp[, c(idVars, colRes), with = FALSE]
   res <- .addClassAndAttributes(res, FALSE, "hourly", opts, type = "loadFactor")
 
   res <- changeTimeStep(res, timeStep, fun = "mean")

@@ -4,13 +4,17 @@
 \alias{loadFactor}
 \title{Load factors of clusters}
 \usage{
-loadFactor(x, timeStep = "annual", synthesis = FALSE, clusterDesc = NULL)
+loadFactor(x, timeStep = "annual", synthesis = FALSE, clusterDesc = NULL,
+  loadFactorAvailable = FALSE)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function
-\code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
-results for clusters and has to contain the columns
-\code{minGenModulation}.}
+  \code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
+  results for clusters and has to contain the columns
+  \code{minGenModulation}.
+
+ @param loadFactorAvailable
+  Should loadFactorAvailable be added to the result}
 
 \item{timeStep}{Desired time step for the result.}
 
@@ -33,6 +37,12 @@ columns:
   the installed capacity of a cluster that is effectively generate
 
   Formula: production / (unitcount * nominalcapacity)
+}
+#' \item{loadFactorAvailable}{
+  Load factor of the cluster. It represent the proportion of
+  the capacity available of a cluster that is effectively generate
+
+  Formula: production / thermalAvailability
 }
 \item{propHoursMinGen}{
   Proportion of hours when production is positive and
