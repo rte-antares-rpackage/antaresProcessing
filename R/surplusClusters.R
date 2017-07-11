@@ -55,6 +55,16 @@
 #'
 #'   formula = `MRG. PRICE` * production - opCost - startupCost
 #' }
+#' \item{totalSurplusWOS}{
+#'   Surplus of all units of the cluster.
+#'
+#'   formula = `MRG. PRICE` * production - opCost
+#' }
+#' \item{totalSurplusWOSPerMW}{
+#'   Surplus of all units of the cluster.
+#'
+#'   formula = totalSurplusWOS/(unitcount*nominalcapacity)
+#' }
 #' \item{economicGradient}{
 #'   Economic gradient of a cluster. It is equal to
 #'   the surplus per unit divided by the capacity of a unit.
@@ -118,14 +128,16 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
 
   tmp[, `:=`(surplusPerUnit = (`MRG. PRICE` * production - opCost - startupCost) / unitcount,
              totalSurplus = `MRG. PRICE` * production - opCost - startupCost,
+             totalSurplusWOS = `MRG. PRICE` * production - opCost,
              nbHoursPMax = production == round(nominalcapacity * unitcount))]
 
-  tmp[, economicGradient := surplusPerUnit / nominalcapacity]
+  tmp[, `:=`(economicGradient = surplusPerUnit / nominalcapacity,
+             totalSurplusWOSPerMW = totalSurplusWOS/round(nominalcapacity * unitcount))]
 
   if (surplusLastUnit) {
     tmp[, prodLastUnit := pmax(0, (NODU == availableUnits) * (production - nominalcapacity * (NODU - 1)))]
     tmp[, surplusLastUnit := (prodLastUnit > 0) * (`MRG. PRICE` * prodLastUnit - opCost / pmax(1, NODU) - startup.cost * (startupCost > 0))]
-    res <- tmp[, c(idVars, "surplusPerUnit", "surplusLastUnit", "totalSurplus",
+    res <- tmp[, c(idVars, "surplusPerUnit", "surplusLastUnit", "totalSurplus","totalSurplusWOS","totalSurplusWOSPerMW",
                    "economicGradient"),
                with = FALSE]
   } else {
