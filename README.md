@@ -1,6 +1,7 @@
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/antaresProcessing)](https://cran.r-project.org/package=antaresProcessing)
 [![Build status](https://ci.appveyor.com/api/projects/status/rnf5iejmgyu00j1i?svg=true)](https://ci.appveyor.com/project/rte-antares-rpackage/antaresprocessing)
 [![Build Status](https://travis-ci.org/rte-antares-rpackage/antaresProcessing.svg?branch=master)](https://travis-ci.org/rte-antares-rpackage/antaresProcessing)
-[![Coverage Status](https://img.shields.io/codecov/c/github/rte-antares-rpackage/antares-rpackageProcessing/master.svg)](https://codecov.io/github/rte-antares-rpackage/antares-rpackageProcessing?branch=master)
+[![codecov](https://codecov.io/gh/rte-antares-rpackage/antaresProcessing/branch/master/graph/badge.svg)](https://codecov.io/gh/rte-antares-rpackage/antaresProcessing)
 
 # The 'antaresProcessing' R package
 
@@ -9,26 +10,14 @@ The `antaresProcessing` package provides functions that uses data created with p
 
 ## Installation
 
-To install the package from Github, you will need to create a personal access token (PAT) here: https://github.com/settings/tokens . You must check "repo".
-
+This package has been published on CRAN, so you can install it easily:
 ```r
-# Install dependencies
-install.packages(c("data.table", "plyr", "lubridate", "devtools", "digest"))
-library(devtools)
-install_github("rte-antares-rpackage/antares-rpackageRead", auth_token = "your_pat")
-install_github("rte-antares-rpackage/antares-rpackageProcessing", auth_token = "your_pat")
-```
-
-If you are behind a proxy, you need to first run this code:
-```r
-library(httr)
-set_config(use_proxy("XXX.XXX.XX.XX", port=XXXX, username="proxy_user", password="passwd"))
+install.packages("antaresViz")
 ```
 
 To install the last development version:
 ```r
-install_github("rte-antares-rpackage/antares-rpackageProcessing", 
-               auth_token = "your_pat", ref ="develop")
+install_github("rte-antares-rpackage/antaresProcessing", ref ="develop")
 ```
 
 To display the help of the package and see all the functions it provides, type:
