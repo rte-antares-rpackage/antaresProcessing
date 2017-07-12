@@ -10,9 +10,8 @@
 #'   \code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
 #'   results for clusters and has to contain the columns
 #'   \code{minGenModulation}.
-#'
-#'  @param loadFactorAvailable
-#'   Should loadFactorAvailable be added to the result
+#' @param loadFactorAvailable
+#'   Should loadFactorAvailable be added to the result?
 #'
 #' @inheritParams surplus
 #' @inheritParams surplusClusters

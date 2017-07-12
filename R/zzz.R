@@ -3,7 +3,7 @@
 #' @import data.table
 #' @import antaresRead
 #' @importFrom methods is
-#' @importFrom stats median quantile sd
+#' @importFrom stats median quantile sd as.formula
 
 .onLoad <- function(libname, pkgname){
   setAlias(
@@ -100,7 +100,8 @@ globalVariables(
     "surplusPerUnit", "thermalPmin", "timeId", "to", "toDistrict",
     "totalSurplus", "transCapacityDirect", "transCapacityIndirect",
     "unitcount", "upwardModulation", "variableCost",
-    "interconnectedDownwardMargin", "interconnectedUpwardMargin"
+    "interconnectedDownwardMargin", "interconnectedUpwardMargin",
+    "thermalAvailability"
   )
 )
 

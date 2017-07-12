@@ -11,12 +11,20 @@
 #'   \code{transCapacityDirect} and \code{transCapacityIndirect}.
 #'
 #' @return
-#' \code{addLoadFactorLink} modifies its input by adding to it a column "loadFactor". For
-#' convenience, it invisibly returns the modified input.
-#'   loadFactor represent the proportion of
-#'   the installed capacity of a link that is effectively used
+#' \code{addLoadFactorLink} modifies its input by adding to it two columns:
 #'
-#'   Formula: `FLOW LIN` / transCapacity
+#' \item{loadFactor}{Proportion of the installed capacity of a link that
+#' is effectively used:
+#'
+#' \preformatted{loadFactor = `FLOW LIN` / transCapacity}
+#'
+#' Notice that \code{loadFactor} can be positive or negative according to the
+#' direction of the flow.
+#' }
+#' \item{congestion}{1 if the link is saturated (\code{loadFactor = +/-1)},
+#' 0 otherwise.
+#' }
+#' For convenience, the function invisibly returns the modified input.
 #'
 #' @examples
 #' \dontrun{
@@ -38,14 +46,14 @@ addLoadFactorLink <- function(x) {
    if (is(x, "antaresDataList")) {
     if(! c("links") %in% attr(x, "names")) stop("'x' does not contain link data")
     if (!is.null(x$links)) addLoadFactorLink(x$links)
-    return("loadFactorLink added")
+    return(invisible(x))
    }
 
   #check when x is an antaresData
   if(! attr(x, "type") %in% c("links")  ) stop("'x' does not contain link data")
 
   if (!is.null(x$loadFactor)) {
-    stop("Input already contains column 'netLoad'")
+    stop("Input already contains column 'loadFactor'")
   }
 
   missingCols <- setdiff(c("FLOW LIN.", "transCapacityDirect", "transCapacityIndirect"),
@@ -57,12 +65,12 @@ addLoadFactorLink <- function(x) {
 
   x[ `FLOW LIN.`>0 & transCapacityDirect != 0, `:=` (
     loadFactor=as.double(`FLOW LIN.`/transCapacityDirect),
-    congestion=as.integer(`FLOW LIN.`/transCapacityDirect)
+    congestion=ifelse(`FLOW LIN.`/transCapacityDirect >= 1, 1L, 0L)
     )]
 
   x[ `FLOW LIN.`<0 & transCapacityIndirect != 0, `:=` (
     loadFactor=-as.double(-`FLOW LIN.`/transCapacityIndirect),
-    congestion=as.integer(-`FLOW LIN.`/transCapacityIndirect)
+    congestion= ifelse(-`FLOW LIN.`/transCapacityIndirect >= 1, 1L, 0L)
     )]
 
   x[ `FLOW LIN.`==0 , `:=` (
