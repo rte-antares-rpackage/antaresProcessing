@@ -9,12 +9,9 @@ loadFactor(x, timeStep = "annual", synthesis = FALSE, clusterDesc = NULL,
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function
-  \code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
-  results for clusters and has to contain the columns
-  \code{minGenModulation}.
-
- @param loadFactorAvailable
-  Should loadFactorAvailable be added to the result}
+\code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
+results for clusters and has to contain the columns
+\code{minGenModulation}.}
 
 \item{timeStep}{Desired time step for the result.}
 
@@ -24,6 +21,8 @@ per Monte-Carlo scenario.}
 \item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
 If is this parameter is set to \code{NULL} (the default), then the function
 attemps to read the needed data in the same study as \code{x}.}
+
+\item{loadFactorAvailable}{Should loadFactorAvailable be added to the result?}
 }
 \value{
 a data.table of class \code{antaresDataTable}containing the following
