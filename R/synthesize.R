@@ -95,6 +95,13 @@ synthesize <- function(x, ..., prefixForMeans = "") {
   }
 
   x <- copy(x)
+
+  if (length(unique(x$mcYear)) == 1) {
+    x$mcYear <- NULL
+    setattr(x, "synthesis", TRUE)
+    return(x)
+  }
+
   x$mcYear <- NULL
   idVars <- .idCols(x)
   numvars <- lapply(x, function(x) is.numeric(x) | is.logical(x))

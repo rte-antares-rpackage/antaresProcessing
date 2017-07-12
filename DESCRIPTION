@@ -1,7 +1,7 @@
 Package: antaresProcessing
 Type: Package
 Title: Antares Results Processing
-Version: 0.10.2
+Version: 0.11
 Date: 2017-04-05
 Authors@R: c(
     person("Francois", "Guillem", , "francois.guillem@rte-france.com", role = c("aut", "cre")),
