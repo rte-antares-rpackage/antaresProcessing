@@ -12,12 +12,20 @@ addLoadFactorLink(x)
 \code{transCapacityDirect} and \code{transCapacityIndirect}.}
 }
 \value{
-\code{addLoadFactorLink} modifies its input by adding to it a column "loadFactor". For
-convenience, it invisibly returns the modified input.
-  loadFactor represent the proportion of
-  the installed capacity of a link that is effectively used
+\code{addLoadFactorLink} modifies its input by adding to it two columns:
 
-  Formula: `FLOW LIN` / transCapacity
+\item{loadFactor}{Proportion of the installed capacity of a link that
+is effectively used:
+
+\preformatted{loadFactor = `FLOW LIN` / transCapacity}
+
+Notice that \code{loadFactor} can be positive or negative according to the
+direction of the flow.
+}
+\item{congestion}{1 if the link is saturated (\code{loadFactor = +/-1)},
+0 otherwise.
+}
+For convenience, the function invisibly returns the modified input.
 }
 \description{
 This function computes the load factor of link and add it to an
