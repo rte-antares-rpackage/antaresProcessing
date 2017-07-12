@@ -21,7 +21,7 @@ Get all the values of a variable for some years Monte Carlo
 \dontrun{
 
 mydata <- readAntares(areas="all",clusters="all", select="LOAD")
-getVariableAntares(mydata$areas, variable="LOAD")
+getValues(mydata$areas, variable="LOAD")
 getValues(myData$clusters, variable = "production")
 
 }
