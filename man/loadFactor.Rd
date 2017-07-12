@@ -9,9 +9,12 @@ loadFactor(x, timeStep = "annual", synthesis = FALSE, clusterDesc = NULL,
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function
-\code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
-results for clusters and has to contain the columns
-\code{minGenModulation}.}
+  \code{\link[antaresRead]{readAntares}}. It must contain hourly detailed
+  results for clusters and has to contain the columns
+  \code{minGenModulation}.
+
+ @param loadFactorAvailable
+  Should loadFactorAvailable be added to the result}
 
 \item{timeStep}{Desired time step for the result.}
 
