@@ -118,7 +118,7 @@ synthesize <- function(x, ..., prefixForMeans = "") {
   }
   .addClassAndAttributes(res, synthesis = TRUE, timeStep = attrs$timeStep,
                          opts = attrs$opts, type = attrs$type)
-
+  .formatDigits(res)
   # Determine the list of custom statistics to compute for each variable in the
   # input data. aggFun contains one element per variable which is a named list
   # of variables
@@ -226,3 +226,34 @@ synthesize <- function(x, ..., prefixForMeans = "") {
 
   res
 }
+
+
+
+.formatDigits <- function(res)
+{
+  mode <- tolower(attributes(res)$opts$mode)
+  if(mode %in% c("adequacy", "economy")){
+    format <- pkgEnv$formatName[pkgEnv$formatName$Mode == mode,]
+    format <- format[,c("Folder", "Name", "digits")]
+    type <- attributes(res)$type
+    if(type == "districts"){
+      type <- "areas"
+    }
+    type <- gsub("s$", "", type)
+
+    format <- format[format$Folder==type,]
+
+    formatKeep <- format[format$Name%in%names(res),]
+    if(nrow(formatKeep)>0)
+    {
+      for(i in format$Name){
+        i <- as.character(i)
+        roundNumber <- format$digits[which(format$Name == i)]
+        res[,c(i) := round(get(i), roundNumber)]
+      }
+    }
+  }
+}
+
+
+
