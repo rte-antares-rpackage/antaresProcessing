@@ -53,7 +53,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares("all", timeStep = "annual", synthesis = FALSE)
+#' mydata <- readAntares("all", timeStep = "annual")
 #'
 #' synthesize(mydata)
 #'
@@ -81,14 +81,14 @@
 #'
 #'@export
 #'
-synthesize <- function(x, ..., prefixForMeans = "") {
+synthesize <- function(x, ..., prefixForMeans = "", useTime = TRUE) {
   if (!is(x, "antaresData")) stop("'x' must be an object of class 'antaresData' created with ''readAntares()'")
 
-  if (attr(x, "synthesis") == TRUE) return(x)
+  if (attr(x, "synthesis") == TRUE & useTime) return(x)
 
   if (is(x, "antaresDataList")) {
     for (n in names(x)) {
-      x[[n]] <- synthesize(x[[n]], ...)
+      x[[n]] <- synthesize(x[[n]], ..., prefixForMeans = prefixForMeans, useTime = useTime)
     }
     attr(x, "synthesis") <- TRUE
     return(x)
@@ -103,13 +103,21 @@ synthesize <- function(x, ..., prefixForMeans = "") {
   }
 
   x$mcYear <- NULL
+
   idVars <- .idCols(x)
+
+
   numvars <- lapply(x, function(x) is.numeric(x) | is.logical(x))
   numvars <- names(numvars)[numvars == TRUE]
 
   variables <- setdiff(names(x), idVars)
   variables <- intersect(variables, numvars)
   attrs <- attributes(x)
+
+
+ if(!useTime){
+   idVars <- .idCols(x, removeTimeId = TRUE)
+ }
 
   # Compute average values of each column
   res <- suppressWarnings(x[, lapply(.SD, mean), by = idVars, .SDcols = variables])
@@ -246,9 +254,9 @@ synthesize <- function(x, ..., prefixForMeans = "") {
     formatKeep <- format[format$Name%in%names(res),]
     if(nrow(formatKeep)>0)
     {
-      for(i in format$Name){
+      for(i in formatKeep$Name){
         i <- as.character(i)
-        roundNumber <- format$digits[which(format$Name == i)]
+        roundNumber <- formatKeep$digits[which(formatKeep$Name == i)]
         res[,c(i) := round(get(i), roundNumber)]
       }
     }
