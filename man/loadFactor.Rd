@@ -4,7 +4,8 @@
 \alias{loadFactor}
 \title{Load factors of clusters}
 \usage{
-loadFactor(x, timeStep = "annual", synthesis = FALSE, clusterDesc = NULL)
+loadFactor(x, timeStep = "annual", synthesis = FALSE, clusterDesc = NULL,
+  loadFactorAvailable = FALSE)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function
@@ -20,6 +21,8 @@ per Monte-Carlo scenario.}
 \item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
 If is this parameter is set to \code{NULL} (the default), then the function
 attemps to read the needed data in the same study as \code{x}.}
+
+\item{loadFactorAvailable}{Should loadFactorAvailable be added to the result?}
 }
 \value{
 a data.table of class \code{antaresDataTable}containing the following
@@ -33,6 +36,12 @@ columns:
   the installed capacity of a cluster that is effectively generate
 
   Formula: production / (unitcount * nominalcapacity)
+}
+#' \item{loadFactorAvailable}{
+  Load factor of the cluster. It represent the proportion of
+  the capacity available of a cluster that is effectively generate
+
+  Formula: production / thermalAvailability
 }
 \item{propHoursMinGen}{
   Proportion of hours when production is positive and

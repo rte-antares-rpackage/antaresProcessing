@@ -102,7 +102,7 @@ addExportAndImport <- function(x, addCapacities = FALSE) {
 
   # Names of the columns to add
   v <- c("import", "export")
-  if (addCapacities) v <- append(v, "capExport", "capImport")
+  if (addCapacities) v <- c(v, "capExport", "capImport")
 
   # Aggregate flows and capacities by area (or district)
   flowAreas <- flowLinks[, lapply(.SD, sum), keyby = idColsA, .SDcols = v]

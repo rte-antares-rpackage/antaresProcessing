@@ -31,7 +31,7 @@ A data.table with the following columns:
 \item{producerSurplus}{
   The surplus of the producers of some area.
 
-  formula = `MRG. PRICE` * production - `OV. COST`
+  formula = `MRG. PRICE` * production - `OP. COST`
 
   Production includes "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
   "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR" and "MISC. NDG"

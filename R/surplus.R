@@ -29,7 +29,7 @@
 #' \item{producerSurplus}{
 #'   The surplus of the producers of some area.
 #'
-#'   formula = `MRG. PRICE` * production - `OV. COST`
+#'   formula = `MRG. PRICE` * production - `OP. COST`
 #'
 #'   Production includes "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
 #'   "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR" and "MISC. NDG"
@@ -73,7 +73,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   prodVars <- setdiff(pkgEnv$production, "PSP")
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
-  x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OV. COST", prodVars, "PSP", "ROW BAL."),
+  x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OP. COST", prodVars, "PSP", "ROW BAL."),
                              links = "CONG. FEE (ALG.)"))
 
   opts <- simOptions(x)
@@ -108,7 +108,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   idColsA <- .idCols(x$areas)
   res <- x$areas[,append(mget(idColsA),
                          .(consumerSurplus = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD,
-                           producerSurplus = `MRG. PRICE` * production - `OV. COST`,
+                           producerSurplus = `MRG. PRICE` * production - `OP. COST`,
                            rowBalanceSurplus = `MRG. PRICE` * `ROW BAL.`))]
 
   # Compute surplus of storage/flexibility

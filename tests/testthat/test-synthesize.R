@@ -61,7 +61,22 @@ describe("synthesize", {
   it ("skips non numeric variables", {
     mydata$areas[, charColumn := sample(c("a", "b"), .N, TRUE)]
     expect_silent(sumdata <- synthesize(mydata))
-    expect_false("chartColumn" %in% names(sumdata$areas))
+    expect_false("charColumn" %in% names(sumdata$areas))
+    mydata$areas[, charColumn := NULL]
+  })
+
+  it ("synthesizes logical values", {
+    mydata$areas[, boolColumn := sample(c(TRUE, FALSE), .N, TRUE)]
+    expect_silent(sumdata <- synthesize(mydata))
+    expect_true("boolColumn" %in% names(sumdata$areas))
+    mydata$areas[, boolColumn := NULL]
+  })
+
+  it ("does not modify detailed data with a single mcYear", {
+    mydata <- subset(mydata, mcYears = 1)
+    mydata$areas[, charColumn := sample(c("a", "b"), .N, TRUE)]
+    expect_silent(sumdata <- synthesize(mydata))
+    expect_true("charColumn" %in% names(sumdata$areas))
     mydata$areas[, charColumn := NULL]
   })
 
