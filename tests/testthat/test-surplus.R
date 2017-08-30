@@ -34,6 +34,8 @@ test_that("Surpluses are correctly computed", {
                                       production = getAreas("offshore"))
   surplus <- surplus(dataCorrected)
 
+  surplusWithHurdle <- surplus(dataCorrected, hurdleCost = FALSE)
+
   data$areas$production <- data$areas[,`H. ROR` + WIND + SOLAR + NUCLEAR + LIGNITE + COAL +
                                         GAS + OIL + `MIX. FUEL` + `MISC. DTG` + `H. STOR` +
                                         `MISC. NDG`]
@@ -59,6 +61,10 @@ test_that("Surpluses are correctly computed", {
   # Congestion fees
   congestionFeesA <- 1/2 * data$links[link == "a - b", sum(`CONG. FEE (ALG.)`-`HURDLE COST`)]
   expect_equal(congestionFeesA, surplus[area == "a", congestionFees])
+
+  # Congestion fees with hurdle cost
+  congestionFeesAWHC <- 1/2 * data$links[link == "a - b", sum(`CONG. FEE (ALG.)`)]
+  expect_equal(congestionFeesAWHC, surplusWithHurdle[area == "a", congestionFees])
 
   # ROW Balance
   rowSurplusA <- data$areas[area == "a", sum(`MRG. PRICE` * `ROW BAL.`)]
