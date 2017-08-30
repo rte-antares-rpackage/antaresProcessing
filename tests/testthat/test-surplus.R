@@ -57,7 +57,7 @@ test_that("Surpluses are correctly computed", {
   expect_equal(storageSurplusA, surplus[area == "a", storageSurplus])
 
   # Congestion fees
-  congestionFeesA <- 1/2 * data$links[link == "a - b", sum(`CONG. FEE (ALG.)`)]
+  congestionFeesA <- 1/2 * data$links[link == "a - b", sum(`CONG. FEE (ALG.)`-`HURDLE COST`)]
   expect_equal(congestionFeesA, surplus[area == "a", congestionFees])
 
   # ROW Balance
