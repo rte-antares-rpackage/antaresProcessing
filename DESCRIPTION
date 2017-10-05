@@ -1,7 +1,7 @@
 Package: antaresProcessing
 Type: Package
 Title: Antares Results Processing
-Version: 0.11
+Version: 0.12
 Date: 2017-07-13
 Authors@R: c(
     person("Francois", "Guillem", , "francois.guillem@rte-france.com", role = c("aut", "cre")),
@@ -21,7 +21,7 @@ BugReports: https://github.com/rte-antares-rpackage/antaresProcessing/issues
 License: GPL (>= 2) | file LICENSE
 LazyData: TRUE
 Depends:
-    antaresRead (>= 1.1.0)
+    antaresRead (>= 1.1.5)
 Imports:
     data.table,
     methods,
