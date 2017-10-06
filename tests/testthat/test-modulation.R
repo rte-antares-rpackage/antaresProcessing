@@ -36,7 +36,7 @@ test_that("Modulation are lower than unit capacity", {
 })
 
 
-mydata <- readAntares(areas = "all", clusters = "all", showProgress = FALSE, mcYears = "all")
+mydata <- readAntares(areas = "all", showProgress = FALSE, mcYears = "all")
 m <- modulation(mydata, by = "sector")
 
 test_that("modulations by sectors are positive", {
