@@ -15,8 +15,9 @@ an Antares simulation.}
 See details to see how to specify them.}
 
 \item{prefixForMeans}{Prefix to add to the columns containing average values. If it is different
- than "", a "_" is automatically added.
-@param useTime use times columns for synthesize.}
+than "", a "_" is automatically added.}
+
+\item{useTime}{use times columns for synthesize.}
 }
 \value{
 Synthetic version of the input data. It has the same structure as \code{x}

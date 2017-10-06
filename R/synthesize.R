@@ -17,7 +17,7 @@
 #' @param prefixForMeans
 #'   Prefix to add to the columns containing average values. If it is different
 #'   than "", a "_" is automatically added.
-#'  @param useTime use times columns for synthesize.
+#' @param useTime use times columns for synthesize.
 #'
 #' @return
 #' Synthetic version of the input data. It has the same structure as \code{x}
