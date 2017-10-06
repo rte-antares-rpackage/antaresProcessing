@@ -6,7 +6,8 @@ cache: packages
 
 r_github_packages:
  - hadley/devtools#1263
- - rte-antares-rpackage/antares-rpackageRead
+ - rte-antares-rpackage/antares-rpackageRead@develop
+
 
 include:
   - r: release
