@@ -24,6 +24,14 @@ if (sourcedir != "") {
         assign("h5file", file.path(path, "20170707-1355eco-test.h5"), envir = globalenv())
       }
     }
+
+    deprintize<-function(f){
+      return(function(...) {capture.output(w<-f(...));return(w);});
+    }
+
+    silentf <- deprintize(showAliases)
+    assign("silentf", silentf, envir = globalenv())
+
   }
   assign("studyPath", file.path(path, "test_case"), envir = globalenv())
   assign("nweeks", 2, envir = globalenv())

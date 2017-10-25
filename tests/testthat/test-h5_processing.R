@@ -3,7 +3,7 @@ context("h5 : addProcessingH5")
 if(requireNamespace("rhdf5")){
   if(!is.null(h5file)){
     test_that("h5 : processing, write results", {
-      .setAlliasH5()
+      .setAliasH5()
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",
                                         addDownwardMargin = TRUE,

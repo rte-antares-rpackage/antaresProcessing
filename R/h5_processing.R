@@ -84,7 +84,7 @@ addProcessingH5 <- function(opts,
                            evalClusters = list(),
                            evalDistricts = list(), nThreads = 1){
 
-  .setAlliasH5()
+  .setAliasH5()
 
   if(!isH5Opts(opts)){
     stop("opts not refear to an h5 file")
@@ -153,7 +153,7 @@ addProcessingH5 <- function(opts,
     parallel::clusterExport(cl, c("opts"))
     parallel::clusterEvalQ(cl = cl, {
       require(antaresProcessing)
-      .setAlliasH5()
+      .setAliasH5()
       opts <- setSimulationPath(opts$h5path)
     })
 
@@ -385,7 +385,7 @@ addProcessingH5 <- function(opts,
       X[,names(wolumnstoTransform) := lapply(X = .SD, as.numeric), .SDcols = wolumnstoTransform]
       if(mcYears[1] == opts$mcYears[1])
       {
-        cat(paste0("Some boolean column(s) found, they will be transform to numeric (TRUE : 1, FALSE : 0)"))
+        warning(paste0("Some boolean column(s) found, they will be transform to numeric (TRUE : 1, FALSE : 0)"))
       }
     }
   })
@@ -425,7 +425,7 @@ addProcessingH5 <- function(opts,
     rhdf5::H5Dclose(did)
     if(sum(namesVariable %in% structVarAdd) > 0 )
     {
-      cat("Somes columns already exists in h5 file, they will be overwrite")
+      warning("Somes columns already exists in h5 file, they will be overwrite.")
       namesVariable <- namesVariable[!namesVariable %in% structVarAdd]
 
     }
@@ -600,7 +600,7 @@ addProcessingH5 <- function(opts,
 
 #'@export
 #'@noRd
-.setAlliasH5 <- function(){
+.setAliasH5 <- function(){
   sapply(names(pkgEnv$process), function(X){
     tpAlias <- pkgEnv$process[[X]]
     X <- paste0("Out_", X)
