@@ -2,7 +2,7 @@ Package: antaresProcessing
 Type: Package
 Title: Antares Results Processing
 Version: 0.12
-Date: 2017-07-13
+Date: 2017-10-25
 Authors@R: c(
     person("Francois", "Guillem", , "francois.guillem@rte-france.com", role = c("aut", "cre")),
     person("Jalal-Edine", "ZAWAM", , "jalal-edine.zawam@rte-france.com", role = "ctb"),
@@ -27,6 +27,8 @@ Imports:
     methods,
     stats
 Suggests:
+    rhdf5 (>= 2.20.0),
+    parallel,
     testthat,
     knitr,
     rmarkdown,
@@ -34,3 +36,4 @@ Suggests:
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 Encoding: UTF-8
+biocViews: Infrastructure, DataImport

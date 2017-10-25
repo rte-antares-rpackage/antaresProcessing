@@ -16,6 +16,15 @@ if (sourcedir != "") {
     untar(file.path(sourcedir, "antares-test-study.tar.gz"), exdir = path)
   }
 
+  if(requireNamespace("rhdf5", quietly = TRUE)){
+    assign("h5file", NULL, envir = globalenv())
+    h5file <- system.file("testdata/20170707-1355eco-test.h5", package = "antaresProcessing")
+    if(h5file != ""){
+      if(file.copy(from = h5file, to = path)){
+        assign("h5file", file.path(path, "20170707-1355eco-test.h5"), envir = globalenv())
+      }
+    }
+  }
   assign("studyPath", file.path(path, "test_case"), envir = globalenv())
   assign("nweeks", 2, envir = globalenv())
 }
