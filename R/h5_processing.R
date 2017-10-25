@@ -67,7 +67,7 @@
 #' }
 #'
 #' @export
-addProcessingH5 <- function(opts,
+addProcessingH5 <- function(opts = simOptions(),
                            mcY = c("mcInd", "mcAll"),
                            addDownwardMargin = FALSE,
                            addUpwardMargin = FALSE,
