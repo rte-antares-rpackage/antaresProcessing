@@ -4,13 +4,13 @@
 \alias{addProcessingH5}
 \title{Add columns to an antares .h5 file}
 \usage{
-addProcessingH5(opts, mcY = c("mcInd", "mcAll"), addDownwardMargin = FALSE,
-  addUpwardMargin = FALSE, addExportAndImport = FALSE,
-  addLoadFactorLink = FALSE, externalDependency = FALSE,
-  loadFactor = FALSE, modulation = FALSE, netLoadRamp = FALSE,
-  surplus = FALSE, surplusClusters = FALSE, evalAreas = list(),
-  evalLinks = list(), evalClusters = list(), evalDistricts = list(),
-  nThreads = 1)
+addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
+  addDownwardMargin = FALSE, addUpwardMargin = FALSE,
+  addExportAndImport = FALSE, addLoadFactorLink = FALSE,
+  externalDependency = FALSE, loadFactor = FALSE, modulation = FALSE,
+  netLoadRamp = FALSE, surplus = FALSE, surplusClusters = FALSE,
+  allData = FALSE, evalAreas = list(), evalLinks = list(),
+  evalClusters = list(), evalDistricts = list(), nThreads = 1)
 }
 \arguments{
 \item{opts}{\code{simOptions} obtain wich [antaresRead]{setSimulationPath}}
@@ -36,6 +36,8 @@ addProcessingH5(opts, mcY = c("mcInd", "mcAll"), addDownwardMargin = FALSE,
 \item{surplus}{\code{boolean} refer to [antaresProcessing]{surplus}}
 
 \item{surplusClusters}{\code{boolean} refer to [antaresProcessing]{surplusClusters}}
+
+\item{allData}{\code{boolean}, add all process in a single call.}
 
 \item{evalAreas}{\code{list}, list of operation to evaluate in areas data}
 

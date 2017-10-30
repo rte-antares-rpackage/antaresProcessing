@@ -14,6 +14,7 @@
 #' @param netLoadRamp \code{boolean} refer to [antaresProcessing]{netLoadRamp}
 #' @param surplus \code{boolean} refer to [antaresProcessing]{surplus}
 #' @param surplusClusters \code{boolean} refer to [antaresProcessing]{surplusClusters}
+#' @param allData \code{boolean}, add all process in a single call.
 #' @param evalAreas \code{list}, list of operation to evaluate in areas data
 #' @param evalLinks \code{list}, list of operation to evaluate in links data
 #' @param evalClusters \code{list}, list of operation to evaluate in clusters data
@@ -79,6 +80,7 @@ addProcessingH5 <- function(opts = simOptions(),
                            netLoadRamp = FALSE,
                            surplus = FALSE,
                            surplusClusters = FALSE,
+                           allData = FALSE,
                            evalAreas = list(),
                            evalLinks = list(),
                            evalClusters = list(),
@@ -88,6 +90,18 @@ addProcessingH5 <- function(opts = simOptions(),
 
   if(!isH5Opts(opts)){
     stop("opts not refear to an h5 file")
+  }
+  if(allData){
+    addDownwardMargin <- TRUE
+    addUpwardMargin <- TRUE
+    addExportAndImport <- TRUE
+    addLoadFactorLink <- TRUE
+    externalDependency <- TRUE
+    loadFactor <- TRUE
+    modulation <- TRUE
+    netLoadRamp <- TRUE
+    surplus <- TRUE
+    surplusClusters <- TRUE
   }
 
   mcY <- match.arg(mcY)
