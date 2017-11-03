@@ -14,7 +14,7 @@
 #' @param netLoadRamp \code{boolean} refer to [antaresProcessing]{netLoadRamp}
 #' @param surplus \code{boolean} refer to [antaresProcessing]{surplus}
 #' @param surplusClusters \code{boolean} refer to [antaresProcessing]{surplusClusters}
-#' @param allData \code{boolean}, add all process in a single call.
+#' @param allProcess \code{boolean}, add all process in a single call.
 #' @param evalAreas \code{list}, list of operation to evaluate in areas data
 #' @param evalLinks \code{list}, list of operation to evaluate in links data
 #' @param evalClusters \code{list}, list of operation to evaluate in clusters data

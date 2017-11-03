@@ -37,8 +37,6 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
 
 \item{surplusClusters}{\code{boolean} refer to [antaresProcessing]{surplusClusters}}
 
-\item{allData}{\code{boolean}, add all process in a single call.}
-
 \item{evalAreas}{\code{list}, list of operation to evaluate in areas data}
 
 \item{evalLinks}{\code{list}, list of operation to evaluate in links data}
@@ -48,6 +46,8 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
 \item{evalDistricts}{\code{list}, list of operation to evaluate in districts data}
 
 \item{nThreads}{\code{numeric}, nThreads to use}
+
+\item{allProcess}{\code{boolean}, add all process in a single call.}
 }
 \description{
 In this version only hourly data can be enriched.
