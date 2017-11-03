@@ -559,7 +559,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res$links$loadFactor <- NULL
       res$areas$export <- NULL
       res$areas$import <- NULL
-      res <- addExportAndImport(res, addCapacities = TRUE)
+      res <- addExportAndImport(res, addCapacities = linkCapacity)
 
 
     })
@@ -573,7 +573,7 @@ addProcessingH5 <- function(opts = simOptions(),
     try({
       res$areas[,"netLoadRamp" := NULL]
       res$areas[,"netLoad" := NULL]
-      res <- addNetLoad(res)
+      res <- addNetLoad(res, ignoreMustRun = !mustRun)
     })
     try({
       extDep <- externalDependency(res, timeStep =  timeStep)
@@ -584,7 +584,7 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$loadFactor){
     try({
-      loadFactor <- loadFactor(res, timeStep =  timeStep, loadFactorAvailable = TRUE)
+      loadFactor <- loadFactor(res, timeStep =  timeStep, loadFactorAvailable = thermalAvailabilities)
       idC <- getIdCols(loadFactor)
       res$clusters <- merge(res$clusters, loadFactor, by = idC)
     })
@@ -599,7 +599,7 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$netLoadRamp){
     try({
-      netLoadRamp <- netLoadRamp(res, timeStep = timeStep)
+      netLoadRamp <- netLoadRamp(res, timeStep = timeStep, ignoreMustRun = !mustRun)
       netLoadRamp <- as.antaresDataList(netLoadRamp)
       idC <- getIdCols(netLoadRamp$areas)
       res$areas <- merge(res$areas, netLoadRamp$areas, by = idC)
@@ -632,7 +632,7 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$surplusClusters){
     try({
-      surplusClusters <- surplusClusters(res, timeStep =  timeStep)
+      surplusClusters <- surplusClusters(res, timeStep =  timeStep, surplusLastUnit = thermalAvailabilities)
       idC <- getIdCols(surplusClusters)
       res$clusters <- merge(res$clusters, surplusClusters, by = idC)
     })
