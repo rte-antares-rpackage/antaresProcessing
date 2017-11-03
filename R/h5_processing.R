@@ -597,10 +597,19 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$surplus){
     try({
+      ##Surplus for areas
       surplus <- surplus(res, timeStep = timeStep)
-
       idC <- getIdCols(surplus)
       res$areas <- merge(res$areas, surplus, by = idC)
+      if("districts"%in%names(res)){
+        #Surplus districts
+        surplus <- surplus(res, groupByDistrict  = TRUE,  timeStep = timeStep)
+        idC <- getIdCols(surplus)
+        res$districts <- merge(res$districts, surplus, by = idC)
+
+      }
+
+
     })
   }
   if(allStraitments$surplusClusters){
