@@ -51,5 +51,13 @@ if(requireNamespace("rhdf5")){
                             UpwardMargin_recalc$areas$isolatedUpwardMargin))
 
     })
+
+    test_that("h5 : processing calc links clusters discticcts", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",
+                                        evalLinks = list(totalLink= "`FLOW LIN.` + 10000 "),
+                                        evalClusters = list(prodNodu= "`production`*`NODU` "),
+                                        evalDistricts = list(prodDic= "`LOAD`*`WIND`"))})
+    })
   }
 }
