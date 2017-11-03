@@ -593,7 +593,14 @@ addProcessingH5 <- function(opts = simOptions(),
     try({
       netLoadRamp <- netLoadRamp(res, timeStep = timeStep)
       netLoadRamp <- as.antaresDataList(netLoadRamp)
+
+      if("netLoadRamp" %in% names(netLoadRamp)){
+        names(netLoadRamp)[1] <- "areas"
+      }
+
       idC <- getIdCols(netLoadRamp$areas)
+
+
       res$areas <- merge(res$areas, netLoadRamp$areas, by = idC)
 
       if("districts"%in%names(netLoadRamp)){
