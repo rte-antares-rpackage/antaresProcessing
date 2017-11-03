@@ -51,16 +51,18 @@ addDownwardMargin <- function(x) {
     } else {
       if (!is.null(x$areas)) {
         setattr(x$areas, "virtualNodes", attr(x, "virtualNodes"))
-        addDownwardMargin(x$areas)
+        x$areas <- addDownwardMargin(x$areas)
       }
-      if (!is.null(x$districts)) addDownwardMargin(x$districts)
+      if (!is.null(x$districts)) {
+        x$districts <- addDownwardMargin(x$districts)
+        }
     }
     return(invisible(x))
   }
 
   # Check required columns are present
   .neededColAreaDown <- c("H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "ROW BAL.")
-  .checkColumns(x, list(areas = .neededColAreaDown))
+  .checkColumns(x, .neededColAreaDown)
 
   # If the study contains storage/capacity areas, the column 'pumpingCapacity' is
   # also required

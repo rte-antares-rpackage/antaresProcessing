@@ -538,7 +538,7 @@ addProcessingH5 <- function(opts = simOptions(),
   options(warn = -1)
   if(allStraitments$addDownwardMargin){
     try({
-      res$areas <- addDownwardMargin(res$areas)
+      res <- addDownwardMargin(res)
     })
   }
   if(allStraitments$addUpwardMargin){
@@ -546,6 +546,8 @@ addProcessingH5 <- function(opts = simOptions(),
       res <- addUpwardMargin(res)
     })
   }
+
+
   if(allStraitments$addExportAndImport){
     try({
       res$links$loadFactor <- NULL
