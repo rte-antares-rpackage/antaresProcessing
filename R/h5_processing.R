@@ -624,7 +624,7 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$surplusClusters){
     try({
-      surplusClusters <- surplusClusters(res, timeStep =  timeStep)
+      surplusClusters <- surplusClusters(res, timeStep =  timeStep, surplusLastUnit = TRUE)
       idC <- getIdCols(surplusClusters)
       res$clusters <- merge(res$clusters, surplusClusters, by = idC)
     })
