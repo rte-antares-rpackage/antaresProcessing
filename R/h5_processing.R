@@ -551,7 +551,9 @@ addProcessingH5 <- function(opts = simOptions(),
       res$links$loadFactor <- NULL
       res$areas$export <- NULL
       res$areas$import <- NULL
-      res <- addExportAndImport(res)
+      res <- addExportAndImport(res, addCapacities = TRUE)
+
+
     })
   }
   if(allStraitments$addLoadFactorLink){
@@ -574,7 +576,7 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$loadFactor){
     try({
-      loadFactor <- loadFactor(res, timeStep =  timeStep)
+      loadFactor <- loadFactor(res, timeStep =  timeStep, loadFactorAvailable = TRUE)
       idC <- getIdCols(loadFactor)
       res$clusters <- merge(res$clusters, loadFactor, by = idC)
     })
@@ -590,14 +592,14 @@ addProcessingH5 <- function(opts = simOptions(),
   if(allStraitments$netLoadRamp){
     try({
       netLoadRamp <- netLoadRamp(res, timeStep = timeStep)
-      idC <- getIdCols(netLoadRamp)
-      res$areas <- merge(res$areas, netLoadRamp, by = idC)
+      netLoadRamp <- as.antaresDataList(netLoadRamp)
+      idC <- getIdCols(netLoadRamp$areas)
+      res$areas <- merge(res$areas, netLoadRamp$areas, by = idC)
 
-      if("districts"%in%names(res)){
+      if("districts"%in%names(netLoadRamp)){
         #Surplus districts
-        netLoadRamp <- netLoadRamp(res, groupByDistrict  = TRUE,  timeStep = timeStep)
-        idC <- getIdCols(netLoadRamp)
-        res$districts <- merge(res$districts, netLoadRamp, by = idC)
+        idC <- getIdCols(netLoadRamp$districts)
+        res$districts <- merge(res$districts, netLoadRamp$districts, by = idC)
 
       }
 
