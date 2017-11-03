@@ -590,9 +590,17 @@ addProcessingH5 <- function(opts = simOptions(),
   if(allStraitments$netLoadRamp){
     try({
       netLoadRamp <- netLoadRamp(res, timeStep = timeStep)
-
       idC <- getIdCols(netLoadRamp)
       res$areas <- merge(res$areas, netLoadRamp, by = idC)
+
+      if("districts"%in%names(res)){
+        #Surplus districts
+        netLoadRamp <- netLoadRamp(res, groupByDistrict  = TRUE,  timeStep = timeStep)
+        idC <- getIdCols(netLoadRamp)
+        res$districts <- merge(res$districts, netLoadRamp, by = idC)
+
+      }
+
     })
   }
   if(allStraitments$surplus){
