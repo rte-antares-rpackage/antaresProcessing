@@ -563,19 +563,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res <- addLoadFactorLink(res)
     })
   }
-  if(allStraitments$externalDependency){
-    try({
-      res$areas[,"netLoadRamp" := NULL]
-      res$areas[,"netLoad" := NULL]
-      res <- addNetLoad(res)
-    })
-    try({
-      extDep <- externalDependency(res, timeStep =  timeStep)
 
-      idC <- getIdCols(extDep)
-      res$areas <- merge(res$areas, extDep, by = idC)
-    })
-  }
   if(allStraitments$loadFactor){
     try({
       loadFactor <- loadFactor(res, timeStep =  timeStep, loadFactorAvailable = TRUE)
@@ -583,6 +571,8 @@ addProcessingH5 <- function(opts = simOptions(),
       res$clusters <- merge(res$clusters, loadFactor, by = idC)
     })
   }
+
+
   if(allStraitments$modulation){
     try({
       mod <- modulation(res, timeStep =  timeStep)
@@ -614,6 +604,33 @@ addProcessingH5 <- function(opts = simOptions(),
 
     })
   }
+
+  if(allStraitments$externalDependency){
+    try({
+      if(is.null(res$areas$netLoadRamp)){
+        res <- addNetLoad(res)
+      }
+
+    })
+    try({
+      extDep <- externalDependency(res, timeStep =  timeStep)
+      extDep <- as.antaresDataList(extDep)
+      if(!names(extDep)[1] %in%c("areas", "districts")){
+        names(extDep)[1] <- "areas"
+      }
+
+
+      idC <- getIdCols(extDep$areas)
+      res$areas <- merge(res$areas, extDep$areas, by = idC)
+      if("districts" %in%names(extDep)){
+        idC <- getIdCols(extDep$districts)
+        res$districts <- merge(res$districts, extDep$districts, by = idC)
+      }
+
+
+    })
+  }
+
   if(allStraitments$surplus){
     try({
       ##Surplus for areas
