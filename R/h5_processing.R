@@ -384,7 +384,7 @@ addProcessingH5 <- function(opts = simOptions(),
     {
       res$districts[, names(evalDistricts) := lapply(evalDistricts, function(X){eval(parse(text = X))})]
     }
-    cAdd <- c(columnsToAdd$links, names(evalAreas))
+    cAdd <- c(columnsToAdd$links, names(evalDistricts))
     res$districts <- res$districts[, .SD, .SDcols =  cAdd[cAdd%in%names(res$districts)]]
   }else{
     res$districts <- NULL
