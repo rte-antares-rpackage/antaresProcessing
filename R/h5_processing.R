@@ -332,12 +332,14 @@ addProcessingH5 <- function(opts = simOptions(),
   }else{
     dr <- NULL
   }
+
   res <- readAntares(areas = ar,
                      links = ln,
                      clusters = clu,
                      districts = dr,
                      opts = opts, select = c(select,columnsToSelects),
                      mcYears = mcYears, timeStep = timeStep)
+
   res <- as.antaresDataList(res)
   nrowRes <- lapply(res, nrow)
 
@@ -536,7 +538,7 @@ addProcessingH5 <- function(opts = simOptions(),
   options(warn = -1)
   if(allStraitments$addDownwardMargin){
     try({
-      res <- addDownwardMargin(res)
+      res$areas <- addDownwardMargin(res$areas)
     })
   }
   if(allStraitments$addUpwardMargin){
