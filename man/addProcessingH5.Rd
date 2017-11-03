@@ -13,29 +13,29 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
   evalClusters = list(), evalDistricts = list(), nThreads = 1)
 }
 \arguments{
-\item{opts}{\code{simOptions} obtain wich [antaresRead]{setSimulationPath}}
+\item{opts}{\code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}}
 
 \item{mcY}{\code{character}, "mcInd" or "mcAll".}
 
-\item{addDownwardMargin}{\code{boolean} refer to [antaresProcessing]{addDownwardMargin}}
+\item{addDownwardMargin}{\code{boolean} refer to \link[antaresProcessing]{addDownwardMargin}}
 
-\item{addUpwardMargin}{\code{boolean} refer to [antaresProcessing]{addUpwardMargin}}
+\item{addUpwardMargin}{\code{boolean} refer to \link[antaresProcessing]{addUpwardMargin}}
 
-\item{addExportAndImport}{\code{boolean} refer to [antaresProcessing]{addExportAndImport}}
+\item{addExportAndImport}{\code{boolean} refer to \link[antaresProcessing]{addExportAndImport}}
 
-\item{addLoadFactorLink}{\code{boolean} refer to [antaresProcessing]{addLoadFactorLink}}
+\item{addLoadFactorLink}{\code{boolean} refer to \link[antaresProcessing]{addLoadFactorLink}}
 
-\item{externalDependency}{\code{boolean} refer to [antaresProcessing]{externalDependency}}
+\item{externalDependency}{\code{boolean} refer to \link[antaresProcessing]{externalDependency}}
 
-\item{loadFactor}{\code{boolean} refer to [antaresProcessing]{loadFactor}}
+\item{loadFactor}{\code{boolean} refer to \link[antaresProcessing]{loadFactor}}
 
-\item{modulation}{\code{boolean} refer to [antaresProcessing]{modulation}}
+\item{modulation}{\code{boolean} refer to \link[antaresProcessing]{modulation}}
 
-\item{netLoadRamp}{\code{boolean} refer to [antaresProcessing]{netLoadRamp}}
+\item{netLoadRamp}{\code{boolean} refer to \link[antaresProcessing]{netLoadRamp}}
 
-\item{surplus}{\code{boolean} refer to [antaresProcessing]{surplus}}
+\item{surplus}{\code{boolean} refer to \link[antaresProcessing]{surplus}}
 
-\item{surplusClusters}{\code{boolean} refer to [antaresProcessing]{surplusClusters}}
+\item{surplusClusters}{\code{boolean} refer to \link[antaresProcessing]{surplusClusters}}
 
 \item{evalAreas}{\code{list}, list of operation to evaluate in areas data}
 

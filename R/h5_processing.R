@@ -2,18 +2,18 @@
 #'
 #' @description In this version only hourly data can be enriched.
 #'
-#' @param opts \code{simOptions} obtain wich [antaresRead]{setSimulationPath}
+#' @param opts \code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}
 #' @param mcY  \code{character}, "mcInd" or "mcAll".
-#' @param addDownwardMargin \code{boolean} refer to [antaresProcessing]{addDownwardMargin}
-#' @param addUpwardMargin \code{boolean} refer to [antaresProcessing]{addUpwardMargin}
-#' @param addExportAndImport \code{boolean} refer to [antaresProcessing]{addExportAndImport}
-#' @param addLoadFactorLink \code{boolean} refer to [antaresProcessing]{addLoadFactorLink}
-#' @param externalDependency \code{boolean} refer to [antaresProcessing]{externalDependency}
-#' @param loadFactor \code{boolean} refer to [antaresProcessing]{loadFactor}
-#' @param modulation \code{boolean} refer to [antaresProcessing]{modulation}
-#' @param netLoadRamp \code{boolean} refer to [antaresProcessing]{netLoadRamp}
-#' @param surplus \code{boolean} refer to [antaresProcessing]{surplus}
-#' @param surplusClusters \code{boolean} refer to [antaresProcessing]{surplusClusters}
+#' @param addDownwardMargin \code{boolean} refer to \link[antaresProcessing]{addDownwardMargin}
+#' @param addUpwardMargin \code{boolean} refer to \link[antaresProcessing]{addUpwardMargin}
+#' @param addExportAndImport \code{boolean} refer to \link[antaresProcessing]{addExportAndImport}
+#' @param addLoadFactorLink \code{boolean} refer to \link[antaresProcessing]{addLoadFactorLink}
+#' @param externalDependency \code{boolean} refer to \link[antaresProcessing]{externalDependency}
+#' @param loadFactor \code{boolean} refer to \link[antaresProcessing]{loadFactor}
+#' @param modulation \code{boolean} refer to \link[antaresProcessing]{modulation}
+#' @param netLoadRamp \code{boolean} refer to \link[antaresProcessing]{netLoadRamp}
+#' @param surplus \code{boolean} refer to \link[antaresProcessing]{surplus}
+#' @param surplusClusters \code{boolean} refer to \link[antaresProcessing]{surplusClusters}
 #' @param allProcess \code{boolean}, add all process in a single call.
 #' @param evalAreas \code{list}, list of operation to evaluate in areas data
 #' @param evalLinks \code{list}, list of operation to evaluate in links data
