@@ -9,8 +9,9 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
   addExportAndImport = FALSE, addLoadFactorLink = FALSE,
   externalDependency = FALSE, loadFactor = FALSE, modulation = FALSE,
   netLoadRamp = FALSE, surplus = FALSE, surplusClusters = FALSE,
-  allData = FALSE, evalAreas = list(), evalLinks = list(),
-  evalClusters = list(), evalDistricts = list(), nThreads = 1)
+  thermalAvailabilities = FALSE, linkCapacity = FALSE, mustRun = FALSE,
+  evalAreas = list(), evalLinks = list(), evalClusters = list(),
+  evalDistricts = list(), nThreads = 1)
 }
 \arguments{
 \item{opts}{\code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}}
@@ -37,6 +38,16 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
 
 \item{surplusClusters}{\code{boolean} refer to \link[antaresProcessing]{surplusClusters}}
 
+\item{thermalAvailabilities}{\code{boolean} Should the surplus of the last unit of a cluster be computed in \link[antaresProcessing]{surplusClusters}.
+
+Should loadFactorAvailable be added to the result of \link[antaresProcessing]{loadFactor}.}
+
+\item{linkCapacity}{\code{boolean} should export and import capacities be computed \link[antaresProcessing]{addExportAndImport}.}
+
+\item{mustRun}{\code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
+
+Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.}
+
 \item{evalAreas}{\code{list}, list of operation to evaluate in areas data}
 
 \item{evalLinks}{\code{list}, list of operation to evaluate in links data}
@@ -46,8 +57,6 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
 \item{evalDistricts}{\code{list}, list of operation to evaluate in districts data}
 
 \item{nThreads}{\code{numeric}, nThreads to use}
-
-\item{allProcess}{\code{boolean}, add all process in a single call.}
 }
 \description{
 In this version only hourly data can be enriched.

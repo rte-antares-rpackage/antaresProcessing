@@ -14,7 +14,13 @@
 #' @param netLoadRamp \code{boolean} refer to \link[antaresProcessing]{netLoadRamp}
 #' @param surplus \code{boolean} refer to \link[antaresProcessing]{surplus}
 #' @param surplusClusters \code{boolean} refer to \link[antaresProcessing]{surplusClusters}
-#' @param allProcess \code{boolean}, add all process in a single call.
+#' @param thermalAvailabilities \code{boolean} Should the surplus of the last unit of a cluster be computed in \link[antaresProcessing]{surplusClusters}.
+#'
+#' Should loadFactorAvailable be added to the result of \link[antaresProcessing]{loadFactor}.
+#' @param linkCapacity \code{boolean} should export and import capacities be computed \link[antaresProcessing]{addExportAndImport}.
+#' @param mustRun \code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
+#'
+#' Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.
 #' @param evalAreas \code{list}, list of operation to evaluate in areas data
 #' @param evalLinks \code{list}, list of operation to evaluate in links data
 #' @param evalClusters \code{list}, list of operation to evaluate in clusters data
@@ -69,22 +75,24 @@
 #'
 #' @export
 addProcessingH5 <- function(opts = simOptions(),
-                           mcY = c("mcInd", "mcAll"),
-                           addDownwardMargin = FALSE,
-                           addUpwardMargin = FALSE,
-                           addExportAndImport = FALSE,
-                           addLoadFactorLink = FALSE,
-                           externalDependency = FALSE,
-                           loadFactor = FALSE,
-                           modulation = FALSE,
-                           netLoadRamp = FALSE,
-                           surplus = FALSE,
-                           surplusClusters = FALSE,
-                           allData = FALSE,
-                           evalAreas = list(),
-                           evalLinks = list(),
-                           evalClusters = list(),
-                           evalDistricts = list(), nThreads = 1){
+                            mcY = c("mcInd", "mcAll"),
+                            addDownwardMargin = FALSE,
+                            addUpwardMargin = FALSE,
+                            addExportAndImport = FALSE,
+                            addLoadFactorLink = FALSE,
+                            externalDependency = FALSE,
+                            loadFactor = FALSE,
+                            modulation = FALSE,
+                            netLoadRamp = FALSE,
+                            surplus = FALSE,
+                            surplusClusters = FALSE,
+                            thermalAvailabilities = FALSE,
+                            linkCapacity = FALSE,
+                            mustRun = FALSE,
+                            evalAreas = list(),
+                            evalLinks = list(),
+                            evalClusters = list(),
+                            evalDistricts = list(), nThreads = 1){
 
   .setAliasH5()
 
