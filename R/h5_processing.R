@@ -164,10 +164,10 @@ addProcessingH5 <- function(opts = simOptions(),
   if(mcYear[1] != 'mcAll')
   {
     by = nThreads
-    mcYear_L <- vector("list", floor((max(mcYear)-1)/by) + 1 )
+    mcYear_L <- vector("list", floor((max(mcYear))/by) + 1 )
     for(i in 1:length(mcYear))
     {
-      mcYear_L[[floor((i-1)/by) + 1]] <- c(mcYear_L[[floor((i-1)/by) + 1]], mcYear[i])
+      mcYear_L[[floor((i)/by) + 1]] <- c(mcYear_L[[floor((i)/by) + 1]], mcYear[i])
     }
     mcYear <- mcYear_L
   }else{
