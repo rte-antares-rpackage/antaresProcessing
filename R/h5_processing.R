@@ -115,6 +115,12 @@ addProcessingH5 <- function(opts = simOptions(),
     thermalAvailabilities <- TRUE
   }
 
+  if(netLoadRamp){
+    externalDependency <- TRUE
+  }
+
+
+
   mcY <- match.arg(mcY)
   allStraitments <- list(
     addDownwardMargin = addDownwardMargin,
@@ -368,7 +374,7 @@ addProcessingH5 <- function(opts = simOptions(),
   # for(i in 1:length(res)){
   #   res[[i]] <- res[[i]][, .SD, .SDcols = names(res[[i]])[!names(res[[i]])%in%select]]
   # }
-  res <- .calcNewColumns(res, allStraitments, timeStep = timeStep, linkCapacity = linkCapacity, mustRun = mustRun, thermalAvailabilities = thermalAvailabilities)
+  res <- .calcNewColumns(res, allStraitments, timeStep = timeStep, linkCapacity = linkCapacity, mustRun = mustRun, thermalAvailabilities = thermalAvailabilities, opts = opts)
 
   if(writeAreas && "areas" %in% names(res)){
     if(length(evalAreas) > 0)
@@ -407,7 +413,7 @@ addProcessingH5 <- function(opts = simOptions(),
     {
       res$districts[, names(evalDistricts) := lapply(evalDistricts, function(X){eval(parse(text = X))})]
     }
-    cAdd <- c(columnsToAdd$links, names(evalDistricts))
+    cAdd <- c(columnsToAdd$districts, names(evalDistricts))
     res$districts <- res$districts[, .SD, .SDcols =  cAdd[cAdd%in%names(res$districts)]]
   }else{
     res$districts <- NULL
@@ -553,7 +559,7 @@ addProcessingH5 <- function(opts = simOptions(),
 }
 
 
-.calcNewColumns <- function(res, allStraitments, timeStep, linkCapacity, mustRun, thermalAvailabilities){
+.calcNewColumns <- function(res, allStraitments, timeStep, linkCapacity, mustRun, thermalAvailabilities, opts){
 
   oldw <- getOption("warn")
   options(warn = -1)
@@ -589,6 +595,11 @@ addProcessingH5 <- function(opts = simOptions(),
     try({
       res$areas[,"netLoadRamp" := NULL]
       res$areas[,"netLoad" := NULL]
+      if("districts" %in% names(res)){
+        res$districts[,"netLoadRamp" := NULL]
+        res$districts[,"netLoad" := NULL]
+      }
+
       res <- addNetLoad(res, ignoreMustRun = !mustRun)
     })
     try({
@@ -598,7 +609,7 @@ addProcessingH5 <- function(opts = simOptions(),
 
   if(allStraitments$loadFactor){
     try({
-      loadFactor <- loadFactor(res, timeStep =  timeStep, loadFactorAvailable = thermalAvailabilities)
+      loadFactor <- loadFactor(res, timeStep =  timeStep, loadFactorAvailable = thermalAvailabilities, opts = opts)
       idC <- getIdCols(loadFactor)
       res$clusters <- merge(res$clusters, loadFactor, by = idC)
     })
@@ -607,7 +618,7 @@ addProcessingH5 <- function(opts = simOptions(),
 
   if(allStraitments$modulation){
     try({
-      mod <- modulation(res, timeStep =  timeStep)
+      mod <- modulation(res, timeStep =  timeStep, opts = opts)
 
       idC <- getIdCols(mod)
       res$clusters <- merge(res$clusters, mod, by = idC)
@@ -615,7 +626,9 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$netLoadRamp){
     try({
-      netLoadRamp <- netLoadRamp(res, timeStep = timeStep, ignoreMustRun = !mustRun)
+
+
+      netLoadRamp <- netLoadRamp(res, timeStep = timeStep, ignoreMustRun = !mustRun, opts = opts)
       netLoadRamp <- as.antaresDataList(netLoadRamp)
 
       if("netLoadRamp" %in% names(netLoadRamp)){
@@ -640,6 +653,13 @@ addProcessingH5 <- function(opts = simOptions(),
   if(allStraitments$externalDependency){
     try({
       if(is.null(res$areas$netLoadRamp)){
+
+        res$areas[,"netLoadRamp" := NULL]
+        res$areas[,"netLoad" := NULL]
+        if("districts" %in% names(res)){
+          res$districts[,"netLoadRamp" := NULL]
+          res$districts[,"netLoad" := NULL]
+        }
         res <- addNetLoad(res)
       }
 
@@ -683,7 +703,8 @@ addProcessingH5 <- function(opts = simOptions(),
   if(allStraitments$surplusClusters){
     try({
 
-      surplusClusters <- surplusClusters(res, timeStep =  timeStep, surplusLastUnit = thermalAvailabilities)
+      surplusClusters <- surplusClusters(res, timeStep =  timeStep,
+                                         surplusLastUnit = thermalAvailabilities, opts = opts)
 
       idC <- getIdCols(surplusClusters)
       res$clusters <- merge(res$clusters, surplusClusters, by = idC)

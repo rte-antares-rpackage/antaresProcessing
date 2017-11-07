@@ -19,6 +19,7 @@
 #'    A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
 #'    If is this parameter is set to \code{NULL} (the default), then the function
 #'    attemps to read the needed data in the same study as \code{x}.
+#' @param opts opts where clusterDesc will be read if null based on data
 #' @inheritParams surplus
 #' @inheritParams surplusClusters
 #'
@@ -82,11 +83,15 @@
 #' @export
 #'
 surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
-                            surplusLastUnit = FALSE, clusterDesc = NULL) {
+                            surplusLastUnit = FALSE, clusterDesc = NULL, opts = NULL) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
-  opts <- simOptions(x)
+  if(is.null(opts))
+  {
+    opts <- simOptions(x)
+  }
+
   if(opts$antaresVersion < 500) stop("This function only works for study created with Antares 5.0 and newer versions")
 
   x <- .checkColumns(x, list(areas = "MRG. PRICE",
@@ -96,7 +101,7 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
 
   # Get marginal, fixed and startup cost of the clusters
   if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
-  .fillClusterDesc(clusterDesc, marginal.cost = 0, fixed.cost = 0, startup.cost = 0)
+  clusterDesc <- .fillClusterDesc(clusterDesc, marginal.cost = 0, fixed.cost = 0, startup.cost = 0)
 
   idVars <- .idCols(x$clusters)
 

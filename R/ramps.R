@@ -12,6 +12,7 @@
 #' @param ignoreMustRun
 #'   Should the must run production be ignored in the computation of the net
 #'   load?
+#' @param opts opts where clusterDesc will be read if null based on data
 #' @inheritParams surplus
 #'
 #' @return
@@ -55,9 +56,12 @@
 #'
 #' @export
 #'
-netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun = FALSE) {
+netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun = FALSE, opts = NULL) {
   .checkAttrs(x, "hourly", "FALSE")
+  if(is.null(opts))
+  {
   opts <- simOptions(x)
+  }
 
   if (is(x, "antaresDataList")) {
     if (is.null(x$areas) & is.null(x$districts)) stop("'x' does not contain area or district data")

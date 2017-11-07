@@ -62,16 +62,168 @@ if(requireNamespace("rhdf5")){
                                         evalDistricts = list(prodDic= "`LOAD`*`WIND`"))})
     })
 
-    test_that("h5 : processing all straitements", {
+    test_that("h5 : processing Out_addDownwardMargin", {
       optsH5 <- setSimulationPath(h5file)
-      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",allData = TRUE)})
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addDownwardMargin =  TRUE)})
+      re <- readAntares(opts = optsH5, areas = "all", districts = "all",
+                  mcYears = 1, select = "Out_addDownwardMargin")
+      expect_false(is.null(re$areas$isolatedDownwardMargin))
+      expect_false(is.null(re$areas$interconnectedDownwardMargin))
+      expect_false(is.null(re$districts$isolatedDownwardMargin))
+      expect_false(is.null(re$districts$interconnectedDownwardMargin))
+
     })
-    test_that("h5 : processing parallel", {
+
+
+    test_that("h5 : processing Out_addUpwardMargin", {
       optsH5 <- setSimulationPath(h5file)
-    addProcessingH5(opts = optsH5,  mcY = "mcInd",
-                    allData = TRUE,
-                    nThreads =  2
-    )
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addUpwardMargin = TRUE)})
+      re <- readAntares(opts = optsH5, areas = "all", districts = "all",
+                        mcYears = 1, select = "Out_addUpwardMargin")
+      expect_false(is.null(re$areas$isolatedUpwardMargin))
+      expect_false(is.null(re$areas$interconnectedUpwardMargin))
+      expect_false(is.null(re$districts$isolatedUpwardMargin))
+      expect_false(is.null(re$districts$interconnectedUpwardMargin))
+
+    })
+
+
+    test_that("h5 : processing Out_addExportAndImport", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addExportAndImport = TRUE)})
+      re <- readAntares(opts = optsH5, areas = "all", districts = "all",
+                        mcYears = 1, select = "Out_addExportAndImport")
+      expect_false(is.null(re$areas$import))
+      expect_false(is.null(re$areas$export))
+      expect_false(is.null(re$districts$import))
+      expect_false(is.null(re$districts$export))
+
+    })
+
+    test_that("h5 : processing Out_addLoadFactorLink", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addLoadFactorLink = TRUE)})
+      re <- readAntares(opts = optsH5, links = "all",clusters = "all",
+                        mcYears = 1, select = "Out_addLoadFactorLink")
+      expect_false(is.null(re$links$loadFactor))
+      expect_false(is.null(re$links$congestion))
+
+      expect_false(is.null(re$clusters$thermalAvailability))
+      expect_false(is.null(re$clusters$availableUnits))
+      expect_false(is.null(re$clusters$marginalCostModulation))
+      expect_false(is.null(re$clusters$marketBidModulation))
+      expect_false(is.null(re$clusters$capacityModulation))
+      expect_false(is.null(re$clusters$minGenModulation))
+      expect_false(is.null(re$clusters$loadFactor))
+
+
+
+
+    })
+
+
+    test_that("h5 : processing Out_externalDependency", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",externalDependency = TRUE)})
+      re <- readAntares(opts = optsH5, areas = "all", districts = "all",
+                        mcYears = 1, select = "Out_externalDependency")
+      expect_false(is.null(re$areas$netLoad))
+      expect_false(is.null(re$areas$exportsLevel))
+      expect_false(is.null(re$areas$importsLevel))
+      expect_false(is.null(re$areas$exportsFrequency))
+      expect_false(is.null(re$areas$importsFrequency))
+
+      expect_false(is.null(re$districts$netLoad))
+      expect_false(is.null(re$districts$exportsLevel))
+      expect_false(is.null(re$districts$importsLevel))
+      expect_false(is.null(re$districts$exportsFrequency))
+      expect_false(is.null(re$districts$importsFrequency))
+
+    })
+
+
+
+    test_that("h5 : processing Out_loadFactor", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",loadFactor = TRUE)})
+      re <- readAntares(opts = optsH5, clusters = "all",
+                        mcYears = 1, select = "Out_loadFactor")
+      expect_false(is.null(re$loadFactor))
+      expect_false(is.null(re$propHoursMinGen))
+      expect_false(is.null(re$propHoursMaxGen))
+
+    })
+
+
+
+    test_that("h5 : processing Out_modulation", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd", modulation = TRUE)})
+
+
+      re <- readAntares(opts = optsH5, clusters = "all",
+                        mcYears = 1, select = "Out_modulation")
+      expect_false(is.null(re$upwardModulation))
+      expect_false(is.null(re$downwardModulation))
+      expect_false(is.null(re$absoluteModulation))
+
+    })
+
+
+
+    test_that("h5 : processing netLoadRamp", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",netLoadRamp = TRUE)})
+
+      re <- readAntares(opts = optsH5, areas = "all", districts = "all",
+                        mcYears = 1, select = "Out_netLoadRamp")
+      expect_false(is.null(re$areas$netLoadRamp))
+      expect_false(is.null(re$areas$balanceRamp))
+      expect_false(is.null(re$areas$areaRamp))
+
+
+      expect_false(is.null(re$districts$netLoadRamp))
+      expect_false(is.null(re$districts$balanceRamp))
+      expect_false(is.null(re$districts$areaRamp))
+
+    })
+
+
+    test_that("h5 : processing surplus", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",surplus  = TRUE)})
+
+      re <- readAntares(opts = optsH5, areas = "all", districts = "all",
+                        mcYears = 1, select = "Out_surplus")
+      expect_false(is.null(re$areas$consumerSurplus))
+      expect_false(is.null(re$areas$producerSurplus))
+      expect_false(is.null(re$areas$rowBalanceSurplus))
+      expect_false(is.null(re$areas$storageSurplus))
+      expect_false(is.null(re$areas$congestionFees))
+      expect_false(is.null(re$areas$globalSurplus))
+
+      expect_false(is.null(re$districts$consumerSurplus))
+      expect_false(is.null(re$districts$producerSurplus))
+      expect_false(is.null(re$districts$rowBalanceSurplus))
+      expect_false(is.null(re$districts$storageSurplus))
+      expect_false(is.null(re$districts$congestionFees))
+      expect_false(is.null(re$districts$globalSurplus))
+
+    })
+
+    test_that("h5 : Out_surplusClusters", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",surplusClusters =  TRUE)})
+
+      re <- readAntares(opts = optsH5, clusters = "all",
+                        mcYears = 1, select = "Out_surplusClusters")
+      expect_false(is.null(re$variableCost))
+      expect_false(is.null(re$fixedCost))
+      expect_false(is.null(re$startupCost))
+      expect_false(is.null(re$surplusPerUnit))
+      expect_false(is.null(re$totalSurplus))
+      expect_false(is.null(re$economicGradient))
+
     })
 
   }

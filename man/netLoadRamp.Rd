@@ -5,7 +5,7 @@
 \title{Ramp of an area}
 \usage{
 netLoadRamp(x, timeStep = "hourly", synthesis = FALSE,
-  ignoreMustRun = FALSE)
+  ignoreMustRun = FALSE, opts = NULL)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} containing data for areas and/or
@@ -19,6 +19,8 @@ per Monte-Carlo scenario.}
 
 \item{ignoreMustRun}{Should the must run production be ignored in the computation of the net
 load?}
+
+\item{opts}{opts where clusterDesc will be read if null based on data}
 }
 \value{
 \code{netLoadRamp} returns a data.table or a list of data.tables with the

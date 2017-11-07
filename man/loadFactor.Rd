@@ -5,7 +5,7 @@
 \title{Load factors of clusters}
 \usage{
 loadFactor(x, timeStep = "annual", synthesis = FALSE, clusterDesc = NULL,
-  loadFactorAvailable = FALSE)
+  loadFactorAvailable = FALSE, opts = NULL)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function
@@ -23,6 +23,8 @@ If is this parameter is set to \code{NULL} (the default), then the function
 attemps to read the needed data in the same study as \code{x}.}
 
 \item{loadFactorAvailable}{Should loadFactorAvailable be added to the result?}
+
+\item{opts}{opts where clusterDesc will be read if null based on data}
 }
 \value{
 a data.table of class \code{antaresDataTable}containing the following

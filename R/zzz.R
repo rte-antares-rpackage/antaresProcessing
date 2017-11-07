@@ -124,11 +124,18 @@ biocLite('rhdf5')"
 pkgEnv$process$addDownwardMargin$areas <- c("isolatedDownwardMargin",
                                                       "interconnectedDownwardMargin")
 
+pkgEnv$process$addDownwardMargin$districts <- c("isolatedDownwardMargin",
+                                            "interconnectedDownwardMargin")
+
 pkgEnv$process$addUpwardMargin$areas <- c("isolatedUpwardMargin",
                                                     "interconnectedUpwardMargin")
+pkgEnv$process$addUpwardMargin$districts <- c("isolatedUpwardMargin",
+                                          "interconnectedUpwardMargin")
 
 pkgEnv$process$addExportAndImport$areas <- c("import",
                                                        "export")
+pkgEnv$process$addExportAndImport$districts <- c("import",
+                                             "export")
 
 pkgEnv$process$addLoadFactorLink$links <- c("loadFactor",
                                                       "congestion")
@@ -139,15 +146,28 @@ pkgEnv$process$externalDependency$areas <- c("netLoad",
                                                        "exportsFrequency",
                                                        "importsFrequency")
 
+pkgEnv$process$externalDependency$districts <- c("netLoad",
+                                             "exportsLevel",
+                                             "importsLevel",
+                                             "exportsFrequency",
+                                             "importsFrequency")
+
+
+
 pkgEnv$process$loadFactor$clusters <- c("loadFactor", "propHoursMinGen", "propHoursMaxGen")
 
 pkgEnv$process$modulation$clusters <- c("upwardModulation", "downwardModulation",
                                                   "absoluteModulation")
 
 pkgEnv$process$netLoadRamp$areas <- c("netLoadRamp", "balanceRamp", "areaRamp")
+pkgEnv$process$netLoadRamp$districts <- c("netLoadRamp", "balanceRamp", "areaRamp")
 
 pkgEnv$process$surplus$areas <- c("consumerSurplus", "producerSurplus", "rowBalanceSurplus",
                                             "storageSurplus", "congestionFees", "globalSurplus")
+
+pkgEnv$process$surplus$districts <- c("consumerSurplus", "producerSurplus", "rowBalanceSurplus",
+                                  "storageSurplus", "congestionFees", "globalSurplus")
+
 
 pkgEnv$process$surplusClusters$clusters <- c("variableCost", "fixedCost", "startupCost",
                                                        "surplusPerUnit", "totalSurplus", "economicGradient")

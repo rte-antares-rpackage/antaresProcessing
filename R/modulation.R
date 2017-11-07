@@ -11,6 +11,7 @@
 #' @param by
 #'   Should modulations computed by cluster or by sector? Possible values are
 #'   "sector" and "cluster".
+#' @param opts opts where clusterDesc will be read if null based on data
 #' @inheritParams surplus
 #' @inheritParams surplusClusters
 #'
@@ -77,11 +78,14 @@
 #' @export
 #'
 modulation <- function(x, timeStep = "annual", synthesis = FALSE,
-                       by = c("cluster", "sector"), clusterDesc = NULL) {
+                       by = c("cluster", "sector"), clusterDesc = NULL, opts = NULL) {
   by <- match.arg(by)
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
-  opts <- simOptions(x)
+  if(is.null(opts))
+  {
+    opts <- simOptions(x)
+  }
 
   # The code below does the following:
   #

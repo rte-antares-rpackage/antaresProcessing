@@ -52,6 +52,7 @@ surplusSectors <- function(x, sectors = c("thermal", "renewable"),
   .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
   x <- .checkColumns(x, list(areas = "MRG. PRICE"))
 
+
   opts <- simOptions(x)
 
   if (any(sectors == "renewable")) {
