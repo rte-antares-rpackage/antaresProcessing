@@ -71,7 +71,8 @@ if(requireNamespace("rhdf5")){
     addProcessingH5(opts = optsH5,  mcY = "mcInd",
                     allData = TRUE,
                     nThreads =  2
-    )})
+    )
+    })
 
   }
 }
