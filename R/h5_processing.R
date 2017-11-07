@@ -546,7 +546,7 @@ addProcessingH5 <- function(opts = simOptions(),
   options(warn = -1)
   if(allStraitments$addDownwardMargin){
     try({
-      res$areas <- addDownwardMargin(res$areas)
+      res <- addDownwardMargin(res)
     })
   }
   if(allStraitments$addUpwardMargin){
@@ -554,6 +554,8 @@ addProcessingH5 <- function(opts = simOptions(),
       res <- addUpwardMargin(res)
     })
   }
+
+
   if(allStraitments$addExportAndImport){
     try({
       res$links$loadFactor <- NULL
@@ -569,6 +571,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res <- addLoadFactorLink(res)
     })
   }
+
   if(allStraitments$externalDependency){
     try({
       res$areas[,"netLoadRamp" := NULL]
@@ -578,10 +581,7 @@ addProcessingH5 <- function(opts = simOptions(),
     try({
       extDep <- externalDependency(res, timeStep =  timeStep)
 
-      idC <- getIdCols(extDep)
-      res$areas <- merge(res$areas, extDep, by = idC)
-    })
-  }
+
   if(allStraitments$loadFactor){
     try({
       loadFactor <- loadFactor(res, timeStep =  timeStep, loadFactorAvailable = thermalAvailabilities)
@@ -589,6 +589,8 @@ addProcessingH5 <- function(opts = simOptions(),
       res$clusters <- merge(res$clusters, loadFactor, by = idC)
     })
   }
+
+
   if(allStraitments$modulation){
     try({
       mod <- modulation(res, timeStep =  timeStep)
@@ -601,7 +603,14 @@ addProcessingH5 <- function(opts = simOptions(),
     try({
       netLoadRamp <- netLoadRamp(res, timeStep = timeStep, ignoreMustRun = !mustRun)
       netLoadRamp <- as.antaresDataList(netLoadRamp)
+
+      if("netLoadRamp" %in% names(netLoadRamp)){
+        names(netLoadRamp)[1] <- "areas"
+      }
+
       idC <- getIdCols(netLoadRamp$areas)
+
+
       res$areas <- merge(res$areas, netLoadRamp$areas, by = idC)
 
       if("districts"%in%names(netLoadRamp)){
@@ -613,6 +622,33 @@ addProcessingH5 <- function(opts = simOptions(),
 
     })
   }
+
+  if(allStraitments$externalDependency){
+    try({
+      if(is.null(res$areas$netLoadRamp)){
+        res <- addNetLoad(res)
+      }
+
+    })
+    try({
+      extDep <- externalDependency(res, timeStep =  timeStep)
+      extDep <- as.antaresDataList(extDep)
+      if(!names(extDep)[1] %in%c("areas", "districts")){
+        names(extDep)[1] <- "areas"
+      }
+
+
+      idC <- getIdCols(extDep$areas)
+      res$areas <- merge(res$areas, extDep$areas, by = idC)
+      if("districts" %in%names(extDep)){
+        idC <- getIdCols(extDep$districts)
+        res$districts <- merge(res$districts, extDep$districts, by = idC)
+      }
+
+
+    })
+  }
+
   if(allStraitments$surplus){
     try({
       ##Surplus for areas
@@ -632,7 +668,9 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$surplusClusters){
     try({
+
       surplusClusters <- surplusClusters(res, timeStep =  timeStep, surplusLastUnit = thermalAvailabilities)
+
       idC <- getIdCols(surplusClusters)
       res$clusters <- merge(res$clusters, surplusClusters, by = idC)
     })
