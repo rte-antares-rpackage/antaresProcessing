@@ -61,5 +61,10 @@ if(requireNamespace("rhdf5")){
                                         evalClusters = list(prodNodu= "`production`*`NODU` "),
                                         evalDistricts = list(prodDic= "`LOAD`*`WIND`"))})
     })
+
+    test_that("h5 : processing all straitements", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",allData = TRUE)})
+    })
   }
 }
