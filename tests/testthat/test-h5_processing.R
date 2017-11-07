@@ -24,6 +24,13 @@ if(requireNamespace("rhdf5")){
     })
 
 
+    test_that("h5 : all data", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",
+                                       allData = TRUE)})
+    })
+
+
 
     test_that("h5 : processing calc by user", {
       optsH5 <- setSimulationPath(h5file)
