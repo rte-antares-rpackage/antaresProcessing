@@ -250,5 +250,14 @@ if(requireNamespace("rhdf5")){
 
     })
 
+    test_that("No h5 opts", {
+      optsH5 <- setSimulationPath(h5file)
+      optsH5$h5path <- NULL
+      optsH5$h5 <- NULL
+      expect_error(addProcessingH5(optsH5), "opts not refear to an h5 file")
+
+    })
+
+
   }
 }
