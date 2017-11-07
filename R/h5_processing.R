@@ -164,19 +164,15 @@ addProcessingH5 <- function(opts = simOptions(),
   if(mcYear[1] != 'mcAll')
   {
     by = nThreads
-    mcYear_L <- vector("list", floor((max(mcYear))/by) + 1 )
+    mcYear_L <- vector("list", floor((max(mcYear)-1)/by) + 1 )
     for(i in 1:length(mcYear))
     {
-      mcYear_L[[floor((i)/by) + 1]] <- c(mcYear_L[[floor((i)/by) + 1]], mcYear[i])
+      mcYear_L[[floor((i-1)/by) + 1]] <- c(mcYear_L[[floor((i-1)/by) + 1]], mcYear[i])
     }
     mcYear <- mcYear_L
   }else{
     mcYear <- list(mcYear)
   }
-  if(is.null(mcYear[[1]])){
-    mcYear <- mcYear[-1]
-  }
-
 
   if(nThreads > 1){
 
@@ -185,7 +181,7 @@ addProcessingH5 <- function(opts = simOptions(),
     cl <- parallel::makeCluster(length(mcYear[[1]]))
     Parallel = TRUE
 
-    parallel::clusterExport(cl, c("opts"))
+    parallel::clusterExport(cl, c("opts"), envir = environment())
     parallel::clusterEvalQ(cl = cl, {
       require(antaresProcessing)
       .setAliasH5()
