@@ -15,8 +15,8 @@
 #' @param surplus \code{boolean} refer to \link[antaresProcessing]{surplus}
 #' @param surplusClusters \code{boolean} refer to \link[antaresProcessing]{surplusClusters}
 #' @param thermalAvailabilities \code{boolean} Should the surplus of the last unit of a cluster be computed in \link[antaresProcessing]{surplusClusters}.
-#'
 #' Should loadFactorAvailable be added to the result of \link[antaresProcessing]{loadFactor}.
+#' @param allData \code{boolean} All data in one argument.
 #' @param linkCapacity \code{boolean} should export and import capacities be computed \link[antaresProcessing]{addExportAndImport}.
 #' @param mustRun \code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
 #'
@@ -89,6 +89,7 @@ addProcessingH5 <- function(opts = simOptions(),
                             thermalAvailabilities = FALSE,
                             linkCapacity = FALSE,
                             mustRun = FALSE,
+                            allData = FALSE,
                             evalAreas = list(),
                             evalLinks = list(),
                             evalClusters = list(),
@@ -110,6 +111,9 @@ addProcessingH5 <- function(opts = simOptions(),
     netLoadRamp <- TRUE
     surplus <- TRUE
     surplusClusters <- TRUE
+    mustRun <- TRUE
+    linkCapacity <- TRUE
+    thermalAvailabilities <- TRUE
   }
 
   mcY <- match.arg(mcY)
@@ -201,14 +205,14 @@ addProcessingH5 <- function(opts = simOptions(),
                                      columnsToAdd = columnsToAdd)
     }else{
       parallel::clusterExport(cl, c("opts", "select", "X",  "timeStep",
-                          "evalAreas", "evalLinks",
-                          "evalClusters", "evalDistricts",
-                          "columnsToSelects","allStraitments",
-                          "writeAreas",
-                          "writeLinks",
-                          "writeClusters",
-                          "writeDistricts",
-                          "columnsToAdd"), envir = environment())
+                                    "evalAreas", "evalLinks",
+                                    "evalClusters", "evalDistricts",
+                                    "columnsToSelects","allStraitments",
+                                    "writeAreas",
+                                    "writeLinks",
+                                    "writeClusters",
+                                    "writeDistricts",
+                                    "columnsToAdd"), envir = environment())
       myOut <- parallel::parSapply(cl, X, function(Y){
         .readDataEndAddColumn(opts, select = select, mcYears = Y, timeStep = timeStep,
                               evalAreas = evalAreas, evalLinks = evalLinks,
@@ -536,7 +540,7 @@ addProcessingH5 <- function(opts = simOptions(),
 
 .getSelectAlias <- function(allStraitments){
   as.character(pkgEnv$processDispo[pkgEnv$processDispo$fctname%in%
-                                               names(which(unlist(allStraitments))),]$trtName)
+                                     names(which(unlist(allStraitments))),]$trtName)
 }
 
 
@@ -580,7 +584,8 @@ addProcessingH5 <- function(opts = simOptions(),
     })
     try({
       extDep <- externalDependency(res, timeStep =  timeStep)
-
+    })
+  }
 
   if(allStraitments$loadFactor){
     try({
