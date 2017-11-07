@@ -39,4 +39,10 @@ describe("netLoad", {
     expect_error(addNetLoad(mydata, ignoreMustRun = TRUE), "missing")
   })
 
+
+  it("stops mustRunTotal", {
+    mydata <- readAntares(areas="all", timeStep = "annual", showProgress = FALSE)
+    expect_error(addNetLoad(mydata, ignoreMustRun= FALSE), "Column 'mustRunTotal' is needed but missing. You can use argument 'ignoreMustRun=TRUE' if you do not want to take 'must run' production into account.")
+  })
+
 })

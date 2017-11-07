@@ -48,3 +48,31 @@ test_that("modulations by sectors are positive", {
   expect_true(all(m$maxAbsoluteModulation >= 0))
 })
 
+
+mydata <- readAntares(areas = "all", districts = "all", showProgress = FALSE, mcYears = "all")
+m <- modulation(mydata, by = "sector")
+
+
+test_that("modulations are positive, apply to an antaresDataList", {
+  expect_true(all(m$meanUpwardModulation >= 0))
+  expect_true(all(m$meanDownwardModulation >= 0))
+  expect_true(all(m$meanAbsoluteModulation >= 0))
+  expect_true(all(m$maxUpwardModulation >= 0))
+  expect_true(all(m$maxDownwardModulation >= 0))
+  expect_true(all(m$maxAbsoluteModulation >= 0))
+})
+
+
+mydata <- readAntares(areas = "all", clusters = "all", showProgress = FALSE, mcYears = "all")
+m <- modulation(mydata, by = "sector", synthesis = TRUE)
+
+
+test_that("modulations are positive, apply to an antaresDataList", {
+  expect_true(all(m$meanUpwardModulation >= 0))
+  expect_true(all(m$meanDownwardModulation >= 0))
+  expect_true(all(m$meanAbsoluteModulation >= 0))
+  expect_true(all(m$maxUpwardModulation >= 0))
+  expect_true(all(m$maxDownwardModulation >= 0))
+  expect_true(all(m$maxAbsoluteModulation >= 0))
+})
+

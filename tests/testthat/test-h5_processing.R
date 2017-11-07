@@ -23,6 +23,27 @@ if(requireNamespace("rhdf5")){
                                         evalDistricts = list())})
     })
 
+    test_that("h5 : processing, write results mcAll", {
+      .setAliasH5()
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcAll",
+                                        addDownwardMargin = TRUE,
+                                        addUpwardMargin = TRUE,
+                                        addExportAndImport = TRUE,
+                                        addLoadFactorLink = TRUE,
+                                        externalDependency = TRUE,
+                                        loadFactor = TRUE,
+                                        modulation = TRUE,
+                                        netLoadRamp = TRUE,
+                                        surplus = TRUE,
+                                        surplusClusters = TRUE,
+                                        evalAreas = list(Tota = "`H. STOR` + `MISC. DTG`",
+                                                         Tota2 = "`NODU` + `NP COST` + 1"),
+                                        evalLinks = list(),
+                                        evalClusters = list(),
+                                        evalDistricts = list())})
+    })
+
 
     test_that("h5 : all data", {
       optsH5 <- setSimulationPath(h5file)
