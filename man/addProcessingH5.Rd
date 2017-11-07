@@ -46,7 +46,7 @@ Should loadFactorAvailable be added to the result of \link[antaresProcessing]{lo
 \item{mustRun}{\code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
 Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.}
 
-\item{allProcess}{\code{boolean} All data in one argument.}
+\item{allProcess}{\code{boolean} All process in one argument.}
 
 \item{evalAreas}{\code{list}, list of operation to evaluate in areas data}
 
