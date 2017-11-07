@@ -44,7 +44,6 @@ Should loadFactorAvailable be added to the result of \link[antaresProcessing]{lo
 \item{linkCapacity}{\code{boolean} should export and import capacities be computed \link[antaresProcessing]{addExportAndImport}.}
 
 \item{mustRun}{\code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
-
 Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.}
 
 \item{allData}{\code{boolean} All data in one argument.}

@@ -19,7 +19,6 @@
 #' @param allData \code{boolean} All data in one argument.
 #' @param linkCapacity \code{boolean} should export and import capacities be computed \link[antaresProcessing]{addExportAndImport}.
 #' @param mustRun \code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
-#'
 #' Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.
 #' @param evalAreas \code{list}, list of operation to evaluate in areas data
 #' @param evalLinks \code{list}, list of operation to evaluate in links data
