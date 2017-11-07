@@ -202,7 +202,9 @@ addProcessingH5 <- function(opts = simOptions(),
                                      writeLinks = writeLinks,
                                      writeClusters = writeClusters,
                                      writeDistricts = writeDistricts,
-                                     columnsToAdd = columnsToAdd)
+                                     columnsToAdd = columnsToAdd,
+                                     linkCapacity = linkCapacity, mustRun = mustRun,
+                                     thermalAvailabilities = thermalAvailabilities)
     }else{
       parallel::clusterExport(cl, c("opts", "select", "X",  "timeStep",
                                     "evalAreas", "evalLinks",
@@ -212,7 +214,10 @@ addProcessingH5 <- function(opts = simOptions(),
                                     "writeLinks",
                                     "writeClusters",
                                     "writeDistricts",
-                                    "columnsToAdd"), envir = environment())
+                                    "columnsToAdd",
+                                    "linkCapacity",
+                                    "mustRun",
+                                    "thermalAvailabilities"), envir = environment())
       myOut <- parallel::parSapply(cl, X, function(Y){
         .readDataEndAddColumn(opts, select = select, mcYears = Y, timeStep = timeStep,
                               evalAreas = evalAreas, evalLinks = evalLinks,
@@ -222,7 +227,9 @@ addProcessingH5 <- function(opts = simOptions(),
                               writeLinks = writeLinks,
                               writeClusters = writeClusters,
                               writeDistricts = writeDistricts,
-                              columnsToAdd = columnsToAdd)
+                              columnsToAdd = columnsToAdd,
+                              linkCapacity = linkCapacity, mustRun = mustRun,
+                              thermalAvailabilities = thermalAvailabilities)
       }, simplify = FALSE)
 
 
@@ -322,7 +329,7 @@ addProcessingH5 <- function(opts = simOptions(),
                                   writeAreas,
                                   writeLinks,
                                   writeClusters,
-                                  writeDistricts, columnsToAdd){
+                                  writeDistricts, columnsToAdd, linkCapacity, mustRun, thermalAvailabilities){
 
   if(writeAreas){
     ar <- "all"
@@ -359,7 +366,7 @@ addProcessingH5 <- function(opts = simOptions(),
   # for(i in 1:length(res)){
   #   res[[i]] <- res[[i]][, .SD, .SDcols = names(res[[i]])[!names(res[[i]])%in%select]]
   # }
-  res <- .calcNewColumns(res, allStraitments, timeStep = timeStep)
+  res <- .calcNewColumns(res, allStraitments, timeStep = timeStep, linkCapacity = linkCapacity, mustRun = mustRun, thermalAvailabilities = thermalAvailabilities)
 
   if(writeAreas && "areas" %in% names(res)){
     if(length(evalAreas) > 0)
@@ -544,7 +551,7 @@ addProcessingH5 <- function(opts = simOptions(),
 }
 
 
-.calcNewColumns <- function(res, allStraitments, timeStep){
+.calcNewColumns <- function(res, allStraitments, timeStep, linkCapacity, mustRun, thermalAvailabilities){
 
   oldw <- getOption("warn")
   options(warn = -1)
