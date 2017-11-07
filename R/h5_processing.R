@@ -178,7 +178,7 @@ addProcessingH5 <- function(opts = simOptions(),
   }
 
 
-  if(length(mcYear[[1]]) > 1){
+  if(nThreads > 1){
 
     if(!requireNamespace("parallel")) stop("Error loading 'parallel' package.")
 
