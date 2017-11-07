@@ -16,7 +16,7 @@
 #' @param surplusClusters \code{boolean} refer to \link[antaresProcessing]{surplusClusters}
 #' @param thermalAvailabilities \code{boolean} Should the surplus of the last unit of a cluster be computed in \link[antaresProcessing]{surplusClusters}.
 #' Should loadFactorAvailable be added to the result of \link[antaresProcessing]{loadFactor}.
-#' @param allData \code{boolean} All data in one argument.
+#' @param allProcess \code{boolean} All data in one argument.
 #' @param linkCapacity \code{boolean} should export and import capacities be computed \link[antaresProcessing]{addExportAndImport}.
 #' @param mustRun \code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
 #' Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.
@@ -88,7 +88,7 @@ addProcessingH5 <- function(opts = simOptions(),
                             thermalAvailabilities = FALSE,
                             linkCapacity = FALSE,
                             mustRun = FALSE,
-                            allData = FALSE,
+                            allProcess = FALSE,
                             evalAreas = list(),
                             evalLinks = list(),
                             evalClusters = list(),
@@ -99,6 +99,8 @@ addProcessingH5 <- function(opts = simOptions(),
   if(!isH5Opts(opts)){
     stop("opts not refear to an h5 file")
   }
+
+  allData <- allProcess
   if(allData){
     addDownwardMargin <- TRUE
     addUpwardMargin <- TRUE
