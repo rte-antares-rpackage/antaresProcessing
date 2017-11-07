@@ -258,6 +258,18 @@ if(requireNamespace("rhdf5")){
 
     })
 
+    test_that("Write boolean", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings(addProcessingH5(optsH5, evalAreas = list(toto = "TRUE")))
+      expect_false(is.null(readAntares(mcYears = 1, select = "toto")$toto))
+    })
+
+
+    test_that("Write character", {
+      optsH5 <- setSimulationPath(h5file)
+      expect_error(addProcessingH5(optsH5, evalAreas = list(toto = "'GGG'")))
+    })
+
 
   }
 }
