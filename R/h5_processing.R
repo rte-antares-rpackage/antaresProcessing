@@ -173,6 +173,10 @@ addProcessingH5 <- function(opts = simOptions(),
   }else{
     mcYear <- list(mcYear)
   }
+  if(is.null(mcYear[[1]])){
+    mcYear <- mcYear[-1]
+  }
+
 
   if(length(mcYear[[1]]) > 1){
 
