@@ -2,19 +2,25 @@
 #'
 #' @description In this version only hourly data can be enriched.
 #'
-#' @param opts \code{simOptions} obtain wich [antaresRead]{setSimulationPath}
+#' @param opts \code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}
 #' @param mcY  \code{character}, "mcInd" or "mcAll".
-#' @param addDownwardMargin \code{boolean} refer to [antaresProcessing]{addDownwardMargin}
-#' @param addUpwardMargin \code{boolean} refer to [antaresProcessing]{addUpwardMargin}
-#' @param addExportAndImport \code{boolean} refer to [antaresProcessing]{addExportAndImport}
-#' @param addLoadFactorLink \code{boolean} refer to [antaresProcessing]{addLoadFactorLink}
-#' @param externalDependency \code{boolean} refer to [antaresProcessing]{externalDependency}
-#' @param loadFactor \code{boolean} refer to [antaresProcessing]{loadFactor}
-#' @param modulation \code{boolean} refer to [antaresProcessing]{modulation}
-#' @param netLoadRamp \code{boolean} refer to [antaresProcessing]{netLoadRamp}
-#' @param surplus \code{boolean} refer to [antaresProcessing]{surplus}
-#' @param surplusClusters \code{boolean} refer to [antaresProcessing]{surplusClusters}
-#' @param allData \code{boolean}, add all process in a single call.
+#' @param addDownwardMargin \code{boolean} refer to \link[antaresProcessing]{addDownwardMargin}
+#' @param addUpwardMargin \code{boolean} refer to \link[antaresProcessing]{addUpwardMargin}
+#' @param addExportAndImport \code{boolean} refer to \link[antaresProcessing]{addExportAndImport}
+#' @param addLoadFactorLink \code{boolean} refer to \link[antaresProcessing]{addLoadFactorLink}
+#' @param externalDependency \code{boolean} refer to \link[antaresProcessing]{externalDependency}
+#' @param loadFactor \code{boolean} refer to \link[antaresProcessing]{loadFactor}
+#' @param modulation \code{boolean} refer to \link[antaresProcessing]{modulation}
+#' @param netLoadRamp \code{boolean} refer to \link[antaresProcessing]{netLoadRamp}
+#' @param surplus \code{boolean} refer to \link[antaresProcessing]{surplus}
+#' @param surplusClusters \code{boolean} refer to \link[antaresProcessing]{surplusClusters}
+#' @param thermalAvailabilities \code{boolean} Should the surplus of the last unit of a cluster be computed in \link[antaresProcessing]{surplusClusters}.
+#'
+#' Should loadFactorAvailable be added to the result of \link[antaresProcessing]{loadFactor}.
+#' @param linkCapacity \code{boolean} should export and import capacities be computed \link[antaresProcessing]{addExportAndImport}.
+#' @param mustRun \code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
+#'
+#' Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.
 #' @param evalAreas \code{list}, list of operation to evaluate in areas data
 #' @param evalLinks \code{list}, list of operation to evaluate in links data
 #' @param evalClusters \code{list}, list of operation to evaluate in clusters data
@@ -69,22 +75,24 @@
 #'
 #' @export
 addProcessingH5 <- function(opts = simOptions(),
-                           mcY = c("mcInd", "mcAll"),
-                           addDownwardMargin = FALSE,
-                           addUpwardMargin = FALSE,
-                           addExportAndImport = FALSE,
-                           addLoadFactorLink = FALSE,
-                           externalDependency = FALSE,
-                           loadFactor = FALSE,
-                           modulation = FALSE,
-                           netLoadRamp = FALSE,
-                           surplus = FALSE,
-                           surplusClusters = FALSE,
-                           allData = FALSE,
-                           evalAreas = list(),
-                           evalLinks = list(),
-                           evalClusters = list(),
-                           evalDistricts = list(), nThreads = 1){
+                            mcY = c("mcInd", "mcAll"),
+                            addDownwardMargin = FALSE,
+                            addUpwardMargin = FALSE,
+                            addExportAndImport = FALSE,
+                            addLoadFactorLink = FALSE,
+                            externalDependency = FALSE,
+                            loadFactor = FALSE,
+                            modulation = FALSE,
+                            netLoadRamp = FALSE,
+                            surplus = FALSE,
+                            surplusClusters = FALSE,
+                            thermalAvailabilities = FALSE,
+                            linkCapacity = FALSE,
+                            mustRun = FALSE,
+                            evalAreas = list(),
+                            evalLinks = list(),
+                            evalClusters = list(),
+                            evalDistricts = list(), nThreads = 1){
 
   .setAliasH5()
 
@@ -553,7 +561,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res$links$loadFactor <- NULL
       res$areas$export <- NULL
       res$areas$import <- NULL
-      res <- addExportAndImport(res, addCapacities = TRUE)
+      res <- addExportAndImport(res, addCapacities = linkCapacity)
 
 
     })
@@ -564,9 +572,19 @@ addProcessingH5 <- function(opts = simOptions(),
     })
   }
 
+  if(allStraitments$externalDependency){
+    try({
+      res$areas[,"netLoadRamp" := NULL]
+      res$areas[,"netLoad" := NULL]
+      res <- addNetLoad(res, ignoreMustRun = !mustRun)
+    })
+    try({
+      extDep <- externalDependency(res, timeStep =  timeStep)
+
+
   if(allStraitments$loadFactor){
     try({
-      loadFactor <- loadFactor(res, timeStep =  timeStep, loadFactorAvailable = TRUE)
+      loadFactor <- loadFactor(res, timeStep =  timeStep, loadFactorAvailable = thermalAvailabilities)
       idC <- getIdCols(loadFactor)
       res$clusters <- merge(res$clusters, loadFactor, by = idC)
     })
@@ -583,7 +601,7 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$netLoadRamp){
     try({
-      netLoadRamp <- netLoadRamp(res, timeStep = timeStep)
+      netLoadRamp <- netLoadRamp(res, timeStep = timeStep, ignoreMustRun = !mustRun)
       netLoadRamp <- as.antaresDataList(netLoadRamp)
 
       if("netLoadRamp" %in% names(netLoadRamp)){
@@ -650,7 +668,9 @@ addProcessingH5 <- function(opts = simOptions(),
   }
   if(allStraitments$surplusClusters){
     try({
-      surplusClusters <- surplusClusters(res, timeStep =  timeStep, surplusLastUnit = TRUE)
+
+      surplusClusters <- surplusClusters(res, timeStep =  timeStep, surplusLastUnit = thermalAvailabilities)
+
       idC <- getIdCols(surplusClusters)
       res$clusters <- merge(res$clusters, surplusClusters, by = idC)
     })

@@ -9,35 +9,44 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
   addExportAndImport = FALSE, addLoadFactorLink = FALSE,
   externalDependency = FALSE, loadFactor = FALSE, modulation = FALSE,
   netLoadRamp = FALSE, surplus = FALSE, surplusClusters = FALSE,
-  allData = FALSE, evalAreas = list(), evalLinks = list(),
-  evalClusters = list(), evalDistricts = list(), nThreads = 1)
+  thermalAvailabilities = FALSE, linkCapacity = FALSE, mustRun = FALSE,
+  evalAreas = list(), evalLinks = list(), evalClusters = list(),
+  evalDistricts = list(), nThreads = 1)
 }
 \arguments{
-\item{opts}{\code{simOptions} obtain wich [antaresRead]{setSimulationPath}}
+\item{opts}{\code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}}
 
 \item{mcY}{\code{character}, "mcInd" or "mcAll".}
 
-\item{addDownwardMargin}{\code{boolean} refer to [antaresProcessing]{addDownwardMargin}}
+\item{addDownwardMargin}{\code{boolean} refer to \link[antaresProcessing]{addDownwardMargin}}
 
-\item{addUpwardMargin}{\code{boolean} refer to [antaresProcessing]{addUpwardMargin}}
+\item{addUpwardMargin}{\code{boolean} refer to \link[antaresProcessing]{addUpwardMargin}}
 
-\item{addExportAndImport}{\code{boolean} refer to [antaresProcessing]{addExportAndImport}}
+\item{addExportAndImport}{\code{boolean} refer to \link[antaresProcessing]{addExportAndImport}}
 
-\item{addLoadFactorLink}{\code{boolean} refer to [antaresProcessing]{addLoadFactorLink}}
+\item{addLoadFactorLink}{\code{boolean} refer to \link[antaresProcessing]{addLoadFactorLink}}
 
-\item{externalDependency}{\code{boolean} refer to [antaresProcessing]{externalDependency}}
+\item{externalDependency}{\code{boolean} refer to \link[antaresProcessing]{externalDependency}}
 
-\item{loadFactor}{\code{boolean} refer to [antaresProcessing]{loadFactor}}
+\item{loadFactor}{\code{boolean} refer to \link[antaresProcessing]{loadFactor}}
 
-\item{modulation}{\code{boolean} refer to [antaresProcessing]{modulation}}
+\item{modulation}{\code{boolean} refer to \link[antaresProcessing]{modulation}}
 
-\item{netLoadRamp}{\code{boolean} refer to [antaresProcessing]{netLoadRamp}}
+\item{netLoadRamp}{\code{boolean} refer to \link[antaresProcessing]{netLoadRamp}}
 
-\item{surplus}{\code{boolean} refer to [antaresProcessing]{surplus}}
+\item{surplus}{\code{boolean} refer to \link[antaresProcessing]{surplus}}
 
-\item{surplusClusters}{\code{boolean} refer to [antaresProcessing]{surplusClusters}}
+\item{surplusClusters}{\code{boolean} refer to \link[antaresProcessing]{surplusClusters}}
 
-\item{allData}{\code{boolean}, add all process in a single call.}
+\item{thermalAvailabilities}{\code{boolean} Should the surplus of the last unit of a cluster be computed in \link[antaresProcessing]{surplusClusters}.
+
+Should loadFactorAvailable be added to the result of \link[antaresProcessing]{loadFactor}.}
+
+\item{linkCapacity}{\code{boolean} should export and import capacities be computed \link[antaresProcessing]{addExportAndImport}.}
+
+\item{mustRun}{\code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
+
+Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.}
 
 \item{evalAreas}{\code{list}, list of operation to evaluate in areas data}
 
