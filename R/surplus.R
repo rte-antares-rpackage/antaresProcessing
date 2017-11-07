@@ -68,7 +68,7 @@
 #'
 #'@export
 #'
-surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE, hurdleCost=TRUE) {
+surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE, hurdleCost = TRUE) {
 
   prodVars <- setdiff(pkgEnv$production, "PSP")
 

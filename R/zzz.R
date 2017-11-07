@@ -65,7 +65,7 @@
     c("areas", "links", "mcYears", "LOAD", "MRG. PRICE", "OP. COST",
       "CONG. FEE (ALG.)", "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
       "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "PSP",
-      "ROW BAL.")
+      "ROW BAL.", "HURDLE COST")
   )
 
   setAlias(
