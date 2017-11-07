@@ -66,5 +66,11 @@ if(requireNamespace("rhdf5")){
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",allData = TRUE)})
     })
+    test_that("h5 : processing parallel", {
+    addProcessingH5(opts = opts,  mcY = "mcInd",
+                    allData = TRUE,
+                    nThreads =  2
+    )})
+
   }
 }

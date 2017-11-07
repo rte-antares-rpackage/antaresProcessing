@@ -328,7 +328,10 @@ addProcessingH5 <- function(opts = simOptions(),
                                   writeAreas,
                                   writeLinks,
                                   writeClusters,
-                                  writeDistricts, columnsToAdd, linkCapacity, mustRun, thermalAvailabilities){
+                                  writeDistricts, columnsToAdd,
+                                  linkCapacity,
+                                  mustRun,
+                                  thermalAvailabilities){
 
   if(writeAreas){
     ar <- "all"

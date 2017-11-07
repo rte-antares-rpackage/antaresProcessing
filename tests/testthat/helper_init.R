@@ -4,7 +4,7 @@
 
 path <- tempdir()
 sourcedir <- system.file("testdata", package = "antaresRead")
-
+Sys.unsetenv("R_TESTS")
 # Hack: For some unknown reason, this script is executed at some point of
 # the R CMD CHECK before package is correctly installed and tests actually run.
 # The following "if" prevents errors at this step
