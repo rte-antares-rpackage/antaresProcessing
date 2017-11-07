@@ -108,14 +108,6 @@ if(requireNamespace("rhdf5")){
       expect_false(is.null(re$links$loadFactor))
       expect_false(is.null(re$links$congestion))
 
-      expect_false(is.null(re$clusters$thermalAvailability))
-      expect_false(is.null(re$clusters$availableUnits))
-      expect_false(is.null(re$clusters$marginalCostModulation))
-      expect_false(is.null(re$clusters$marketBidModulation))
-      expect_false(is.null(re$clusters$capacityModulation))
-      expect_false(is.null(re$clusters$minGenModulation))
-      expect_false(is.null(re$clusters$loadFactor))
-
 
 
 
