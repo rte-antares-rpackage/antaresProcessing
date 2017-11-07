@@ -51,7 +51,7 @@
 #' showAliases("netLoadRamp")
 #'
 #' mydata <- readAntares(select="netLoadRamp")
-#' addRamps(mydata, timeStep = "annual")
+#' netLoadRamp(mydata, timeStep = "annual")
 #' }
 #'
 #' @export
