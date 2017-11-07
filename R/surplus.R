@@ -16,6 +16,8 @@
 #'   per Monte-Carlo scenario.
 #' @param groupByDistrict
 #'   If TRUE, results are grouped by district.
+#' @param hurdleCost
+#'  If TRUE, HURDLE COST will be removed from congestionFees.
 #'
 #' @return
 #' A data.table with the following columns:
@@ -46,7 +48,7 @@
 #'   The congestion fees of a given area. It equals to half
 #'   the congestion fees of the links connected to that area.
 #'
-#'   formula = congestionFees / 2
+#'   formula = (congestionFees-hurdleCost) / 2
 #'  }
 #' \item{globalSurplus}{
 #'   Sum of the consumer surplus, the producer surplus and the congestion fees.
@@ -66,7 +68,7 @@
 #'
 #'@export
 #'
-surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE) {
+surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE, hurdleCost=TRUE) {
 
   prodVars <- setdiff(pkgEnv$production, "PSP")
 
@@ -125,9 +127,16 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   links <- links[area %in% areas]
 
   idColsL <- .idCols(x$links)
-  cong <- merge(links,
-                x$links[, append(mget(idColsL), .(congestionFees = `CONG. FEE (ALG.)`))],
-                by = "link", allow.cartesian = TRUE)
+  if (hurdleCost){
+    cong <- merge(links,
+                  x$links[, append(mget(idColsL), .(congestionFees = `CONG. FEE (ALG.)` - `HURDLE COST`))],
+                  by = "link", allow.cartesian = TRUE)
+  }else {
+    cong <- merge(links,
+                  x$links[, append(mget(idColsL), .(congestionFees = `CONG. FEE (ALG.)`))],
+                  by = "link", allow.cartesian = TRUE)
+  }
+
   cong[, link := NULL]
   cong <- cong[, .(congestionFees = sum(congestionFees) / 2), keyby = idColsA]
 
