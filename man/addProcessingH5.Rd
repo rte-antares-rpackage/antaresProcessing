@@ -38,10 +38,10 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
 
 \item{surplusClusters}{\code{boolean} refer to \link[antaresProcessing]{surplusClusters}}
 
-\item{thermalAvailabilities}{\code{boolean} Should the surplus of the last unit of a cluster be computed in \link[antaresProcessing]{surplusClusters}.
+\item{thermalAvailabilities}{\code{boolean} Should the surplus of the last unit of a cluster be computed by \link[antaresProcessing]{surplusClusters}.
 Should loadFactorAvailable be added to the result of \link[antaresProcessing]{loadFactor}.}
 
-\item{linkCapacity}{\code{boolean} should export and import capacities be computed \link[antaresProcessing]{addExportAndImport}.}
+\item{linkCapacity}{\code{boolean} should export and import capacities be computed by \link[antaresProcessing]{addExportAndImport}.}
 
 \item{mustRun}{\code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
 Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.}
