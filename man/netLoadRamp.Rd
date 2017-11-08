@@ -42,12 +42,12 @@ following columns:
 
   formula = netLoadRamp + balanceRamp
 }
-\item{minNetLoadRamp}{Minimum ramp of the net load of an area.}
-\item{minBalanceRamp}{Minimum ramp of the balance of an area.}
-\item{minAreaRamp}{Minimum ramp sum of the sum of balance and net load.}
-\item{maxNetLoadRamp}{Maximum ramp of the net load of an area.}
-\item{maxBalanceRamp}{Maximum ramp of the balance of an area.}
-\item{maxAreaRamp}{Maximum ramp of the sum of balance and net load.}
+\item{minNetLoadRamp}{Minimum ramp of the net load of an area, if \code{timeStep} is not hourly.}
+\item{minBalanceRamp}{Minimum ramp of the balance of an area, if \code{timeStep} is not hourly.}
+\item{minAreaRamp}{Minimum ramp sum of the sum of balance and net load, if \code{timeStep} is not hourly.}
+\item{maxNetLoadRamp}{Maximum ramp of the net load of an area, if \code{timeStep} is not hourly.}
+\item{maxBalanceRamp}{Maximum ramp of the balance of an area, if \code{timeStep} is not hourly.}
+\item{maxAreaRamp}{Maximum ramp of the sum of balance and net load, if \code{timeStep} is not hourly.}
 
 For convenience the function invisibly returns the modified input.
 }
