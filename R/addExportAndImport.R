@@ -12,6 +12,14 @@
 #' @param addCapacities
 #'   If \code{TRUE}, export and import capacities are added.
 #'
+#' @return
+#' \code{addExportAndImport} modifies its input by adding to it columns:
+#'
+#' \item{export}{export for an area or district}
+#' \item{import}{import for an area or district}
+#' \item{capExport}{capacity of export for an area or district, if \code{addCapacities} is set to TRUE}
+#' \item{capImport}{capacity of import for an area or district, if \code{addCapacities} is set to TRUE}
+#'
 #' @examples
 #' \dontrun{
 #' # Data required by the function

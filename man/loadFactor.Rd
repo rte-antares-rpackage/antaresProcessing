@@ -31,7 +31,7 @@ a data.table of class \code{antaresDataTable}containing the following
 columns:
 \item{area}{Area name}
 \item{cluster}{Cluster name}
-\item{mcYear}{Only if \code{synthesis=FALSE}}. Id of the Monte-carlo scenario
+\item{mcYear}{Only if \code{synthesis=FALSE}. Id of the Monte-carlo scenario}
 \item{timeId}{Time id and other time variables}
 \item{loadFactor}{
   Load factor of the cluster. It represent the proportion of
