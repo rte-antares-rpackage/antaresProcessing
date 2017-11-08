@@ -65,4 +65,8 @@ describe("addDownwardMargin", {
   it("does not work with other objects", {
     expect_error(addDownwardMargin(TRUE), "antaresData")
   })
+  data <- readAntares(links = "all", clusters = "all", showProgress = FALSE)
+  it("warning no area no district", {
+    expect_warning(addDownwardMargin(data), "'x' does not contain area or district data. Upward margin has not been computed.")
+  })
 })

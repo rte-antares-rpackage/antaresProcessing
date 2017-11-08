@@ -5,7 +5,7 @@
 \title{Compute economic surplus}
 \usage{
 surplus(x, timeStep = "annual", synthesis = FALSE,
-  groupByDistrict = FALSE)
+  groupByDistrict = FALSE, hurdleCost = TRUE)
 }
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
@@ -18,6 +18,8 @@ connected to these areas. Moreover it needs to have a hourly time step and detai
 per Monte-Carlo scenario.}
 
 \item{groupByDistrict}{If TRUE, results are grouped by district.}
+
+\item{hurdleCost}{If TRUE, HURDLE COST will be removed from congestionFees.}
 }
 \value{
 A data.table with the following columns:
@@ -48,7 +50,7 @@ A data.table with the following columns:
   The congestion fees of a given area. It equals to half
   the congestion fees of the links connected to that area.
 
-  formula = congestionFees / 2
+  formula = (congestionFees-hurdleCost) / 2
  }
 \item{globalSurplus}{
   Sum of the consumer surplus, the producer surplus and the congestion fees.

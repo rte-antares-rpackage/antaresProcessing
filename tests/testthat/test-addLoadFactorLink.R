@@ -60,4 +60,5 @@ describe("addLoadFactorLink", {
   #   expect_lt(mydata[`FLOW LIN.`<0,max(loadFactorLink-transCapacityIndirect)],0)
   # })
 
+
 })
