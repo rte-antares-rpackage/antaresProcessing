@@ -170,7 +170,7 @@ pkgEnv$process$surplus$districts <- c("consumerSurplus", "producerSurplus", "row
 
 
 pkgEnv$process$surplusClusters$clusters <- c("variableCost", "fixedCost", "startupCost",
-                                                       "surplusPerUnit", "totalSurplus", "economicGradient")
+                                                       "surplusPerUnit", "totalSurplus", "economicGradient", "surplusLastUnit")
 
 
 sapply(names(pkgEnv$process), function(X){
