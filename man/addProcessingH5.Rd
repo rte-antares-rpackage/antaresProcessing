@@ -5,7 +5,7 @@
 \title{Add columns to an antares .h5 file}
 \usage{
 addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
-  addDownwardMargin = FALSE, addUpwardMargin = FALSE,
+  addNetLoad = FALSE, addDownwardMargin = FALSE, addUpwardMargin = FALSE,
   addExportAndImport = FALSE, addLoadFactorLink = FALSE,
   externalDependency = FALSE, loadFactor = FALSE, modulation = FALSE,
   netLoadRamp = FALSE, surplus = FALSE, surplusClusters = FALSE,
@@ -17,6 +17,8 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
 \item{opts}{\code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}}
 
 \item{mcY}{\code{character}, "mcInd" or "mcAll".}
+
+\item{addNetLoad}{\code{boolean} refer to \link[antaresProcessing]{addNetLoad}}
 
 \item{addDownwardMargin}{\code{boolean} refer to \link[antaresProcessing]{addDownwardMargin}}
 

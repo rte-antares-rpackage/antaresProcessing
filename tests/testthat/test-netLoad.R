@@ -28,11 +28,6 @@ describe("netLoad", {
   })
 
 
-  it("stops if input already contains a column 'addNetLoad'", {
-    mydata <- readAntares(areas="all", timeStep = "annual", showProgress = FALSE)
-    addNetLoad(mydata, ignoreMustRun = TRUE)
-    expect_error(addNetLoad(mydata, ignoreMustRun = TRUE))
-  })
 
   it("stops if some necesary column is missing", {
     mydata <- readAntares(areas="all", timeStep = "annual", showProgress = FALSE, select = "LOAD")
