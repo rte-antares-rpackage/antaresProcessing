@@ -127,6 +127,10 @@ addProcessingH5 <- function(opts = simOptions(),
 
 
   mcY <- match.arg(mcY)
+
+  if(mcY == "mcAll"){
+    nThreads = 1
+  }
   allStraitments <- list(
     addNetLoad = addNetLoad,
     addDownwardMargin = addDownwardMargin,
