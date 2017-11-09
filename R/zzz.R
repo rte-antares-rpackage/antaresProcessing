@@ -137,9 +137,13 @@ pkgEnv$process$addUpwardMargin$districts <- c("isolatedUpwardMargin",
                                           "interconnectedUpwardMargin")
 
 pkgEnv$process$addExportAndImport$areas <- c("import",
-                                                       "export")
+                                              "export",
+                                             "capExport",
+                                             "capImport")
 pkgEnv$process$addExportAndImport$districts <- c("import",
-                                             "export")
+                                             "export",
+                                             "capExport",
+                                             "capImport")
 
 pkgEnv$process$addLoadFactorLink$links <- c("loadFactor",
                                                       "congestion")
