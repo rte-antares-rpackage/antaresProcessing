@@ -604,7 +604,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res$links$loadFactor <- NULL
       res$areas$export <- NULL
       res$areas$import <- NULL
-      res <- addExportAndImport(res, addCapacities = linkCapacity)
+      res <- addExportAndImport(res, addCapacities = linkCapacity, opts = opts)
 
 
     })
@@ -627,7 +627,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res <- addNetLoad(res, ignoreMustRun = !mustRun)
     })
     try({
-      extDep <- externalDependency(res, timeStep =  timeStep)
+      extDep <- externalDependency(res, timeStep =  timeStep, opts = opts)
     })
   }
 
@@ -689,7 +689,7 @@ addProcessingH5 <- function(opts = simOptions(),
 
     })
     try({
-      extDep <- externalDependency(res, timeStep =  timeStep)
+      extDep <- externalDependency(res, timeStep =  timeStep, opts = opts)
       extDep <- as.antaresDataList(extDep)
       if(!names(extDep)[1] %in%c("areas", "districts")){
         names(extDep)[1] <- "areas"
@@ -710,7 +710,7 @@ addProcessingH5 <- function(opts = simOptions(),
   if(allStraitments$surplus){
     try({
       ##Surplus for areas
-      surplus <- surplus(res, timeStep = timeStep)
+      surplus <- surplus(res, timeStep = timeStep, opts = opts)
       idC <- getIdCols(surplus)
       res$areas <- merge(res$areas, surplus, by = idC)
       if("districts"%in%names(res)){

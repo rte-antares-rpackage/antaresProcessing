@@ -18,6 +18,7 @@
 #'   If TRUE, results are grouped by district.
 #' @param hurdleCost
 #'  If TRUE, HURDLE COST will be removed from congestionFees.
+#' @param opts opts
 #'
 #' @return
 #' A data.table with the following columns:
@@ -68,16 +69,17 @@
 #'
 #'@export
 #'
-surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE, hurdleCost = TRUE) {
+surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE, hurdleCost = TRUE, opts = NULL) {
 
   prodVars <- setdiff(pkgEnv$production, "PSP")
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
   x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OP. COST", prodVars, "PSP", "ROW BAL."),
                              links = "CONG. FEE (ALG.)"))
-
-  opts <- simOptions(x)
-
+  if(is.null(opts))
+  {
+    opts <- simOptions(x)
+  }
 
   # Check that necessary links are present in the object
   areas <- unique(x$areas$area)

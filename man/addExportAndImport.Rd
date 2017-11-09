@@ -4,7 +4,7 @@
 \alias{addExportAndImport}
 \title{Export and import of areas or districts}
 \usage{
-addExportAndImport(x, addCapacities = FALSE)
+addExportAndImport(x, addCapacities = FALSE, opts = NULL)
 }
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
@@ -12,6 +12,8 @@ addExportAndImport(x, addCapacities = FALSE)
 connected to these areas. Moreover the function \code{\link{removeVirtualAreas}} must be call before.}
 
 \item{addCapacities}{If \code{TRUE}, export and import capacities are added.}
+
+\item{opts}{opts}
 }
 \value{
 \code{addExportAndImport} modifies its input by adding to it columns:

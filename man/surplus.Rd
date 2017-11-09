@@ -5,7 +5,7 @@
 \title{Compute economic surplus}
 \usage{
 surplus(x, timeStep = "annual", synthesis = FALSE,
-  groupByDistrict = FALSE, hurdleCost = TRUE)
+  groupByDistrict = FALSE, hurdleCost = TRUE, opts = NULL)
 }
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
@@ -20,6 +20,8 @@ per Monte-Carlo scenario.}
 \item{groupByDistrict}{If TRUE, results are grouped by district.}
 
 \item{hurdleCost}{If TRUE, HURDLE COST will be removed from congestionFees.}
+
+\item{opts}{opts}
 }
 \value{
 A data.table with the following columns:

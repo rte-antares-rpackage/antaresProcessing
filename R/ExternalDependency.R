@@ -27,6 +27,7 @@
 #' @param synthesis
 #'   If TRUE, average external dependncies are returned. Else the function
 #'   returns external dependncies per Monte-Carlo scenario.
+#' @param opts opts
 #'
 #' @return
 #' A data.table of class \code{antaresDataTable} with the following columns:
@@ -62,7 +63,7 @@
 #'
 #' @export
 #'
-externalDependency <- function(x , timeStep = "annual", synthesis = FALSE) {
+externalDependency <- function(x , timeStep = "annual", synthesis = FALSE, opts = NULL) {
 
   # Check that x contains is a antaresDataList
   if (is(x, "antaresDataList")) {
@@ -86,7 +87,10 @@ externalDependency <- function(x , timeStep = "annual", synthesis = FALSE) {
 
   x <- .checkColumns(x, neededCol)
 
+  if(is.null(opts))
+  {
   opts <- simOptions(x)
+  }
 
   if (!is.null(x$areas)) idVars <- .idCols(x$areas)
   else {

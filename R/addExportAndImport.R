@@ -11,6 +11,7 @@
 #'   connected to these areas. Moreover the function \code{\link{removeVirtualAreas}} must be call before.
 #' @param addCapacities
 #'   If \code{TRUE}, export and import capacities are added.
+#' @param opts opts
 #'
 #' @return
 #' \code{addExportAndImport} modifies its input by adding to it columns:
@@ -33,7 +34,7 @@
 #' @export
 #'
 
-addExportAndImport <- function(x, addCapacities = FALSE) {
+addExportAndImport <- function(x, addCapacities = FALSE, opts = NULL) {
   if (!is(x, "antaresData")) stop("'x' is not an 'antaresData' object")
 
   if (is(x, "antaresDataList")) {
@@ -42,7 +43,10 @@ addExportAndImport <- function(x, addCapacities = FALSE) {
     areas <- unique(x$areas$area)
     vnodes <- unlist(attr(x, "virtualNodes"))
 
+    if(is.null(opts))
+    {
     opts <- simOptions(x)
+    }
     neededLinks <- getLinks(areas, exclude = vnodes, opts = opts)
 
     links <- unique(x$links$link)
