@@ -170,7 +170,7 @@ pkgEnv$process$externalDependency$districts <- c("netLoad",
 
 
 
-pkgEnv$process$loadFactor$clusters <- c("loadFactor", "propHoursMinGen", "propHoursMaxGen")
+pkgEnv$process$loadFactor$clusters <- c("loadFactor", "propHoursMinGen", "propHoursMaxGen", "loadFactorAvailable")
 
 pkgEnv$process$modulation$clusters <- c("upwardModulation", "downwardModulation",
                                                   "absoluteModulation")
@@ -186,7 +186,7 @@ pkgEnv$process$surplus$districts <- c("consumerSurplus", "producerSurplus", "row
 
 
 pkgEnv$process$surplusClusters$clusters <- c("variableCost", "fixedCost", "startupCost",
-                                                       "surplusPerUnit", "totalSurplus", "economicGradient")
+                                                       "surplusPerUnit", "totalSurplus", "economicGradient", "surplusLastUnit")
 
 
 

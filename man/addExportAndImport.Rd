@@ -13,6 +13,14 @@ connected to these areas. Moreover the function \code{\link{removeVirtualAreas}}
 
 \item{addCapacities}{If \code{TRUE}, export and import capacities are added.}
 }
+\value{
+\code{addExportAndImport} modifies its input by adding to it columns:
+
+\item{export}{export for an area or district}
+\item{import}{import for an area or district}
+\item{capExport}{capacity of export for an area or district, if \code{addCapacities} is set to TRUE}
+\item{capImport}{capacity of import for an area or district, if \code{addCapacities} is set to TRUE}
+}
 \description{
 This function computes the export and import of areas or districts and add it to an
 \code{antaresData} object.
