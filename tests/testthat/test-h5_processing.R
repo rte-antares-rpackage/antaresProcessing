@@ -6,6 +6,7 @@ if(requireNamespace("rhdf5")){
       .setAliasH5()
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",
+                                        addNetLoad = TRUE,
                                         addDownwardMargin = TRUE,
                                         addUpwardMargin = TRUE,
                                         addExportAndImport = TRUE,
@@ -93,6 +94,21 @@ if(requireNamespace("rhdf5")){
                                         evalClusters = list(prodNodu= "`production`*`NODU` "),
                                         evalDistricts = list(prodDic= "`LOAD`*`WIND`"))})
     })
+
+
+
+
+
+    test_that("h5 : processing Out_addNetLoad", {
+      optsH5 <- setSimulationPath(h5file)
+      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addNetLoad =  TRUE)})
+      re <- readAntares(opts = optsH5, areas = "all", districts = "all",
+                        mcYears = 1, select = "Out_addNetLoad")
+      expect_false(is.null(re$areas$netLoad))
+      expect_false(is.null(re$districts$netLoad))
+
+    })
+
 
     test_that("h5 : processing Out_addDownwardMargin", {
       optsH5 <- setSimulationPath(h5file)

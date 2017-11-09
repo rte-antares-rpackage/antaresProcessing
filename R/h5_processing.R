@@ -4,6 +4,7 @@
 #'
 #' @param opts \code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}
 #' @param mcY  \code{character}, "mcInd" or "mcAll".
+#' @param addNetLoad  \code{boolean} refer to \link[antaresProcessing]{addNetLoad}
 #' @param addDownwardMargin \code{boolean} refer to \link[antaresProcessing]{addDownwardMargin}
 #' @param addUpwardMargin \code{boolean} refer to \link[antaresProcessing]{addUpwardMargin}
 #' @param addExportAndImport \code{boolean} refer to \link[antaresProcessing]{addExportAndImport}
@@ -75,6 +76,7 @@
 #' @export
 addProcessingH5 <- function(opts = simOptions(),
                             mcY = c("mcInd", "mcAll"),
+                            addNetLoad = FALSE,
                             addDownwardMargin = FALSE,
                             addUpwardMargin = FALSE,
                             addExportAndImport = FALSE,
@@ -102,6 +104,7 @@ addProcessingH5 <- function(opts = simOptions(),
 
   allData <- allProcess
   if(allData){
+    addNetLoad <- TRUE
     addDownwardMargin <- TRUE
     addUpwardMargin <- TRUE
     addExportAndImport <- TRUE
@@ -125,6 +128,7 @@ addProcessingH5 <- function(opts = simOptions(),
 
   mcY <- match.arg(mcY)
   allStraitments <- list(
+    addNetLoad = addNetLoad,
     addDownwardMargin = addDownwardMargin,
     addUpwardMargin = addUpwardMargin,
     addExportAndImport = addExportAndImport,
@@ -565,6 +569,20 @@ addProcessingH5 <- function(opts = simOptions(),
 
   oldw <- getOption("warn")
   options(warn = -1)
+
+
+  if(allStraitments$addNetLoad){
+    res$areas[,"netLoad" := NULL]
+    if("districts" %in%names(res)){
+      res$districts <- res$districts[,"netLoad" := NULL]
+    }
+    res$areas <- addNetLoad(res$areas, ignoreMustRun = !mustRun)
+    if("districts" %in%names(res)){
+      res$districts <- addNetLoad(res$districts, ignoreMustRun = !mustRun)
+
+    }
+  }
+
   if(allStraitments$addDownwardMargin){
     try({
       res <- addDownwardMargin(res)

@@ -121,6 +121,10 @@ biocLite('rhdf5')"
 
 # Process H5
 
+pkgEnv$process$addNetLoad$areas <- c("netLoad")
+pkgEnv$process$addNetLoad$districts <- c("netLoad")
+
+
 pkgEnv$process$addDownwardMargin$areas <- c("isolatedDownwardMargin",
                                                       "interconnectedDownwardMargin")
 
@@ -186,7 +190,9 @@ sapply(names(pkgEnv$process), function(X){
 #pkgEnv$process$surplusSectors$areas <- c("surplus", "cost")
 
 pkgEnv$processDispo <- data.frame(
-  trtName = c("downwardMargin",
+  trtName = c(
+              "netLoad",
+              "downwardMargin",
               "upwardMargin",
               "exportsImports",
               "loadFactorLink",
@@ -197,7 +203,9 @@ pkgEnv$processDispo <- data.frame(
               "surplus",
               "surplusClusters"
   )
-  , fctname = c( "addDownwardMargin" ,
+  , fctname = c(
+                 "addNetLoad",
+                 "addDownwardMargin" ,
                  "addUpwardMargin" ,
                  "addExportAndImport" ,
                  "addLoadFactorLink" ,
