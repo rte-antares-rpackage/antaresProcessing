@@ -80,6 +80,14 @@
     c("areas", "clusters", "mcYears", "WIND", "SOLAR", "H. ROR", "H. STOR",
       "MRG. PRICE")
   )
+  sapply(names(pkgEnv$process), function(X){
+    tpAlias <- pkgEnv$process[[X]]
+    X <- paste0("Out_", X)
+    sapply(names(tpAlias), function(Y){
+      varAlias <- tpAlias[[Y]]
+      setAlias(X, X, c(Y, varAlias))
+    })
+  })
 }
 
 globalVariables(
@@ -181,14 +189,7 @@ pkgEnv$process$surplusClusters$clusters <- c("variableCost", "fixedCost", "start
                                                        "surplusPerUnit", "totalSurplus", "economicGradient")
 
 
-sapply(names(pkgEnv$process), function(X){
-  tpAlias <- pkgEnv$process[[X]]
-  X <- paste0("Out_", X)
-  sapply(names(tpAlias), function(Y){
-    varAlias <- tpAlias[[Y]]
-    setAlias(X, X, c(Y, varAlias))
-  })
-})
+
 
 
 #pkgEnv$process$surplusSectors$areas <- c("surplus", "cost")
