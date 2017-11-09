@@ -128,6 +128,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
 
   idColsL <- .idCols(x$links)
   if (hurdleCost){
+    `HURDLE COST` <- "nothing"
     cong <- merge(links,
                   x$links[, append(mget(idColsL), .(congestionFees = `CONG. FEE (ALG.)` - `HURDLE COST`))],
                   by = "link", allow.cartesian = TRUE)
