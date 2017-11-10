@@ -9,14 +9,14 @@
   setAlias(
     "downwardMargin",
     "Data required by 'addDownwardMargin()'",
-    c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE",
+    c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "pumpingCapacity",
       "ROW BAL.", "linkCapacity", "mustRun")
   )
 
   setAlias(
     "upwardMargin",
     "Data required by 'addUpwardMargin()'",
-    c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE",
+    c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "pumpingCapacity", "storageCapacity",
       "ROW BAL.", "AVL DTG", "linkCapacity", "hydroStorageMaxPower")
   )
 
@@ -36,7 +36,7 @@
     "externalDependency",
     "Data required by 'externalDependency()'",
     c("areas", "links", "LOAD", "ROW BAL.", "PSP", "MISC. NDG", "H. ROR", "WIND",
-      "SOLAR", "AVL DTG", "FLOW LIN.", "mustRun", "linkCapacity", "hydroStorageMaxPower")
+      "SOLAR", "AVL DTG", "FLOW LIN.", "pumpingCapacity", "storageCapacity", "mustRun", "linkCapacity", "hydroStorageMaxPower")
   )
 
   setAlias(

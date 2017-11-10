@@ -152,6 +152,22 @@ addProcessingH5 <- function(opts = simOptions(),
 
   select <- .getSelectAlias(allStraitments)
 
+
+  ##Load removeVirtAreas
+  if(allStraitments$surplus == TRUE)
+  {
+    if(!requireNamespace("rhdf5", versionCheck = list(op = ">=", version = rhdf5_version))) stop(rhdf5_message)
+    fid <- rhdf5::H5Fopen(opts$h5path)
+    removeAre <- .loadAttributes(fid, "hourly")
+    rhdf5::H5Fclose(fid)
+    if("virtualNodes" %in% names(removeAre))
+    {
+      removeAre <- unlist(removeAre$virtualNodes)
+      select <- c(select, removeAre)
+    }
+
+  }
+
   columnsToSelects <- unique(unlist(lapply(list(evalAreas,evalLinks,evalClusters,  evalDistricts ), function(Z){
     lapply(Z, function(X){
       strsplit(X, "`")
@@ -183,7 +199,6 @@ addProcessingH5 <- function(opts = simOptions(),
   }else{
     mcYear <- list(mcYear)
   }
-
   if(nThreads > 1){
 
     if(!requireNamespace("parallel")) stop("Error loading 'parallel' package.")
@@ -259,8 +274,11 @@ addProcessingH5 <- function(opts = simOptions(),
     }
 
     outList <- names(myOut)
+    myOut$areas
     outToWrite <- sapply(outList, function(HH){
-      as.matrix(myOut[[HH]])
+      tp <- as.matrix(myOut[[HH]])
+      tp[is.na(tp)] <- -9999
+      tp
     }, simplify = FALSE)
 
 
@@ -394,7 +412,7 @@ addProcessingH5 <- function(opts = simOptions(),
 
     cAdd <- c(columnsToAdd$areas, names(evalAreas))
 
-    res$areas <- res$areas[, .SD, .SDcols = cAdd[cAdd%in%names(res$areas)]]
+    res$areas <- res$areas[, .SD, .SDcols = unique(cAdd[cAdd%in%names(res$areas)])]
   }else{
     res$areas <- NULL
   }
@@ -404,7 +422,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res$links[, names(evalLinks) := lapply(evalLinks, function(X){eval(parse(text = X))})]
     }
     cAdd <- c(columnsToAdd$links, names(evalLinks))
-    res$links <- res$links[, .SD, .SDcols = cAdd[cAdd%in%names(res$links)]]
+    res$links <- res$links[, .SD, .SDcols = unique(cAdd[cAdd%in%names(res$links)])]
   }else{
     res$links <- NULL
   }
@@ -414,7 +432,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res$clusters[, names(evalClusters) := lapply(evalClusters, function(X){eval(parse(text = X))})]
     }
     cAdd <- c(columnsToAdd$clusters,names(evalClusters))
-    res$clusters <- res$clusters[, .SD, .SDcols =  cAdd[cAdd%in%names(res$clusters)]]
+    res$clusters <- res$clusters[, .SD, .SDcols =  unique(cAdd[cAdd%in%names(res$clusters)])]
   }else{
     res$clusters <- NULL
   }
@@ -424,7 +442,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res$districts[, names(evalDistricts) := lapply(evalDistricts, function(X){eval(parse(text = X))})]
     }
     cAdd <- c(columnsToAdd$districts, names(evalDistricts))
-    res$districts <- res$districts[, .SD, .SDcols =  cAdd[cAdd%in%names(res$districts)]]
+    res$districts <- res$districts[, .SD, .SDcols =  unique(cAdd[cAdd%in%names(res$districts)])]
   }else{
     res$districts <- NULL
   }
@@ -525,7 +543,7 @@ addProcessingH5 <- function(opts = simOptions(),
   actualDim <- .getDim(fid, datatype)
   indexToWrite <- .getIndexToWrite(actualDim, nbVarToWrite, mcYear)
   dimtowrite <- unlist(lapply(indexToWrite, length))
-  indexToWrite[[2]] <- indexVar
+  indexToWrite[[2]] <- unlist(indexVar)
 
   arrayToWrite <- array(newdata, dimtowrite[c(1,3,4,2)])
   # dim(arrayToWrite)
@@ -712,12 +730,12 @@ addProcessingH5 <- function(opts = simOptions(),
       ##Surplus for areas
       surplus <- surplus(res, timeStep = timeStep, opts = opts)
       idC <- getIdCols(surplus)
-      res$areas <- merge(res$areas, surplus, by = idC)
+      res$areas <- merge(res$areas, surplus, by = idC, all.x = TRUE)
       if("districts"%in%names(res)){
         #Surplus districts
         surplus <- surplus(res, groupByDistrict  = TRUE,  timeStep = timeStep)
         idC <- getIdCols(surplus)
-        res$districts <- merge(res$districts, surplus, by = idC)
+        res$districts <- merge(res$districts, surplus, by = idC, all.x = TRUE)
 
       }
 
@@ -752,6 +770,29 @@ addProcessingH5 <- function(opts = simOptions(),
 }
 
 
+
+.loadAttributes <- function(fid, timeStep){
+
+  if(!requireNamespace("rhdf5", versionCheck = list(op = ">=", version = rhdf5_version))) stop(rhdf5_message)
+
+  if(rhdf5::H5Lexists(fid, paste0(timeStep, "/attrib")))
+  {
+
+    did <- rhdf5::H5Dopen(fid, paste0(timeStep, "/attrib"))
+    attrib <- unserialize(charToRaw(rhdf5::H5Dread(did)))
+    rhdf5::H5Dclose(did)
+
+    if(!is.null(attrib$opts$linksDef)){
+      attrib$opts$linksDef <- data.table(attrib$opts$linksDef)
+    }
+    if(!is.null(attrib$opts$districtsDef)){
+      attrib$opts$districtsDef <- data.table(attrib$opts$districtsDef)
+    }
+  }else{
+    attrib <- NULL
+  }
+  attrib
+}
 # library(antaresProcessing)
 # library(data.table)
 # devtools::load_all(".")
