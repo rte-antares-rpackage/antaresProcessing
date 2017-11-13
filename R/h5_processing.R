@@ -115,9 +115,6 @@ addProcessingH5 <- function(opts = simOptions(),
     netLoadRamp <- TRUE
     surplus <- TRUE
     surplusClusters <- TRUE
-    mustRun <- TRUE
-    linkCapacity <- TRUE
-    thermalAvailabilities <- TRUE
   }
 
   if(netLoadRamp){
