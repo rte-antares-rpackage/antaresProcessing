@@ -2,7 +2,7 @@
 % Please edit documentation in R/h5_processing.R
 \name{addProcessingH5}
 \alias{addProcessingH5}
-\title{Add columns to an antares .h5 file}
+\title{Add process results of antaresProcessing to an ANTARES .h5 files}
 \usage{
 addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
   addNetLoad = FALSE, addDownwardMargin = FALSE, addUpwardMargin = FALSE,

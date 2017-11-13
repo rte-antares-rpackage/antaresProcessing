@@ -1,4 +1,4 @@
-#' Add columns to an antares .h5 file
+#' Add process results of antaresProcessing to an ANTARES .h5 files
 #'
 #' @description In this version only hourly data can be enriched.
 #'
