@@ -1,6 +1,6 @@
 # Copyright © 2016 RTE Réseau de transport d’électricité
 
-#' compute thermal generation from study
+#' compute thermal capacities from study
 #' @param opts \code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}
 #' @export
 thermalGeneration <- function(opts = simOptions()){
