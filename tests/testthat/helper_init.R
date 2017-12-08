@@ -40,4 +40,5 @@ if (sourcedir != "") {
   }
   assign("studyPath", file.path(path, "test_case"), envir = globalenv())
   assign("nweeks", 2, envir = globalenv())
+  assign("pathtodelete", path, envir = globalenv())
 }
