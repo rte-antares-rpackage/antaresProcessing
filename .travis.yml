@@ -8,6 +8,9 @@ cache: packages
 bioc_required: true
 bioc_use_devel: true
 
+os:
+ - linux
+ - osx
 
 r:
  - bioc-devel
