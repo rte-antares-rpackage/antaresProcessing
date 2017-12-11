@@ -4,7 +4,9 @@ language: R
 sudo: false
 cache: packages
 
-use_bioc: true
+
+bioc_required: true
+bioc_use_devel: true
 
 
 r:
