@@ -1,10 +1,10 @@
-context("thermalGeneration")
+context("thermalGroupCapacities")
 
 
 opts <- setSimulationPath(studyPath)
 
-test_that("thermalGeneration calc",{
-  Tres <- thermalGeneration(opts)
+test_that("thermalGroupCapacities calc",{
+  Tres <- thermalGroupCapacities(opts)
   reCl <- readClusterDesc(opts)
   uniqueRe <- unique(reCl[, .SD, .SDcols = c("area", "group")])
   expect_true(nrow(uniqueRe) == nrow(Tres))
