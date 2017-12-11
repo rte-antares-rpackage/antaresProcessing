@@ -4,7 +4,14 @@ language: R
 sudo: false
 cache: packages
 
-r: bioc-devel
+use_bioc: true
+
+
+r:
+ - bioc-devel
+ - oldrel
+ - release
+ - devel
 
 r_github_packages:
  - Bioconductor-mirror/zlibbioc
@@ -20,6 +27,7 @@ include:
 
 r_packages:
   - covr
+  - devtools
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
