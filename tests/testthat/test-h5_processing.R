@@ -52,11 +52,11 @@ if(requireNamespace("rhdf5")){
                                         allProcess = TRUE)})
     })
 
-    test_that("h5 : all data multi process", {
-      optsH5 <- setSimulationPath(h5file)
-      suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",
-                                        addUpwardMargin = TRUE, nThreads = 2)})
-    })
+    # test_that("h5 : all data multi process", {
+    #   optsH5 <- setSimulationPath(h5file)
+    #   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",
+    #                                     addUpwardMargin = TRUE, nThreads = 2)})
+    # })
 
     test_that("h5 : processing calc by user", {
       optsH5 <- setSimulationPath(h5file)
