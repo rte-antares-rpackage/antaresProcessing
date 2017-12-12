@@ -24,6 +24,7 @@ if(requireNamespace("rhdf5")){
                                         evalDistricts = list())})
     })
 
+
     test_that("h5 : processing, write results mcAll", {
       .setAliasH5()
       optsH5 <- setSimulationPath(h5file)
