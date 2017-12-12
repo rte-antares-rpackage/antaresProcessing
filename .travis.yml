@@ -38,7 +38,7 @@ r_packages:
   - plyr
   - stringr
   - shiny
-
+  - knitr
 
 
 after_success:
