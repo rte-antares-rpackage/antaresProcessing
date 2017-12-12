@@ -1,7 +1,7 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo: false
+sudo: true
 cache: packages
 
 
@@ -13,7 +13,6 @@ os:
  - osx
 
 r:
- - bioc-devel
  - oldrel
  - release
  - devel
@@ -24,12 +23,6 @@ r_github_packages:
  - hadley/devtools#1263
  - rte-antares-rpackage/antares-rpackageRead@develop
 
-
-include:
-  - r: release
-  - r: oldrel
-  - r: devel
-
 r_packages:
   - covr
   - devtools
@@ -39,7 +32,8 @@ r_packages:
   - stringr
   - shiny
   - knitr
-
+  - testthat
+  - rmarkdown
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
