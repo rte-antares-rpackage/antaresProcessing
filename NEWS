@@ -1,5 +1,9 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
+Changes in version 0.13 (2017-12-14)
+
+BREAKING CHANGES:
+* Rename ThermalGeneration() to thermalGroupCapacities().
 
 Changes in version 0.12 (2017-11-13)
 
