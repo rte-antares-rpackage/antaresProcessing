@@ -4,7 +4,7 @@
 \alias{externalDependency}
 \title{External Dependencies in imports and exports}
 \usage{
-externalDependency(x, timeStep = "annual", synthesis = FALSE)
+externalDependency(x, timeStep = "annual", synthesis = FALSE, opts = NULL)
 }
 \arguments{
 \item{x}{An object created with function \code{\link[antaresRead]{readAntares}}. It
@@ -24,6 +24,8 @@ externalDependency(x, timeStep = "annual", synthesis = FALSE)
 
 \item{synthesis}{If TRUE, average external dependncies are returned. Else the function
 returns external dependncies per Monte-Carlo scenario.}
+
+\item{opts}{opts}
 }
 \value{
 A data.table of class \code{antaresDataTable} with the following columns:

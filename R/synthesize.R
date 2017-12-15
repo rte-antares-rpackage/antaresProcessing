@@ -17,6 +17,7 @@
 #' @param prefixForMeans
 #'   Prefix to add to the columns containing average values. If it is different
 #'   than "", a "_" is automatically added.
+#' @param useTime use times columns for synthesize.
 #'
 #' @return
 #' Synthetic version of the input data. It has the same structure as \code{x}
@@ -53,7 +54,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' mydata <- readAntares("all", timeStep = "annual", synthesis = FALSE)
+#' mydata <- readAntares("all", timeStep = "annual")
 #'
 #' synthesize(mydata)
 #'
@@ -81,14 +82,14 @@
 #'
 #'@export
 #'
-synthesize <- function(x, ..., prefixForMeans = "") {
+synthesize <- function(x, ..., prefixForMeans = "", useTime = TRUE) {
   if (!is(x, "antaresData")) stop("'x' must be an object of class 'antaresData' created with ''readAntares()'")
 
-  if (attr(x, "synthesis") == TRUE) return(x)
+  if (attr(x, "synthesis") == TRUE & useTime) return(x)
 
   if (is(x, "antaresDataList")) {
     for (n in names(x)) {
-      x[[n]] <- synthesize(x[[n]], ...)
+      x[[n]] <- synthesize(x[[n]], ..., prefixForMeans = prefixForMeans, useTime = useTime)
     }
     attr(x, "synthesis") <- TRUE
     return(x)
@@ -103,13 +104,21 @@ synthesize <- function(x, ..., prefixForMeans = "") {
   }
 
   x$mcYear <- NULL
+
   idVars <- .idCols(x)
+
+
   numvars <- lapply(x, function(x) is.numeric(x) | is.logical(x))
   numvars <- names(numvars)[numvars == TRUE]
 
   variables <- setdiff(names(x), idVars)
   variables <- intersect(variables, numvars)
   attrs <- attributes(x)
+
+
+ if(!useTime){
+   idVars <- .idCols(x, removeTimeId = TRUE)
+ }
 
   # Compute average values of each column
   res <- suppressWarnings(x[, lapply(.SD, mean), by = idVars, .SDcols = variables])
@@ -118,7 +127,7 @@ synthesize <- function(x, ..., prefixForMeans = "") {
   }
   .addClassAndAttributes(res, synthesis = TRUE, timeStep = attrs$timeStep,
                          opts = attrs$opts, type = attrs$type)
-
+  .formatDigits(res)
   # Determine the list of custom statistics to compute for each variable in the
   # input data. aggFun contains one element per variable which is a named list
   # of variables
@@ -226,3 +235,34 @@ synthesize <- function(x, ..., prefixForMeans = "") {
 
   res
 }
+
+
+
+.formatDigits <- function(res)
+{
+  mode <- tolower(attributes(res)$opts$mode)
+  if(mode %in% c("adequacy", "economy")){
+    format <- pkgEnv$formatName[pkgEnv$formatName$Mode == mode,]
+    format <- format[,c("Folder", "Name", "digits")]
+    type <- attributes(res)$type
+    if(type == "districts"){
+      type <- "areas"
+    }
+    type <- gsub("s$", "", type)
+
+    format <- format[format$Folder==type,]
+
+    formatKeep <- format[format$Name%in%names(res),]
+    if(nrow(formatKeep)>0)
+    {
+      for(i in formatKeep$Name){
+        i <- as.character(i)
+        roundNumber <- formatKeep$digits[which(formatKeep$Name == i)]
+        res[,c(i) := round(get(i), roundNumber)]
+      }
+    }
+  }
+}
+
+
+

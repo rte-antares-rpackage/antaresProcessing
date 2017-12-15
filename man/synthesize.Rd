@@ -4,7 +4,7 @@
 \alias{synthesize}
 \title{Synthesize Monte-Carlo scenarios}
 \usage{
-synthesize(x, ..., prefixForMeans = "")
+synthesize(x, ..., prefixForMeans = "", useTime = TRUE)
 }
 \arguments{
 \item{x}{an object of class \code{antaresData} created with
@@ -16,6 +16,8 @@ See details to see how to specify them.}
 
 \item{prefixForMeans}{Prefix to add to the columns containing average values. If it is different
 than "", a "_" is automatically added.}
+
+\item{useTime}{use times columns for synthesize.}
 }
 \value{
 Synthetic version of the input data. It has the same structure as \code{x}
@@ -58,7 +60,7 @@ statistics only on a few variables.
 }
 \examples{
 \dontrun{
-mydata <- readAntares("all", timeStep = "annual", synthesis = FALSE)
+mydata <- readAntares("all", timeStep = "annual")
 
 synthesize(mydata)
 

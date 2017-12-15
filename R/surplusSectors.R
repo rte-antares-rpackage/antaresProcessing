@@ -18,6 +18,7 @@
 #'   the cost of these productions is equal to 0 as for renewable energies.
 #'   If the parameter contains the value "thermal", then the parameter
 #'   \code{x} has to contain cluster data.
+#' @param opts opts
 #' @inheritParams surplus
 #' @inheritParams surplusClusters
 #'
@@ -47,13 +48,15 @@
 #'
 surplusSectors <- function(x, sectors = c("thermal", "renewable"),
                            timeStep = "annual", synthesis = FALSE,
-                           groupByDistrict = FALSE, clusterDesc = NULL) {
+                           groupByDistrict = FALSE, clusterDesc = NULL, opts = NULL) {
 
   .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
   x <- .checkColumns(x, list(areas = "MRG. PRICE"))
 
+  if(is.null(opts))
+  {
   opts <- simOptions(x)
-
+  }
   if (any(sectors == "renewable")) {
     sectors <- sectors[!sectors == "renewable"]
     sectors <- union(sectors, pkgEnv$ren)

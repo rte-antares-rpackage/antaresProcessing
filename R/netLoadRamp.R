@@ -8,10 +8,11 @@
 #' @param x
 #'   Object of class \code{antaresData} containing data for areas and/or
 #'   districts. It must contain the column \code{BALANCE}  and either the column
-#'   "netLoad" or the columns needed to compute the net load.
+#'   "netLoad" or the columns needed to compute the net load  see \link[antaresProcessing]{addNetLoad}.
 #' @param ignoreMustRun
 #'   Should the must run production be ignored in the computation of the net
 #'   load?
+#' @param opts opts where clusterDesc will be read if null based on data
 #' @inheritParams surplus
 #'
 #' @return
@@ -34,12 +35,12 @@
 #'
 #'   formula = netLoadRamp + balanceRamp
 #' }
-#' \item{minNetLoadRamp}{Minimum ramp of the net load of an area.}
-#' \item{minBalanceRamp}{Minimum ramp of the balance of an area.}
-#' \item{minAreaRamp}{Minimum ramp sum of the sum of balance and net load.}
-#' \item{maxNetLoadRamp}{Maximum ramp of the net load of an area.}
-#' \item{maxBalanceRamp}{Maximum ramp of the balance of an area.}
-#' \item{maxAreaRamp}{Maximum ramp of the sum of balance and net load.}
+#' \item{minNetLoadRamp}{Minimum ramp of the net load of an area, if \code{timeStep} is not hourly.}
+#' \item{minBalanceRamp}{Minimum ramp of the balance of an area, if \code{timeStep} is not hourly.}
+#' \item{minAreaRamp}{Minimum ramp sum of the sum of balance and net load, if \code{timeStep} is not hourly.}
+#' \item{maxNetLoadRamp}{Maximum ramp of the net load of an area, if \code{timeStep} is not hourly.}
+#' \item{maxBalanceRamp}{Maximum ramp of the balance of an area, if \code{timeStep} is not hourly.}
+#' \item{maxAreaRamp}{Maximum ramp of the sum of balance and net load, if \code{timeStep} is not hourly.}
 #'
 #' For convenience the function invisibly returns the modified input.
 #'
@@ -50,14 +51,17 @@
 #' showAliases("netLoadRamp")
 #'
 #' mydata <- readAntares(select="netLoadRamp")
-#' addRamps(mydata, timeStep = "annual")
+#' netLoadRamp(mydata, timeStep = "annual")
 #' }
 #'
 #' @export
 #'
-netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun = FALSE) {
+netLoadRamp <- function(x, timeStep = "hourly", synthesis = FALSE, ignoreMustRun = FALSE, opts = NULL) {
   .checkAttrs(x, "hourly", "FALSE")
-  opts <- simOptions(x)
+  if(is.null(opts))
+  {
+    opts <- simOptions(x)
+  }
 
   if (is(x, "antaresDataList")) {
     if (is.null(x$areas) & is.null(x$districts)) stop("'x' does not contain area or district data")

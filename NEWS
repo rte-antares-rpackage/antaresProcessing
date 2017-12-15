@@ -1,5 +1,17 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
+Changes in version 0.13 (2017-12-14)
+
+BREAKING CHANGES:
+* Rename ThermalGeneration() to thermalGroupCapacities().
+
+Changes in version 0.12 (2017-11-13)
+
+NEW FEATURES:
+* New function "addProcessingH5()" add process results of antaresProcessing to an ANTARES .h5 files.
+* Function "surplus" has a new boolean parameter hurdleCost to take into account hurdles costs when calculating congestion fees.
+
+
 Changes in version 0.11 (2017-07-13)
 
 NEW FEATURES:
@@ -9,6 +21,7 @@ NEW FEATURES:
 
 BUGFIXES:
 * Producer surplus was incorrectly computed using column "OV COST" instead of "OP COST".
+
 
 Changes in version 0.10.2 (2017-05-24)
 

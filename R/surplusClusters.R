@@ -19,6 +19,7 @@
 #'    A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
 #'    If is this parameter is set to \code{NULL} (the default), then the function
 #'    attemps to read the needed data in the same study as \code{x}.
+#' @param opts opts where clusterDesc will be read if null based on data
 #' @inheritParams surplus
 #' @inheritParams surplusClusters
 #'
@@ -55,16 +56,6 @@
 #'
 #'   formula = `MRG. PRICE` * production - opCost - startupCost
 #' }
-#' \item{totalSurplusWOS}{
-#'   Surplus of all units of the cluster.
-#'
-#'   formula = `MRG. PRICE` * production - opCost
-#' }
-#' \item{totalSurplusWOSPerMW}{
-#'   Surplus of all units of the cluster.
-#'
-#'   formula = round(totalSurplusWOS/nominalcapacity * unitcount))
-#' }
 #' \item{economicGradient}{
 #'   Economic gradient of a cluster. It is equal to
 #'   the surplus per unit divided by the capacity of a unit.
@@ -92,11 +83,15 @@
 #' @export
 #'
 surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
-                            surplusLastUnit = FALSE, clusterDesc = NULL) {
+                            surplusLastUnit = FALSE, clusterDesc = NULL, opts = NULL) {
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
-  opts <- simOptions(x)
+  if(is.null(opts))
+  {
+    opts <- simOptions(x)
+  }
+
   if(opts$antaresVersion < 500) stop("This function only works for study created with Antares 5.0 and newer versions")
 
   x <- .checkColumns(x, list(areas = "MRG. PRICE",
@@ -106,7 +101,7 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
 
   # Get marginal, fixed and startup cost of the clusters
   if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
-  .fillClusterDesc(clusterDesc, marginal.cost = 0, fixed.cost = 0, startup.cost = 0)
+  clusterDesc <- .fillClusterDesc(clusterDesc, marginal.cost = 0, fixed.cost = 0, startup.cost = 0)
 
   idVars <- .idCols(x$clusters)
 
@@ -128,16 +123,14 @@ surplusClusters <- function(x, timeStep="annual", synthesis = FALSE,
 
   tmp[, `:=`(surplusPerUnit = (`MRG. PRICE` * production - opCost - startupCost) / unitcount,
              totalSurplus = `MRG. PRICE` * production - opCost - startupCost,
-             totalSurplusWOS = `MRG. PRICE` * production - opCost,
              nbHoursPMax = production == round(nominalcapacity * unitcount))]
 
-  tmp[, `:=`(economicGradient = surplusPerUnit / nominalcapacity,
-             totalSurplusWOSPerMW = round(totalSurplusWOS/nominalcapacity * unitcount))]
+  tmp[, economicGradient := surplusPerUnit / nominalcapacity]
 
   if (surplusLastUnit) {
     tmp[, prodLastUnit := pmax(0, (NODU == availableUnits) * (production - nominalcapacity * (NODU - 1)))]
     tmp[, surplusLastUnit := (prodLastUnit > 0) * (`MRG. PRICE` * prodLastUnit - opCost / pmax(1, NODU) - startup.cost * (startupCost > 0))]
-    res <- tmp[, c(idVars, "surplusPerUnit", "surplusLastUnit", "totalSurplus","totalSurplusWOS","totalSurplusWOSPerMW",
+    res <- tmp[, c(idVars, "surplusPerUnit", "surplusLastUnit", "totalSurplus",
                    "economicGradient"),
                with = FALSE]
   } else {

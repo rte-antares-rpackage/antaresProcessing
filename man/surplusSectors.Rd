@@ -5,7 +5,8 @@
 \title{Compute the surplus of sectors}
 \usage{
 surplusSectors(x, sectors = c("thermal", "renewable"), timeStep = "annual",
-  synthesis = FALSE, groupByDistrict = FALSE, clusterDesc = NULL)
+  synthesis = FALSE, groupByDistrict = FALSE, clusterDesc = NULL,
+  opts = NULL)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with \code{readAntares}. It needs
@@ -30,6 +31,8 @@ per Monte-Carlo scenario.}
 \item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
 If is this parameter is set to \code{NULL} (the default), then the function
 attemps to read the needed data in the same study as \code{x}.}
+
+\item{opts}{opts}
 }
 \value{
 A data.table of class "antaresData". It contains one column per sector

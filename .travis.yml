@@ -1,20 +1,39 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo: false
+sudo: true
 cache: packages
 
-r_github_packages:
- - hadley/devtools#1263
- - rte-antares-rpackage/antares-rpackageRead
 
-include:
-  - r: release
-  - r: oldrel
-  - r: devel
+bioc_required: true
+bioc_use_devel: true
+
+os:
+ - linux
+ - osx
+
+r:
+ - oldrel
+ - release
+ - devel
+
+r_github_packages:
+ - Bioconductor-mirror/zlibbioc
+ - Bioconductor-mirror/rhdf5
+ - hadley/devtools#1263
+ - rte-antares-rpackage/antares-rpackageRead@develop
 
 r_packages:
   - covr
+  - devtools
+  - data.table
+  - lubridate
+  - plyr
+  - stringr
+  - shiny
+  - knitr
+  - testthat
+  - rmarkdown
 
 after_success:
   - Rscript -e 'library(covr); codecov()'

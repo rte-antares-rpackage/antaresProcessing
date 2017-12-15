@@ -52,10 +52,6 @@ addLoadFactorLink <- function(x) {
   #check when x is an antaresData
   if(! attr(x, "type") %in% c("links")  ) stop("'x' does not contain link data")
 
-  if (!is.null(x$loadFactor)) {
-    stop("Input already contains column 'loadFactor'")
-  }
-
   missingCols <- setdiff(c("FLOW LIN.", "transCapacityDirect", "transCapacityIndirect"),
                          names(x))
 

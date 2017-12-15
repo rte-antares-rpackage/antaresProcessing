@@ -9,14 +9,14 @@
   setAlias(
     "downwardMargin",
     "Data required by 'addDownwardMargin()'",
-    c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE",
+    c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "pumpingCapacity",
       "ROW BAL.", "linkCapacity", "mustRun")
   )
 
   setAlias(
     "upwardMargin",
     "Data required by 'addUpwardMargin()'",
-    c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE",
+    c("areas", "links", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE", "pumpingCapacity", "storageCapacity",
       "ROW BAL.", "AVL DTG", "linkCapacity", "hydroStorageMaxPower")
   )
 
@@ -36,7 +36,7 @@
     "externalDependency",
     "Data required by 'externalDependency()'",
     c("areas", "links", "LOAD", "ROW BAL.", "PSP", "MISC. NDG", "H. ROR", "WIND",
-      "SOLAR", "AVL DTG", "FLOW LIN.", "mustRun", "linkCapacity", "hydroStorageMaxPower")
+      "SOLAR", "AVL DTG", "FLOW LIN.", "pumpingCapacity", "storageCapacity", "mustRun", "linkCapacity", "hydroStorageMaxPower")
   )
 
   setAlias(
@@ -65,7 +65,7 @@
     c("areas", "links", "mcYears", "LOAD", "MRG. PRICE", "OP. COST",
       "CONG. FEE (ALG.)", "NUCLEAR", "LIGNITE", "COAL", "GAS", "OIL", "MIX. FUEL",
       "MISC. DTG", "H. STOR", "H. ROR", "WIND", "SOLAR", "MISC. NDG", "PSP",
-      "ROW BAL.")
+      "ROW BAL.", "HURDLE COST")
   )
 
   setAlias(
@@ -80,6 +80,14 @@
     c("areas", "clusters", "mcYears", "WIND", "SOLAR", "H. ROR", "H. STOR",
       "MRG. PRICE")
   )
+  sapply(names(pkgEnv$process), function(X){
+    tpAlias <- pkgEnv$process[[X]]
+    X <- paste0("Out_", X)
+    sapply(names(tpAlias), function(Y){
+      varAlias <- tpAlias[[Y]]
+      setAlias(X, X, c(Y, varAlias))
+    })
+  })
 }
 
 globalVariables(
@@ -108,4 +116,109 @@ globalVariables(
 .idCols <- antaresRead:::.idCols
 .addClassAndAttributes <- antaresRead:::.addClassAndAttributes
 .groupByDistrict <- antaresRead:::.groupByDistrict
+
 pkgEnv <- antaresRead:::pkgEnv
+
+#-----------------------------  HDF5 ------------------------------------#
+
+rhdf5_version <- "2.20.0"
+rhdf5_message <- "This function require 'rhdf5' (>= 2.20.0) package.
+This is a bioconductor package. You can install it with :
+source('https://bioconductor.org/biocLite.R')
+biocLite('rhdf5')"
+
+# Process H5
+
+pkgEnv$process$addNetLoad$areas <- c("netLoad")
+pkgEnv$process$addNetLoad$districts <- c("netLoad")
+
+
+pkgEnv$process$addDownwardMargin$areas <- c("isolatedDownwardMargin",
+                                                      "interconnectedDownwardMargin")
+
+pkgEnv$process$addDownwardMargin$districts <- c("isolatedDownwardMargin",
+                                            "interconnectedDownwardMargin")
+
+pkgEnv$process$addUpwardMargin$areas <- c("isolatedUpwardMargin",
+                                                    "interconnectedUpwardMargin")
+pkgEnv$process$addUpwardMargin$districts <- c("isolatedUpwardMargin",
+                                          "interconnectedUpwardMargin")
+
+pkgEnv$process$addExportAndImport$areas <- c("import",
+                                              "export",
+                                             "capExport",
+                                             "capImport")
+pkgEnv$process$addExportAndImport$districts <- c("import",
+                                             "export",
+                                             "capExport",
+                                             "capImport")
+
+pkgEnv$process$addLoadFactorLink$links <- c("loadFactor",
+                                                      "congestion")
+
+pkgEnv$process$externalDependency$areas <- c("netLoad",
+                                                       "exportsLevel",
+                                                       "importsLevel",
+                                                       "exportsFrequency",
+                                                       "importsFrequency")
+
+pkgEnv$process$externalDependency$districts <- c("netLoad",
+                                             "exportsLevel",
+                                             "importsLevel",
+                                             "exportsFrequency",
+                                             "importsFrequency")
+
+
+
+pkgEnv$process$loadFactor$clusters <- c("loadFactor", "propHoursMinGen", "propHoursMaxGen", "loadFactorAvailable")
+
+pkgEnv$process$modulation$clusters <- c("upwardModulation", "downwardModulation",
+                                                  "absoluteModulation")
+
+pkgEnv$process$netLoadRamp$areas <- c("netLoadRamp", "balanceRamp", "areaRamp")
+pkgEnv$process$netLoadRamp$districts <- c("netLoadRamp", "balanceRamp", "areaRamp")
+
+pkgEnv$process$surplus$areas <- c("consumerSurplus", "producerSurplus", "rowBalanceSurplus",
+                                            "storageSurplus", "congestionFees", "globalSurplus")
+
+pkgEnv$process$surplus$districts <- c("consumerSurplus", "producerSurplus", "rowBalanceSurplus",
+                                  "storageSurplus", "congestionFees", "globalSurplus")
+
+
+pkgEnv$process$surplusClusters$clusters <- c("variableCost", "fixedCost", "startupCost",
+                                                       "surplusPerUnit", "totalSurplus", "economicGradient", "surplusLastUnit")
+
+
+
+
+
+#pkgEnv$process$surplusSectors$areas <- c("surplus", "cost")
+
+pkgEnv$processDispo <- data.frame(
+  trtName = c(
+              "netLoad",
+              "downwardMargin",
+              "upwardMargin",
+              "exportsImports",
+              "loadFactorLink",
+              "externalDependency",
+              "loadFactor",
+              "modulation",
+              "netLoadRamp",
+              "surplus",
+              "surplusClusters"
+  )
+  , fctname = c(
+                 "addNetLoad",
+                 "addDownwardMargin" ,
+                 "addUpwardMargin" ,
+                 "addExportAndImport" ,
+                 "addLoadFactorLink" ,
+                 "externalDependency" ,
+                 "loadFactor" ,
+                 "modulation" ,
+                 "netLoadRamp" ,
+                 "surplus" ,
+                 "surplusClusters"
+  ))
+

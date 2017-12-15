@@ -11,6 +11,7 @@
 #' @param by
 #'   Should modulations computed by cluster or by sector? Possible values are
 #'   "sector" and "cluster".
+#' @param opts opts where clusterDesc will be read if null based on data
 #' @inheritParams surplus
 #' @inheritParams surplusClusters
 #'
@@ -28,23 +29,32 @@
 #' \item{timeId}{
 #'   Time id and other time columns.
 #' }
-#' \item{meanUpWardModulation}{
-#'   Average upward modulation of a cluster unit or of the sector.
+#' \item{upwardModulation}{
+#'   Maximal absolute modulation of a cluster unit or of the sector, if \code{timeStep} is hourly.
 #' }
-#' \item{meanDownWardModulation}{
-#'   Average downward modulation of a cluster unit or of the sector.
+#' \item{downwardModulation}{
+#'   Maximal absolute modulation of a cluster unit or of the sector, if \code{timeStep} is hourly.
 #' }
-#' \item{meanAbsoluteModulation}{
-#'   Average absolute modulation of a cluster unit or of the sector.
+#' \item{absoluteModulation}{
+#'   Maximal absolute modulation of a cluster unit or of the sector, if \code{timeStep} is hourly.
 #' }
-#' \item{maxUpWardModulation}{
-#'   Maximal upward modulation of a cluster unit or of the sector.
+#' \item{avg_upwardModulation}{
+#'   Average upward modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
 #' }
-#' \item{maxDownWardModulation}{
-#'   Maximal downward modulation of a cluster unit or of the sector.
+#' \item{avg_downwardModulation}{
+#'   Average downward modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
 #' }
-#' \item{maxAbsoluteModulation}{
-#'   Maximal absolute modulation of a cluster unit or of the sector.
+#' \item{avg_absoluteModulation}{
+#'   Average absolute modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
+#' }
+#' \item{max_upwardModulation}{
+#'   Maximal upward modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
+#' }
+#' \item{max_downwardModulation}{
+#'   Maximal downward modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
+#' }
+#' \item{max_absoluteModulation}{
+#'   Maximal absolute modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
 #' }
 #'
 #' Notice that if \code{by="cluster"}, the function computes the modulation per
@@ -77,11 +87,14 @@
 #' @export
 #'
 modulation <- function(x, timeStep = "annual", synthesis = FALSE,
-                       by = c("cluster", "sector"), clusterDesc = NULL) {
+                       by = c("cluster", "sector"), clusterDesc = NULL, opts = NULL) {
   by <- match.arg(by)
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
-  opts <- simOptions(x)
+  if(is.null(opts))
+  {
+    opts <- simOptions(x)
+  }
 
   # The code below does the following:
   #

@@ -12,6 +12,7 @@
 #'   \code{minGenModulation}.
 #' @param loadFactorAvailable
 #'   Should loadFactorAvailable be added to the result?
+#' @param opts opts where clusterDesc will be read if null based on data
 #'
 #' @inheritParams surplus
 #' @inheritParams surplusClusters
@@ -21,7 +22,7 @@
 #' columns:
 #' \item{area}{Area name}
 #' \item{cluster}{Cluster name}
-#' \item{mcYear}{Only if \code{synthesis=FALSE}}. Id of the Monte-carlo scenario
+#' \item{mcYear}{Only if \code{synthesis=FALSE}. Id of the Monte-carlo scenario}
 #' \item{timeId}{Time id and other time variables}
 #' \item{loadFactor}{
 #'   Load factor of the cluster. It represent the proportion of
@@ -65,7 +66,7 @@
 #' @export
 #'
 loadFactor <- function(x, timeStep = "annual", synthesis = FALSE,
-                       clusterDesc = NULL, loadFactorAvailable = FALSE) {
+                       clusterDesc = NULL, loadFactorAvailable = FALSE, opts = NULL) {
 
   .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
 
@@ -77,11 +78,11 @@ loadFactor <- function(x, timeStep = "annual", synthesis = FALSE,
 
   x <- .checkColumns(x, clList)
   x$cluster[is.na(minGenModulation), minGenModulation := 0]
-  opts <- simOptions(x)
+  if(is.null(opts)) opts <- simOptions(x)
   idVars <- .idCols(x$clusters)
 
   if (is.null(clusterDesc)) clusterDesc <- readClusterDesc(opts)
-  .fillClusterDesc(clusterDesc, min.stable.power = 0, spinning = 0)
+  clusterDesc <- .fillClusterDesc(clusterDesc, min.stable.power = 0, spinning = 0)
 
   tmp <- merge(x$cluster[, c(idVars, clList$clusters), with = FALSE],
                clusterDesc[, .(area, cluster, min.stable.power, nominalcapacity, unitcount, spinning)],

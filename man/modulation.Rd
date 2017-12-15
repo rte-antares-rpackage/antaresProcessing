@@ -5,7 +5,7 @@
 \title{Compute the modulation of cluster units}
 \usage{
 modulation(x, timeStep = "annual", synthesis = FALSE, by = c("cluster",
-  "sector"), clusterDesc = NULL)
+  "sector"), clusterDesc = NULL, opts = NULL)
 }
 \arguments{
 \item{x}{An \code{antaresData} object created with \code{readAntares}. It must
@@ -23,6 +23,8 @@ per Monte-Carlo scenario.}
 \item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
 If is this parameter is set to \code{NULL} (the default), then the function
 attemps to read the needed data in the same study as \code{x}.}
+
+\item{opts}{opts where clusterDesc will be read if null based on data}
 }
 \value{
 A data.table of class \code{antaresDataTable} or a list of such tables with
@@ -38,23 +40,32 @@ the following columns:
 \item{timeId}{
   Time id and other time columns.
 }
-\item{meanUpWardModulation}{
-  Average upward modulation of a cluster unit or of the sector.
+\item{upwardModulation}{
+  Maximal absolute modulation of a cluster unit or of the sector, if \code{timeStep} is hourly.
 }
-\item{meanDownWardModulation}{
-  Average downward modulation of a cluster unit or of the sector.
+\item{downwardModulation}{
+  Maximal absolute modulation of a cluster unit or of the sector, if \code{timeStep} is hourly.
 }
-\item{meanAbsoluteModulation}{
-  Average absolute modulation of a cluster unit or of the sector.
+\item{absoluteModulation}{
+  Maximal absolute modulation of a cluster unit or of the sector, if \code{timeStep} is hourly.
 }
-\item{maxUpWardModulation}{
-  Maximal upward modulation of a cluster unit or of the sector.
+\item{avg_upwardModulation}{
+  Average upward modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
 }
-\item{maxDownWardModulation}{
-  Maximal downward modulation of a cluster unit or of the sector.
+\item{avg_downwardModulation}{
+  Average downward modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
 }
-\item{maxAbsoluteModulation}{
-  Maximal absolute modulation of a cluster unit or of the sector.
+\item{avg_absoluteModulation}{
+  Average absolute modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
+}
+\item{max_upwardModulation}{
+  Maximal upward modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
+}
+\item{max_downwardModulation}{
+  Maximal downward modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
+}
+\item{max_absoluteModulation}{
+  Maximal absolute modulation of a cluster unit or of the sector, if \code{timeStep} is not hourly.
 }
 
 Notice that if \code{by="cluster"}, the function computes the modulation per

@@ -52,9 +52,11 @@ addUpwardMargin <- function(x) {
     } else {
       if (!is.null(x$areas)) {
         setattr(x$areas, "virtualNodes", attr(x, "virtualNodes"))
-        addUpwardMargin(x$areas)
+        x$areas <- addUpwardMargin(x$areas)
       }
-      if (!is.null(x$districts)) addUpwardMargin(x$districts)
+      if (!is.null(x$districts)) {
+        x$districts <- addUpwardMargin(x$districts)
+        }
     }
     return(invisible(x))
   }
@@ -62,7 +64,7 @@ addUpwardMargin <- function(x) {
   # Check required columns are present
   .neededColAreaUp<-c("H. ROR", "WIND", "SOLAR", "MISC. NDG",
                       "LOAD", "BALANCE", "ROW BAL.", "AVL DTG")
-  .checkColumns(x, list(areas = .neededColAreaUp))
+  .checkColumns(x, .neededColAreaUp)
 
   # If the study contains storage/capacity areas, the column 'storageCapacity' is
   # also required

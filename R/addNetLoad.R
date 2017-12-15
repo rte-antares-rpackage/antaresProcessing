@@ -44,9 +44,9 @@ addNetLoad <- function(x, ignoreMustRun = FALSE) {
 
   if(! attr(x, "type") %in% c("areas", "districts")) stop("'x' does not contain area or district data")
 
-  if (!is.null(x$netLoad)) {
-    stop("Input already contains column 'netLoad'")
-  }
+  # if (!is.null(x$netLoad)) {
+  #   stop("Input already contains column 'netLoad'")
+  # }
 
   missingCols <- setdiff(c("LOAD", "ROW BAL.", "PSP", "MISC. NDG", "H. ROR", "WIND", "SOLAR"),
                          names(x))
