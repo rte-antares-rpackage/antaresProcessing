@@ -81,7 +81,7 @@ Contributions to the library are welcome and can be submitted in the form of pul
 
 ## License Information:
 
-Copyright 2015-2016 RTE (France)
+Copyright 2015-2018 RTE (France)
 
 * RTE: http://www.rte-france.com
 
