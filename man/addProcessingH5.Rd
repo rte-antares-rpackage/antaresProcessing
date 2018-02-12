@@ -5,18 +5,21 @@
 \title{Add process results of antaresProcessing to an ANTARES .h5 files}
 \usage{
 addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
-  addNetLoad = FALSE, addDownwardMargin = FALSE, addUpwardMargin = FALSE,
-  addExportAndImport = FALSE, addLoadFactorLink = FALSE,
-  externalDependency = FALSE, loadFactor = FALSE, modulation = FALSE,
-  netLoadRamp = FALSE, surplus = FALSE, surplusClusters = FALSE,
-  thermalAvailabilities = FALSE, linkCapacity = FALSE, mustRun = FALSE,
-  allProcess = FALSE, evalAreas = list(), evalLinks = list(),
-  evalClusters = list(), evalDistricts = list(), nThreads = 1)
+  timeStep = "hourly", addNetLoad = FALSE, addDownwardMargin = FALSE,
+  addUpwardMargin = FALSE, addExportAndImport = FALSE,
+  addLoadFactorLink = FALSE, externalDependency = FALSE,
+  loadFactor = FALSE, modulation = FALSE, netLoadRamp = FALSE,
+  surplus = FALSE, surplusClusters = FALSE, thermalAvailabilities = FALSE,
+  linkCapacity = FALSE, mustRun = FALSE, allProcess = FALSE,
+  evalAreas = list(), evalLinks = list(), evalClusters = list(),
+  evalDistricts = list(), nThreads = 1)
 }
 \arguments{
 \item{opts}{\code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}}
 
 \item{mcY}{\code{character}, "mcInd" or "mcAll".}
+
+\item{timeStep}{\code{character}, timeStep}
 
 \item{addNetLoad}{\code{boolean} refer to \link[antaresProcessing]{addNetLoad}}
 

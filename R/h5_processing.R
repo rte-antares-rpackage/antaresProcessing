@@ -4,6 +4,7 @@
 #'
 #' @param opts \code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}
 #' @param mcY  \code{character}, "mcInd" or "mcAll".
+#' @param timeStep \code{character}, timeStep
 #' @param addNetLoad  \code{boolean} refer to \link[antaresProcessing]{addNetLoad}
 #' @param addDownwardMargin \code{boolean} refer to \link[antaresProcessing]{addDownwardMargin}
 #' @param addUpwardMargin \code{boolean} refer to \link[antaresProcessing]{addUpwardMargin}
@@ -76,6 +77,7 @@
 #' @export
 addProcessingH5 <- function(opts = simOptions(),
                             mcY = c("mcInd", "mcAll"),
+                            timeStep = "hourly",
                             addNetLoad = FALSE,
                             addDownwardMargin = FALSE,
                             addUpwardMargin = FALSE,
@@ -181,7 +183,7 @@ addProcessingH5 <- function(opts = simOptions(),
   {
     mcYear <- "mcAll"
   }
-  timeStep <- "hourly"
+  # timeStep <- "hourly"
 
 
   if(mcYear[1] != 'mcAll')

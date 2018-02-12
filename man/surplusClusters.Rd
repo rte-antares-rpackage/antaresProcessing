@@ -61,16 +61,6 @@ A data.table of class \code{antaresDataTable} with the following columns:
 
   formula = `MRG. PRICE` * production - opCost - startupCost
 }
-\item{totalSurplusWOS}{
-  Surplus of all units of the cluster.
-
-  formula = `MRG. PRICE` * production - opCost
-}
-\item{totalSurplusWOSPerMW}{
-  Surplus of all units of the cluster.
-
-  formula = round(totalSurplusWOS/nominalcapacity * unitcount))
-}
 \item{economicGradient}{
   Economic gradient of a cluster. It is equal to
   the surplus per unit divided by the capacity of a unit.
