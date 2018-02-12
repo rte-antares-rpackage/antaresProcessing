@@ -1,8 +1,8 @@
 Package: antaresProcessing
 Type: Package
 Title: Antares Results Processing
-Version: 0.13
-Date: 2017-12-14
+Version: 0.14
+Date: 2018-02-12
 Authors@R: c(
     person("Jalal-Edine", "ZAWAM", , "jalal-edine.zawam@rte-france.com", role = c("aut", "cre")),
     person("Francois", "Guillem", , "francois.guillem@rte-france.com", role = "aut"),
