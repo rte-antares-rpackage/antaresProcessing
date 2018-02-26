@@ -17,11 +17,17 @@ r:
  - release
  - devel
 
+
 r_github_packages:
- - Bioconductor-mirror/zlibbioc
- - Bioconductor-mirror/rhdf5
  - hadley/devtools#1263
  - rte-antares-rpackage/antares-rpackageRead@develop
+#before - Bioconductor-mirror/zlibbioc
+# - Bioconductor-mirror/rhdf5
+#after
+bioc_packages:
+  - rhdf5
+  - zlibbioc
+
 
 r_packages:
   - covr
