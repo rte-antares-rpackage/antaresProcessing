@@ -178,6 +178,9 @@ addProcessingH5 <- function(opts = simOptions(),
   if(mcY == "mcInd")
   {
     mcYear <- opts$mcYears
+    if(!isTRUE(all.equal(1:length(mcYear), mcYear))){
+      mcYear <- 1:length(mcYear)
+    }
   }
   if(mcY == "mcAll")
   {
