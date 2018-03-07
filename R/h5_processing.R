@@ -178,9 +178,9 @@ addProcessingH5 <- function(opts = simOptions(),
   if(mcY == "mcInd")
   {
     mcYear <- opts$mcYears
-    if(!isTRUE(all.equal(1:length(mcYear), mcYear))){
-      mcYear <- 1:length(mcYear)
-    }
+    # if(!isTRUE(all.equal(1:length(mcYear), mcYear))){
+    #   mcYear <- 1:length(mcYear)
+    # }
   }
   if(mcY == "mcAll")
   {
@@ -192,7 +192,7 @@ addProcessingH5 <- function(opts = simOptions(),
   if(mcYear[1] != 'mcAll')
   {
     by = nThreads
-    mcYear_L <- vector("list", floor((max(mcYear)-1)/by) + 1 )
+    mcYear_L <- vector("list", floor((length(mcYear)-1)/by) + 1 )
     for(i in 1:length(mcYear))
     {
       mcYear_L[[floor((i-1)/by) + 1]] <- c(mcYear_L[[floor((i-1)/by) + 1]], mcYear[i])
@@ -219,7 +219,8 @@ addProcessingH5 <- function(opts = simOptions(),
     Parallel = FALSE
   }
 
-  outToWrite <- lapply(mcYear, function(X){
+  outToWrite <- lapply(1:length(mcYear), function(x){
+    X <- mcYear[[x]]
     if(X[1] == "mcAll"){
       X <- NULL
     }
@@ -305,7 +306,7 @@ addProcessingH5 <- function(opts = simOptions(),
                     links = writeLinks,
                     clusters = writeClusters,
                     districts = writeDistricts,
-                    mcYear = X, writeStruct = writeStruct)
+                    mcYear = x, writeStruct = writeStruct)
 
 
 
