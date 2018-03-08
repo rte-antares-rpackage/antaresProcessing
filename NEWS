@@ -1,5 +1,15 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
+Changes in version 0.15 (2018-03-08)
+
+BUGFIXES:
+* Function "addProcessingH5()" was crashing when data contained several mcYears but not continuously.
+
+Changes in version 0.14 (2017-02-26)
+
+NEW FEATURES:
+* addProcessingH5() has a new parameter timeStep.
+
 Changes in version 0.13 (2017-12-14)
 
 BREAKING CHANGES:
