@@ -4,6 +4,7 @@ Changes in version 0.15 (2018-03-08)
 
 BUGFIXES:
 * Function "addProcessingH5()" was crashing when data contained several mcYears but not continuously.
+* Some tests were failing in Debian for r-devel.
 
 Changes in version 0.14 (2017-02-26)
 
