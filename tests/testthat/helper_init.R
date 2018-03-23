@@ -25,7 +25,7 @@ if (sourcedir != "") {
     assign("h5file", NULL, envir = globalenv())
     h5file <- system.file("testdata/20170707-1355eco-test.h5", package = "antaresProcessing")
     if(h5file != ""){
-      if(file.copy(from = h5file, to = path)){
+      if(file.copy(from = h5file, to = path, overwrite = TRUE)){
         assign("h5file", file.path(path, "20170707-1355eco-test.h5"), envir = globalenv())
       }
     }
