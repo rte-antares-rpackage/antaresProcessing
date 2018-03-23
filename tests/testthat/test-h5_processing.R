@@ -63,7 +63,7 @@ if(requireNamespace("rhdf5")){
       optsH5 <- setSimulationPath(h5file)
       calcData <- readAntares(areas = "all", mcYears = "all",
                               select = c("H. STOR" , "MISC. DTG",
-                                         "NODU" , "NP COST", "Tota", "Tota2"), opts = optsH5)
+                                         "NODU" , "NP COST", "Tota", "Tota2"), opts = optsH5, showProgress = FALSE)
 
       calcData[,verif1 := `H. STOR` + `MISC. DTG`]
       calcData[,verif2 := `NODU` + `NP COST` + 1]
@@ -75,9 +75,9 @@ if(requireNamespace("rhdf5")){
     test_that("h5 : processing calc by straitements", {
 
       UpwardMargin_out <- readAntares(areas = "all", mcYears = "all",
-                                      select = "Out_addUpwardMargin")
+                                      select = "Out_addUpwardMargin", showProgress = FALSE)
 
-      UpwardMargin_recalc <- readAntares(areas = "all", mcYears = "all",select = "upwardMargin")
+      UpwardMargin_recalc <- readAntares(areas = "all", mcYears = "all",select = "upwardMargin",  showProgress = FALSE)
       addUpwardMargin(UpwardMargin_recalc)
 
       expect_true(identical(UpwardMargin_out$interconnectedUpwardMargin,
@@ -104,7 +104,7 @@ if(requireNamespace("rhdf5")){
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addNetLoad =  TRUE)})
       re <- readAntares(opts = optsH5, areas = "all", districts = "all",
-                        mcYears = 1, select = "Out_addNetLoad")
+                        mcYears = 1, select = "Out_addNetLoad",  showProgress = FALSE)
       expect_false(is.null(re$areas$netLoad))
       expect_false(is.null(re$districts$netLoad))
 
@@ -115,7 +115,7 @@ if(requireNamespace("rhdf5")){
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addDownwardMargin =  TRUE)})
       re <- readAntares(opts = optsH5, areas = "all", districts = "all",
-                  mcYears = 1, select = "Out_addDownwardMargin")
+                  mcYears = 1, select = "Out_addDownwardMargin",  showProgress = FALSE)
       expect_false(is.null(re$areas$isolatedDownwardMargin))
       expect_false(is.null(re$areas$interconnectedDownwardMargin))
       expect_false(is.null(re$districts$isolatedDownwardMargin))
@@ -128,7 +128,7 @@ if(requireNamespace("rhdf5")){
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addUpwardMargin = TRUE)})
       re <- readAntares(opts = optsH5, areas = "all", districts = "all",
-                        mcYears = 1, select = "Out_addUpwardMargin")
+                        mcYears = 1, select = "Out_addUpwardMargin", showProgress = FALSE)
       expect_false(is.null(re$areas$isolatedUpwardMargin))
       expect_false(is.null(re$areas$interconnectedUpwardMargin))
       expect_false(is.null(re$districts$isolatedUpwardMargin))
@@ -141,7 +141,7 @@ if(requireNamespace("rhdf5")){
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addExportAndImport = TRUE)})
       re <- readAntares(opts = optsH5, areas = "all", districts = "all",
-                        mcYears = 1, select = "Out_addExportAndImport")
+                        mcYears = 1, select = "Out_addExportAndImport", showProgress = FALSE)
       expect_false(is.null(re$areas$import))
       expect_false(is.null(re$areas$export))
       expect_false(is.null(re$districts$import))
@@ -153,7 +153,7 @@ if(requireNamespace("rhdf5")){
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addLoadFactorLink = TRUE)})
       re <- readAntares(opts = optsH5, links = "all",clusters = "all",
-                        mcYears = 1, select = "Out_addLoadFactorLink")
+                        mcYears = 1, select = "Out_addLoadFactorLink", showProgress = FALSE)
       expect_false(is.null(re$links$loadFactor))
       expect_false(is.null(re$links$congestion))
 
@@ -167,7 +167,7 @@ if(requireNamespace("rhdf5")){
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",externalDependency = TRUE)})
       re <- readAntares(opts = optsH5, areas = "all", districts = "all",
-                        mcYears = 1, select = "Out_externalDependency")
+                        mcYears = 1, select = "Out_externalDependency", showProgress = FALSE)
       expect_false(is.null(re$areas$netLoad))
       expect_false(is.null(re$areas$exportsLevel))
       expect_false(is.null(re$areas$importsLevel))
@@ -188,7 +188,7 @@ if(requireNamespace("rhdf5")){
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",loadFactor = TRUE)})
       re <- readAntares(opts = optsH5, clusters = "all",
-                        mcYears = 1, select = "Out_loadFactor")
+                        mcYears = 1, select = "Out_loadFactor", showProgress = FALSE)
       expect_false(is.null(re$loadFactor))
       expect_false(is.null(re$propHoursMinGen))
       expect_false(is.null(re$propHoursMaxGen))
@@ -203,7 +203,7 @@ if(requireNamespace("rhdf5")){
 
 
       re <- readAntares(opts = optsH5, clusters = "all",
-                        mcYears = 1, select = "Out_modulation")
+                        mcYears = 1, select = "Out_modulation", showProgress = FALSE)
       expect_false(is.null(re$upwardModulation))
       expect_false(is.null(re$downwardModulation))
       expect_false(is.null(re$absoluteModulation))
@@ -217,7 +217,7 @@ if(requireNamespace("rhdf5")){
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",netLoadRamp = TRUE)})
 
       re <- readAntares(opts = optsH5, areas = "all", districts = "all",
-                        mcYears = 1, select = "Out_netLoadRamp")
+                        mcYears = 1, select = "Out_netLoadRamp", showProgress = FALSE)
       expect_false(is.null(re$areas$netLoadRamp))
       expect_false(is.null(re$areas$balanceRamp))
       expect_false(is.null(re$areas$areaRamp))
@@ -235,7 +235,7 @@ if(requireNamespace("rhdf5")){
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",surplus  = TRUE)})
 
       re <- readAntares(opts = optsH5, areas = "all", districts = "all",
-                        mcYears = 1, select = "Out_surplus")
+                        mcYears = 1, select = "Out_surplus", showProgress = FALSE)
       expect_false(is.null(re$areas$consumerSurplus))
       expect_false(is.null(re$areas$producerSurplus))
       expect_false(is.null(re$areas$rowBalanceSurplus))
@@ -257,7 +257,7 @@ if(requireNamespace("rhdf5")){
       suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",surplusClusters =  TRUE)})
 
       re <- readAntares(opts = optsH5, clusters = "all",
-                        mcYears = 1, select = "Out_surplusClusters")
+                        mcYears = 1, select = "Out_surplusClusters", showProgress = FALSE)
       expect_false(is.null(re$variableCost))
       expect_false(is.null(re$fixedCost))
       expect_false(is.null(re$startupCost))
@@ -278,7 +278,7 @@ if(requireNamespace("rhdf5")){
     test_that("Write boolean", {
       optsH5 <- setSimulationPath(h5file)
       suppressWarnings(addProcessingH5(optsH5, evalAreas = list(toto = "TRUE")))
-      expect_false(is.null(readAntares(mcYears = 1, select = "toto")$toto))
+      expect_false(is.null(readAntares(mcYears = 1, select = "toto", showProgress = FALSE)$toto))
     })
 
 
