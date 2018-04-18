@@ -8,7 +8,6 @@ if(sourcedir == ""){ sourcedir <- system.file("testdata", package = "antaresRead
 
 
 
-
 Sys.unsetenv("R_TESTS")
 # Hack: For some unknown reason, this script is executed at some point of
 # the R CMD CHECK before package is correctly installed and tests actually run.
@@ -25,8 +24,17 @@ if (sourcedir != "") {
     assign("h5file", NULL, envir = globalenv())
     h5file <- system.file("testdata/20170707-1355eco-test.h5", package = "antaresProcessing")
     if(h5file != ""){
-      if(file.copy(from = h5file, to = path)){
+      if(file.copy(from = h5file, to = path, overwrite = TRUE)){
         assign("h5file", file.path(path, "20170707-1355eco-test.h5"), envir = globalenv())
+
+        #WE MUST assign h5file variable in the test environnement and not in the global environnement
+        if(!grepl("Temp", h5file)){
+          assign("h5file", file.path(path, "20170707-1355eco-test.h5"))
+        }
+
+        if(!grepl("Temp", h5file)){
+          print("h5file is not in temp file")
+        }
       }
     }
 
@@ -42,3 +50,5 @@ if (sourcedir != "") {
   assign("nweeks", 2, envir = globalenv())
   assign("pathtodelete", path, envir = globalenv())
 }
+
+
