@@ -4,7 +4,7 @@ context("h5 : addProcessingH5")
 skipFunctionH5<-function(){
   skip_if(is.null(h5file), "h5file is null")
   if(!is.null(h5file)){
-    skip_if(!grepl("Temp", h5file), "h5file is not in temp folder")
+    skip_if(!grepl("Temp", h5file, ignore.case = TRUE), "h5file is not in temp folder")
   }
   skip_if_not_installed("rhdf5", minimum_version = 2.20)
 }

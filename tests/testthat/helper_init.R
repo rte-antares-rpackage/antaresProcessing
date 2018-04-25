@@ -47,8 +47,16 @@ if (sourcedir != "") {
       return(function(...) {capture.output(w<-f(...));return(w);});
     }
 
-    if(is.null(h5file) | !grepl("Temp", h5file)){
+    if(is.null(h5file)){
+      print(paste0("h5file : ", h5file))
+      print(paste0("path : ", path))
       stop("h5file must not be null")
+    }
+
+    if(!grepl("Temp", h5file, ignore.case = TRUE) ){
+      print(paste0("h5file : ", h5file))
+      print(paste0("path : ", path))
+      stop("h5file is not in temp folder")
     }
 
     silentf <- deprintize(showAliases)
