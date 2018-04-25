@@ -34,11 +34,11 @@ if (sourcedir != "") {
       if(file.copy(from = h5file, to = path, overwrite = TRUE)){
         assign("h5file", file.path(path, nameH5File), envir = globalenv())
         #WE MUST assign h5file variable in the test environnement and not in the global environnement
-        if(!grepl("Temp", h5file)){
+        if(!grepl("Temp", h5file, ignore.case = TRUE)){
           assign("h5file", file.path(path, nameH5File))
         }
-        if(!grepl("Temp", h5file)){
-          print("h5file is not in temp file")
+        if(!grepl("Temp", h5file, ignore.case = TRUE)){
+          print("h5file is not in temp folder")
         }
       }
     }
