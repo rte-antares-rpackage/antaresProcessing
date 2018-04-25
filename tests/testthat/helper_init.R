@@ -22,16 +22,21 @@ if (sourcedir != "") {
 
   if(requireNamespace("rhdf5", quietly = TRUE)){
     assign("h5file", NULL, envir = globalenv())
-    h5file <- system.file("testdata/20170707-1355eco-test.h5", package = "antaresProcessing")
+    nameH5File<-"20170707-1355eco-test.h5"
+    for(i in .libPaths()){
+      h5file<-file.path(system.file("testdata", package="antaresProcessing", lib.loc = c(i)), nameH5File)
+      if(file.exists(h5file)){
+        break
+      }
+    }
+
     if(h5file != ""){
       if(file.copy(from = h5file, to = path, overwrite = TRUE)){
-        assign("h5file", file.path(path, "20170707-1355eco-test.h5"), envir = globalenv())
-
+        assign("h5file", file.path(path, nameH5File), envir = globalenv())
         #WE MUST assign h5file variable in the test environnement and not in the global environnement
         if(!grepl("Temp", h5file)){
-          assign("h5file", file.path(path, "20170707-1355eco-test.h5"))
+          assign("h5file", file.path(path, nameH5File))
         }
-
         if(!grepl("Temp", h5file)){
           print("h5file is not in temp file")
         }
@@ -40,6 +45,10 @@ if (sourcedir != "") {
 
     deprintize<-function(f){
       return(function(...) {capture.output(w<-f(...));return(w);});
+    }
+
+    if(is.null(h5file) | !grepl("Temp", h5file)){
+      stop("h5file must not be null")
     }
 
     silentf <- deprintize(showAliases)
