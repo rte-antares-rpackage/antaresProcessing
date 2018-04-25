@@ -21,7 +21,7 @@ describe("surplusClusters", {
   })
 
   it("returns an antaresDataTable with correct number of lines and columns", {
-    s <- surplusClusters(data)
+    s <- suppressWarnings(surplusClusters(data))
     expect_equal(nrow(s) / length(simOptions()$mcYears),
                  nrow(unique(data$clusters[, .(area, cluster)])))
   })
@@ -29,7 +29,7 @@ describe("surplusClusters", {
 })
 
 test_that("All cluster surpluses are positive, except for must run clusters", {
-  s <- surplusClusters(data)
+  s <- suppressWarnings(surplusClusters(data))
   s <- s[!cluster %like% "must_run"]
   for (v in c("surplusPerUnit", "totalSurplus")) {
     expect_true(all(s[[v]] >= 0), info = v)

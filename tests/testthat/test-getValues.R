@@ -21,10 +21,10 @@ describe("getValues", {
 
   it ("check values", {
     res<-getValues(data=mydata$areas,variable="LOAD", mcyear = c(2))
-    expect_equal(res[timeId==193 & area=="a",]$`2`,71918)
+    expect_equal(res[timeId==2689 & area=="a",]$`2`,53709)
 
     res<-getValues(data=mydata$areas,variable="WIND", mcyear = "all")
-    expect_equal(res[timeId==193 & area=="a",]$`1`,5310)
+    expect_equal(res[timeId==2689 & area=="a",]$`1`,7492)
   })
 
 })

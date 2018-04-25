@@ -32,9 +32,9 @@ test_that("Surpluses are correctly computed", {
   dataCorrected <- removeVirtualAreas(data,
                                       storageFlexibility = getAreas(c("psp", "hub")),
                                       production = getAreas("offshore"))
-  surplus <- surplus(dataCorrected)
+  surplus <- suppressWarnings(surplus(dataCorrected))
 
-  surplusWithHurdle <- surplus(dataCorrected, hurdleCost = FALSE)
+  surplusWithHurdle <- suppressWarnings(surplus(dataCorrected, hurdleCost = FALSE))
 
   data$areas$production <- data$areas[,`H. ROR` + WIND + SOLAR + NUCLEAR + LIGNITE + COAL +
                                         GAS + OIL + `MIX. FUEL` + `MISC. DTG` + `H. STOR` +

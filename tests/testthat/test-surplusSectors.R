@@ -5,7 +5,7 @@ opts <- setSimulationPath(studyPath)
 mydata <- readAntares(areas="all", clusters = "all",
                       showProgress = FALSE, mcYears = "all")
 
-s <- surplusSectors(mydata)
+s <- suppressWarnings(surplusSectors(mydata))
 
 describe("surplusSectors", {
 

@@ -7,7 +7,7 @@ mydata <- readAntares(clusters = "all", thermalModulation = TRUE,
 
 describe("loadFactor", {
 
-  lf <- loadFactor(mydata)
+  lf <- suppressWarnings(loadFactor(mydata))
 
   it ("returns an antaresDataTable with correct number of row and columns", {
     expect_is(lf, "antaresDataTable")
@@ -25,7 +25,7 @@ describe("loadFactor", {
 
   mydata <- readAntares(clusters = "all", thermalModulation = TRUE,
                         mcYears = "all", showProgress = FALSE, thermalAvailabilities = TRUE)
-  lfA <- loadFactor(mydata, loadFactorAvailable = TRUE)
+  lfA <- suppressWarnings(loadFactor(mydata, loadFactorAvailable = TRUE))
 
   it("returns values between 0 and 1", {
     expect_true(all(lfA$loadFactorAvailable %between% c(0, 1)))
