@@ -60,6 +60,7 @@ if (sourcedir != "") {
         if(!check_if_h5_is_in_tmp(h5file, path, printMessage = FALSE)){
           assign("h5file", file.path(path, nameH5File))
         }
+
         check_if_h5_is_in_tmp(h5file, path)
       }
     }
