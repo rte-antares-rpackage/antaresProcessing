@@ -37,7 +37,7 @@ if (sourcedir != "") {
         if(!grepl("Temp", h5file, ignore.case = TRUE)){
           assign("h5file", file.path(path, nameH5File))
         }
-        if(!grepl("Temp", h5file, ignore.case = TRUE)){
+        if(!grepl("Temp", h5file, ignore.case = TRUE) & !grepl("tmp", h5file, ignore.case = TRUE) ){
           print("h5file is not in temp folder")
         }
       }
