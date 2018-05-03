@@ -18,15 +18,22 @@ describe("addExportAndImport", {
   it ("check values for areas and distric", {
     mydata <- readAntares(clusters = "all", areas = "all",
                           mcYears = "all", showProgress = FALSE, links = "all")
-    res<-addExportAndImport(x=mydata)
-    expect_equal(res$areas[area=="a",]$export[2],3000)
-    expect_equal(res$areas[area=="c",]$export[2],0)
+
+    mydataCorrected<-removeVirtualAreas(mydata, storageFlexibility = getAreas(select = c("psp", "hub")), production = getAreas("off"))
+    res<-addExportAndImport(x=mydataCorrected)
+
+    getFirstTimeIdWhereAExport<-res$links[link=="a - b" & mcYear==1 & `FLOW LIN.`>0, timeId][1]
+    valueOfExportA<-res$links[link=="a - b" & mcYear==1 & `FLOW LIN.`>0, `FLOW LIN.`][1]
+    expect_equal(res$areas[area=="a" & mcYear==1 & timeId==getFirstTimeIdWhereAExport, export],valueOfExportA)
+
+    #if a export to b, then b import more than valueOfExportA
+    expect_gte(res$areas[area=="b" & mcYear==1 & timeId==getFirstTimeIdWhereAExport, import],valueOfExportA)
 
     mydata <- suppressWarnings(readAntares(select = "exportsImports", showProgress = FALSE, districts = "all"))
 
-    res<-addExportAndImport(x=mydata, addCapacities = TRUE)
-    expect_equal(res$districts[district=="a and b",]$export[2],1500)
-    expect_equal(res$districts[district=="a and b",]$export[5],1500)
+    res<-addExportAndImport(x=mydata)
+    expect_equal(res$districts[district=="a and b",]$export[2],0)
+    expect_equal(res$districts[district=="a and b",]$export[5],0)
 
   })
 

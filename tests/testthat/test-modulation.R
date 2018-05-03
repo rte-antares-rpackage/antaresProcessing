@@ -3,7 +3,7 @@ context("Function modulation")
 opts <- setSimulationPath(studyPath)
 
 mydata <- readAntares(clusters = "all", showProgress = FALSE, mcYears = "all")
-m <- modulation(mydata)
+m <- suppressWarnings(modulation(mydata))
 
 describe("modulation", {
 
@@ -37,7 +37,7 @@ test_that("Modulation are lower than unit capacity", {
 
 
 mydata <- readAntares(areas = "all", showProgress = FALSE, mcYears = "all")
-m <- modulation(mydata, by = "sector")
+m <- suppressWarnings(modulation(mydata, by = "sector"))
 
 test_that("modulations by sectors are positive", {
   expect_true(all(m$meanUpwardModulation >= 0))
@@ -50,7 +50,7 @@ test_that("modulations by sectors are positive", {
 
 
 mydata <- readAntares(areas = "all", districts = "all", showProgress = FALSE, mcYears = "all")
-m <- modulation(mydata, by = "sector")
+m <- suppressWarnings(modulation(mydata, by = "sector"))
 
 
 test_that("modulations are positive, apply to an antaresDataList", {
@@ -64,7 +64,7 @@ test_that("modulations are positive, apply to an antaresDataList", {
 
 
 mydata <- readAntares(areas = "all", clusters = "all", showProgress = FALSE, mcYears = "all")
-m <- modulation(mydata, by = "sector", synthesis = TRUE)
+m <- suppressWarnings(modulation(mydata, by = "sector", synthesis = TRUE))
 
 
 test_that("modulations are positive, apply to an antaresDataList", {

@@ -15,16 +15,16 @@ describe("externalDependency", {
   it("stops if frequency exceeds a level ", {
     data2 <- suppressWarnings(readAntares(areas="all", showProgress = FALSE, hydroStorageMaxPower = TRUE))
     addNetLoad(data2, ignoreMustRun = TRUE)
-    resH<-externalDependency(data2, timeStep = "hourly")
+    resH<-suppressWarnings(externalDependency(data2, timeStep = "hourly"))
     expect_lte(max(resH$exportsFrequency), 1)
 
-    resW<-externalDependency(data2, timeStep = "weekly")
+    resW<-suppressWarnings(externalDependency(data2, timeStep = "weekly"))
     expect_lte(max(resW$exportsFrequency), 168)
 
-    resM<-externalDependency(data2, timeStep = "monthly")
+    resM<-suppressWarnings(externalDependency(data2, timeStep = "monthly"))
     expect_lte(max(resM$exportsFrequency), 744)
 
-    resA<-externalDependency(data2, timeStep = "annual")
+    resA<-suppressWarnings(externalDependency(data2, timeStep = "annual"))
     expect_lte(max(resA$exportsFrequency), 8736)
   })
 
@@ -33,7 +33,7 @@ describe("externalDependency", {
 
     expect_is(mydata, "antaresDataList")
 
-    addNetLoad(mydata, ignoreMustRun = TRUE)
+    mydata<-addNetLoad(mydata, ignoreMustRun = TRUE)
     res<-externalDependency(mydata, timeStep = "hourly")
     expect_false(is.null(res$exportsLevel))
   })
@@ -43,7 +43,7 @@ describe("externalDependency", {
 
     expect_is(mydata, "antaresDataList")
 
-    addNetLoad(mydata, ignoreMustRun = TRUE)
+    mydata<-addNetLoad(mydata, ignoreMustRun = TRUE)
     res<-externalDependency(mydata, timeStep = "hourly")
     expect_false(is.null(res$areas$exportsFrequency))
     expect_false(is.null(res$districts$exportsLevel))
@@ -54,7 +54,7 @@ describe("externalDependency", {
 
     expect_is(mydata, "antaresDataList")
 
-    addNetLoad(mydata, ignoreMustRun = TRUE)
+    mydata<-addNetLoad(mydata, ignoreMustRun = TRUE)
     res<-externalDependency(mydata, timeStep = "hourly")
     expect_true(is.null(res$links))
     expect_false(is.null(res$areas$exportsFrequency))
@@ -70,7 +70,7 @@ describe("externalDependency", {
     attrMyDataCorrected<-attributes(mydataCorrected)
     expect_false(is.null(attrMyDataCorrected$virtualNodes))
 
-    addNetLoad(mydataCorrected, ignoreMustRun = TRUE)
+    mydataCorrected<-addNetLoad(mydataCorrected, ignoreMustRun = TRUE)
     res<-externalDependency(mydataCorrected, timeStep = "hourly")
     expect_true(is.null(res$links))
     expect_false(is.null(res$areas$exportsFrequency))

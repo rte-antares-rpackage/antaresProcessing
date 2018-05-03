@@ -30,7 +30,7 @@ describe("netLoadRamp", {
     s <- netLoadRamp(x = mydata$areas, ignoreMustRun = TRUE, synthesis = TRUE)
     expect_false(is.null(s$min_areaRamp))
 
-    s <- netLoadRamp(mydata$areas, ignoreMustRun = TRUE, timeStep = "monthly")
+    s <- suppressWarnings(netLoadRamp(mydata$areas, ignoreMustRun = TRUE, timeStep = "monthly"))
     expect_false(is.null(s$min_areaRamp))
   })
 
