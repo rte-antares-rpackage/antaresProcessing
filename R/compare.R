@@ -59,7 +59,7 @@ compare <- function(x, y, method=c("diff", "ratio", "rate")) {
         res[[i]] <- compare(x[[i]], y[[i]], method)
       }
       attrs <- attributes(x)
-      .addClassAndAttributes(res, synthesis = attrs$synthesis, timeStep = attrs$timeStep,
+      res <- .addClassAndAttributes(res, synthesis = attrs$synthesis, timeStep = attrs$timeStep,
                              type = paste0(attrs$type, "Comparison"), opts = attrs$opts)
       return(res)
     }
@@ -96,7 +96,9 @@ compare <- function(x, y, method=c("diff", "ratio", "rate")) {
 
   res <- res[, sharedVars, with = FALSE]
 
-  .addClassAndAttributes(res, synthesis = attrs$synthesis, timeStep = attrs$timeStep,
+  res <- .addClassAndAttributes(res, synthesis = attrs$synthesis, timeStep = attrs$timeStep,
                          type = paste0(attrs$type, "Comparison"), opts = attrs$opts)
+
+  res
 
 }

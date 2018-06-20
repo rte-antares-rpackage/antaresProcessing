@@ -113,6 +113,9 @@ test_that("x and y can be antaresDataList ", {
                   paste0("attr(data1, t) : ", attr(data1, t), " != ", "attr(res, t) : ", attr(res, t) ))
     }
   }
+
+  expect_true(all(class(data1) == class(res)))
+  expect_true(all(class(data1$areas) == class(res$areas)))
 })
 
 test_that("x and y can be antaresDataList but they must have the same names ", {
@@ -136,7 +139,7 @@ test_that("x and y can be antaresDataList but they must have the same names ", {
 
 #compare values data1, data2 et res
 
-test_that("x and y can be antaresDataList ", {
+test_that("x and y can be antaresDataList, diff must work ", {
   data1 <- suppressWarnings(readAntares(
     areas = c("a", "b"),
     links = getLinks(),
