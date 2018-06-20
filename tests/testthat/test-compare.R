@@ -10,7 +10,7 @@ describe("compare", {
   it("returns an object with same structure than the input", {
     data2 <- readAntares(c("a", "b"), select = c("LOAD", "BALANCE"),
                          timeStep = "annual", showProgress = FALSE)
-    res <- compare(data1, data2)
+    res <- antaresProcessing::compare(data1, data2)
 
     expect_is(res, "antaresDataTable")
     expect_identical(names(res), names(data1))
@@ -19,7 +19,7 @@ describe("compare", {
   it("keeps only shared rows and columns", {
     data2 <- readAntares(c("b", "c"), select = c("LOAD", "BALANCE", "MRG. PRICE"),
                          timeStep = "annual", showProgress = FALSE)
-    res <- compare(data1, data2)
+    res <- antaresProcessing::compare(data1, data2)
     expect_identical(names(res),
                      intersect(names(data1), names(data2)))
     expect_identical(as.character(unique(res$area)),
@@ -29,11 +29,11 @@ describe("compare", {
   it("stops if x and y have different types", {
     data2 <- readAntares(links="all", select = c("FLOW LIN."),
                          timeStep = "annual", showProgress = FALSE)
-    expect_error(compare(data1, data2), "type")
+    expect_error(antaresProcessing::compare(data1, data2), "type")
   })
 
   it("returns 0s if x = y", {
-    res <- compare(data1, data1)
+    res <- antaresProcessing::compare(data1, data1)
     expect_true(all(res$LOAD == 0 & res$BALANCE == 0))
   })
 
@@ -46,18 +46,48 @@ mydata2 <- copy(mydata)
 mydata2[, LOAD := LOAD * 1.2]
 
 test_that("Differences are correctly computed", {
-  res <- compare(mydata, mydata2, "diff")
+  res <- antaresProcessing::compare(mydata, mydata2, "diff")
   expect_equal(res$LOAD, mydata$LOAD * 0.2)
 })
 
 test_that("Ratios are correctly computed", {
-  res <- compare(mydata, mydata2, "ratio")
+  res <- antaresProcessing::compare(mydata, mydata2, "ratio")
   expect_true(all(res$LOAD - 1.2 < 1e-10))
 })
 
 test_that("Evolutions are correctly computed", {
-  res <- compare(mydata, mydata2, "rate")
+  res <- antaresProcessing::compare(mydata, mydata2, "rate")
   expect_true(all(res$LOAD - 0.2 < 1e-10))
 })
 
+test_that("if x = y, then the res is idential to x",
+         {
+           data1 <- readAntares(areas = c("a", "b"), select = c("LOAD", "BALANCE"),
+                                timeStep = "hourly", showProgress = FALSE)
+           data2 <- readAntares(areas = c("a", "b"), select = c("LOAD", "BALANCE"),
+                                timeStep = "hourly", showProgress = FALSE)
 
+          expect_true(identical(data1, data2))
+          res <- antaresProcessing::compare(data1, data2)
+          for (t in names(attributes(data1))) {
+            if (class(attr(data1, t)) != "externalptr" & t != "type" & t != "opts"){
+              print(t)
+              expect_true(all(attr(data1, t) == attr(res, t)),
+                          paste0("attr(data1, t) : ", attr(data1, t) ," != ", "attr(res, t) : ", attr(res, t) ))
+            }
+          }
+})
+
+# x can be an antaresDataList (y also)
+# attr res = attr x whan x = y
+
+test_that("x and y can be antaresDataList ", {
+  data1 <- readAntares(areas = c("a", "b"), links = "all", select = c("LOAD", "BALANCE"),
+                       timeStep = "hourly", showProgress = FALSE)
+  data2 <- readAntares(areas = c("a", "c"), links = "all", select = c("LOAD", "BALANCE"),
+                       timeStep = "hourly", showProgress = FALSE)
+  res <- antaresProcessing::compare(data1, data2)
+
+
+
+})
