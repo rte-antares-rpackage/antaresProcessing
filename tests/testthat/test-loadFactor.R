@@ -33,8 +33,8 @@ describe("loadFactor", {
 
     expect_true(all(lfA$loadFactorAvailable %between% c(0 - 1e-7, 1 + 1e-7)))
 
-    expect_equal(max(lfA$loadFactorAvailable), 1)
-    expect_equal(min(lfA$loadFactorAvailable), 0)
+    expect_equal(max(lfA$loadFactorAvailable, na.rm = TRUE), 1)
+    expect_equal(min(lfA$loadFactorAvailable, na.rm = TRUE), 0)
 
   })
 
