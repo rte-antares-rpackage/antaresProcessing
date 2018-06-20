@@ -1,15 +1,15 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-#' Compare the surpluses of two simulations
+#' Compare the surpluses of two simulations or two antaresData
 #'
 #' \code{compare} has been designed to compare two surpluses created with function
 #' \code{\link{surplus}} but it can be used to compare the values of two tables of
-#' class \code{antaresDataTable} that contain the same type of data.
+#' class \code{antaresData} that contain the same type of data.
 #'
 #' @param x
-#'   Table of class \code{antaresDataTable}
+#'   Table of class \code{antaresData}
 #' @param y
-#'   Table of class \code{antaresDataTable}. It must contain the same type of data
+#'   Table of class \code{antaresData}. It must contain the same type of data
 #'   than 'x': if 'x' contains areas, it must contain areas, ... Moreover it has
 #'   to have same time step and contain either synthetic or detailed results like
 #'   'x'.
@@ -46,13 +46,29 @@
 compare <- function(x, y, method=c("diff", "ratio", "rate")) {
   method <- match.arg(method)
 
-  if (!is(x, "antaresDataTable")) stop("'x' must be a data.table of class 'antaresDataTable'")
-  if (!is(y, "antaresDataTable")) stop("'y' must be a data.table of class 'antaresDataTable'")
+  if (!is(x, "antaresData")) stop("'x' must be a data.table of class 'antaresData'")
+  if (!is(y, "antaresData")) stop("'y' must be a data.table of class 'antaresData'")
+
+  if (is(x, "antaresDataList")) {
+    if (!suppressWarnings(all(names(x) == names(y)))){
+      stop(paste0(" x and y must have the same names, names(x) :", paste(names(x), collapse = ", "),
+                  " names(y) : ", paste(names(y), collapse = ", ")))
+    }else{
+      res <- list()
+      for (i in names(x)){
+        res[[i]] <- compare(x[[i]], y[[i]], method)
+      }
+      attrs <- attributes(x)
+      .addClassAndAttributes(res, synthesis = attrs$synthesis, timeStep = attrs$timeStep,
+                             type = paste0(attrs$type, "Comparison"), opts = attrs$opts)
+      return(res)
+    }
+  }
 
   # Check that x and y are comparable
   for (t in c("type", "timeStep", "synthesis")) {
     if (attr(x, t) != attr(y, t)) {
-      stop("'x' and 'y' are not comparable. 'x' has ",t, " = ", attr(x, t),
+      stop("'x' and 'y' are not comparable. 'x' has ", t, " = ", attr(x, t),
            " while 'y' has ", t, " = ", attr(y, t))
     }
   }

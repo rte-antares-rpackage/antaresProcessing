@@ -2,14 +2,14 @@
 % Please edit documentation in R/compare.R
 \name{compare}
 \alias{compare}
-\title{Compare the surpluses of two simulations}
+\title{Compare the surpluses of two simulations or two antaresData}
 \usage{
 compare(x, y, method = c("diff", "ratio", "rate"))
 }
 \arguments{
-\item{x}{Table of class \code{antaresDataTable}}
+\item{x}{Table of class \code{antaresData}}
 
-\item{y}{Table of class \code{antaresDataTable}. It must contain the same type of data
+\item{y}{Table of class \code{antaresData}. It must contain the same type of data
 than 'x': if 'x' contains areas, it must contain areas, ... Moreover it has
 to have same time step and contain either synthetic or detailed results like
 'x'.}
@@ -27,7 +27,7 @@ difference, ratio or rate of change.
 \description{
 \code{compare} has been designed to compare two surpluses created with function
 \code{\link{surplus}} but it can be used to compare the values of two tables of
-class \code{antaresDataTable} that contain the same type of data.
+class \code{antaresData} that contain the same type of data.
 }
 \examples{
 \dontrun{
