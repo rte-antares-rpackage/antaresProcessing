@@ -61,6 +61,8 @@ compare <- function(x, y, method=c("diff", "ratio", "rate")) {
       attrs <- attributes(x)
       res <- .addClassAndAttributes(res, synthesis = attrs$synthesis, timeStep = attrs$timeStep,
                              type = paste0(attrs$type, "Comparison"), opts = attrs$opts)
+
+      res <- antaresRead::as.antaresDataList(res)
       return(res)
     }
   }
@@ -96,9 +98,10 @@ compare <- function(x, y, method=c("diff", "ratio", "rate")) {
 
   res <- res[, sharedVars, with = FALSE]
 
+  #type = paste0(attrs$type, "Comparison")
   res <- .addClassAndAttributes(res, synthesis = attrs$synthesis, timeStep = attrs$timeStep,
-                         type = paste0(attrs$type, "Comparison"), opts = attrs$opts)
+                                type = attrs$type, opts = attrs$opts)
 
-  res
+  res <- antaresRead::as.antaresDataTable(res)
 
 }
