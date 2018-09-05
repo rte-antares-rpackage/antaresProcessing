@@ -43,7 +43,7 @@ mydata <- readAntares(c("a", "b"), select = c("LOAD"),
                       timeStep = "annual", showProgress = FALSE)
 
 mydata2 <- copy(mydata)
-mydata2[, LOAD := LOAD * 1.2]
+mydata2 <- mydata2[, LOAD := LOAD * 1.2]
 
 test_that("Differences are correctly computed", {
   res <- antaresProcessing::compare(mydata, mydata2, "diff")
@@ -158,4 +158,29 @@ test_that("x and y can be antaresDataList, diff must work ", {
   expect_equal(res$links[link == "b - c", `FLOW LIN.`], rep(10000, 336))
   expect_equal(res$clusters[area == "c" & cluster == "base", production ],  data1$clusters[area == "c" & cluster == "base", production ]*0.8)
   expect_equal(res$districts[, `MRG. PRICE` ], rep(1.20, 336))
+})
+
+test_that("compare return a warning when diff is empty, no row", {
+  opts <- setSimulationPath(studyPath)
+  data1 <- suppressWarnings(readAntares(
+    areas = c("a", "b"),
+    timeStep = "hourly",
+    showProgress = FALSE))
+  data2 <- suppressWarnings(readAntares(
+    areas = c("a", "b"),
+    timeStep = "hourly",
+    showProgress = FALSE))
+  res <- antaresProcessing::compare(data1, data2)
+  expect_equal(dim(res)[1], 672)
+  data1 <- suppressWarnings(readAntares(
+    areas = c("a", "b"),
+    timeStep = "hourly",
+    showProgress = FALSE,
+    mcYears = 1))
+  data2 <- suppressWarnings(readAntares(
+    areas = c("a", "b"),
+    timeStep = "hourly",
+    showProgress = FALSE,
+    mcYears = 2))
+  expect_warning(antaresProcessing::compare(data1, data2))
 })

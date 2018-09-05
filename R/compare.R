@@ -133,5 +133,12 @@ compare <- function(x, y, method=c("diff", "ratio", "rate")) {
                                 type = attrs$type, opts = attrs$opts)
 
   res <- antaresRead::as.antaresDataTable(res)
-
+  # if compare is empty return a warning
+  # no rows
+  if(dim(res)[1]==0){
+    warning("compare is empty, x and y must the same ids. For example, table 'areas' of x and y must contains the same values for 'area', 'mcYear', 'timeId', 'time', 'day', 'month' and 'hour'.")
+    return(NULL)
+  }else{
+    return(res)
+  }
 }

@@ -1,7 +1,7 @@
 Package: antaresProcessing
 Type: Package
 Title: 'Antares' Results Processing
-Version: 0.15.3.900
+Version: 0.15.3.910
 Date: 2018-06-01
 Authors@R: c(
     person("Jalal-Edine", "ZAWAM", , "jalal-edine.zawam@rte-france.com", role = c("aut", "cre")),
@@ -25,7 +25,7 @@ LazyData: TRUE
 Depends: antaresRead (>= 1.1.5)
 Imports: data.table, methods, stats
 Suggests: rhdf5 (>= 2.20.0), parallel, testthat, knitr, rmarkdown, covr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 VignetteBuilder: knitr
 Encoding: UTF-8
 biocViews: Infrastructure, DataImport
