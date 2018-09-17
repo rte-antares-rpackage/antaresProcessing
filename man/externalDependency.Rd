@@ -4,7 +4,8 @@
 \alias{externalDependency}
 \title{External Dependencies in imports and exports}
 \usage{
-externalDependency(x, timeStep = "annual", synthesis = FALSE, opts = NULL)
+externalDependency(x, timeStep = "annual", synthesis = FALSE,
+  opts = NULL)
 }
 \arguments{
 \item{x}{An object created with function \code{\link[antaresRead]{readAntares}}. It
