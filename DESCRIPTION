@@ -24,7 +24,7 @@ License: GPL (>= 2) | file LICENSE
 LazyData: TRUE
 Depends: antaresRead (>= 1.1.5)
 Imports: data.table, methods, stats
-Suggests: rhdf5 (>= 2.20.0), parallel, testthat, knitr, rmarkdown, covr
+Suggests: rhdf5 (>= 2.24.0), parallel, testthat, knitr, rmarkdown, covr
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr
 Encoding: UTF-8

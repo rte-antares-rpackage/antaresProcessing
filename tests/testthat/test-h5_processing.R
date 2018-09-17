@@ -6,7 +6,7 @@ skipFunctionH5<-function(){
   if(!is.null(h5file)){
     skip_if(!check_if_h5_is_in_tmp(h5file), "h5file is not in temp folder")
   }
-  skip_if_not_installed("rhdf5", minimum_version = 2.20)
+  skip_if_not(.requireRhdf5_Antares(stopP = FALSE))
 
   #I dont why but according to CRAN Team antaresProcessing try to write in the user library
   # but there are checks to verify that h5 file is in tmp folder

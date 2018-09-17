@@ -121,12 +121,9 @@ pkgEnv <- antaresRead:::pkgEnv
 
 #-----------------------------  HDF5 ------------------------------------#
 
-rhdf5_version <- "2.20.0"
-rhdf5_message <- "This function require 'rhdf5' (>= 2.20.0) package.
-This is a bioconductor package. You can install it with :
-source('https://bioconductor.org/biocLite.R')
-biocLite('rhdf5')"
-
+rhdf5_version <- antaresRead:::.rhdf5_version
+rhdf5_message <- antaresRead:::.rhdf5_message
+.requireRhdf5_Antares <- antaresRead:::.requireRhdf5_Antares
 # Process H5
 
 pkgEnv$process$addNetLoad$areas <- c("netLoad")
