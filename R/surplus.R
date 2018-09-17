@@ -109,7 +109,7 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   # consumer, producer surplus and row balance surplus
   idColsA <- .idCols(x$areas)
   res <- x$areas[,append(mget(idColsA),
-                         .(consumerSurplus = (unsupliedCost[areas] - `MRG. PRICE`) * LOAD,
+                         .(consumerSurplus = (unsupliedCost[area] - `MRG. PRICE`) * LOAD,
                            producerSurplus = `MRG. PRICE` * production - `OP. COST`,
                            rowBalanceSurplus = `MRG. PRICE` * `ROW BAL.`))]
 

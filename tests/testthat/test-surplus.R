@@ -75,3 +75,41 @@ test_that("Surpluses are correctly computed", {
                surplus[area == "a", globalSurplus])
 })
 
+test_that("bug in consumerSurplus, github #38", {
+  opts <- setSimulationPath(studyPath)
+  data <- suppressWarnings(readAntares(areas="all", links = "all", showProgress = FALSE,
+                                       linkCapacity = TRUE, mcYears = 1))
+  # get the reference
+  expect_equal(opts$energyCosts$unserved[["c"]], 10000)
+  resSurplus <- antaresProcessing::surplus(data,
+                                           timeStep = "hourly",
+                                           opts = opts)
+  conSC <- resSurplus[area=="c" & timeId==2690, consumerSurplus]
+  expect_equal(conSC, 503967500)
+  # change the unserved cost for area c
+  opts$energyCosts$unserved[["c"]] <- 0
+  data$areas[area=="c", `MRG. PRICE` := 0]
+  expect_equal(unique(data$areas[area=="c", `MRG. PRICE`]), 0)
+  resSurplus <- antaresProcessing::surplus(data,
+                                           timeStep = "hourly",
+                                           opts = opts)
+  conSC <- resSurplus[area=="c" & timeId==2690, consumerSurplus]
+  expect_equal(conSC, 0)
+  # verification for area b
+  unServedB <- opts$energyCosts$unserved[["b"]]
+  data$areas[, verif := (opts$energyCosts$unserved[area] - `MRG. PRICE`)*LOAD]
+  expect_equal(resSurplus[area=="b", consumerSurplus], data$areas[area == "b", verif])
+  # change the value for area b
+  opts$energyCosts$unserved[["b"]] <- 40000
+  resSurplus <- antaresProcessing::surplus(data,
+                                           timeStep = "hourly",
+                                           opts = opts)
+  data$areas[, verif := (opts$energyCosts$unserved[area] - `MRG. PRICE`)*LOAD]
+  expect_equal(resSurplus[area=="b", consumerSurplus], data$areas[area == "b", verif])
+  expect_gt(min(resSurplus[area=="b", consumerSurplus]), max(resSurplus[area=="a", consumerSurplus]))
+  # set the initial values
+  opts <- setSimulationPath(studyPath)
+  data <- suppressWarnings(readAntares(areas="all", links = "all", showProgress = FALSE,
+                                       linkCapacity = TRUE, mcYears = 1))
+})
+
