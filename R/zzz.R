@@ -121,8 +121,8 @@ pkgEnv <- antaresRead:::pkgEnv
 
 #-----------------------------  HDF5 ------------------------------------#
 
-rhdf5_version <- antaresRead:::.rhdf5_version
-rhdf5_message <- antaresRead:::.rhdf5_message
+rhdf5_version <- antaresRead:::rhdf5_version
+rhdf5_message <- antaresRead:::rhdf5_message
 .requireRhdf5_Antares <- antaresRead:::.requireRhdf5_Antares
 # Process H5
 
