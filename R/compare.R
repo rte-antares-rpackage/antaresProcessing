@@ -40,20 +40,40 @@
 #'
 #' compare(surplus1, surplus2)
 #'
-#' opts1<-setSimulationPath(studyPath,-1)
-#' mydata1<-readAntares(areas = "all", links = "all", select=c("allAreas", "allLinks"), mcYears = c(1), linkCapacity = TRUE)
+#' opts1 <- setSimulationPath(studyPath,-1)
+#' mydata1<-readAntares(areas = "all",
+#' links = "all",
+#' select = c("allAreas", "allLinks"),
+#' mcYears = c(1),
+#' linkCapacity = TRUE)
 #'
-#' opts2<-setSimulationPath(studyPath,-2)
-#' mydata2<-readAntares(areas = "all", links = "all", select=c("allAreas", "allLinks"), mcYears = c(1), linkCapacity = TRUE)
+#' opts2 <- setSimulationPath(studyPath,-2)
+#' mydata2 <- readAntares(areas = "all",
+#' links = "all",
+#' select = c("allAreas", "allLinks"),
+#' mcYears = c(1),
+#' linkCapacity = TRUE)
 #'
-#' opts3<-setSimulationPath(studyPath,-3)
-#' mydata3<-readAntares(areas = "all", links = "all", select=c("allAreas", "allLinks"), mcYears = c(1), linkCapacity = TRUE)
+#' opts3 <- setSimulationPath(studyPath,-3)
+#' mydata3 <- readAntares(areas = "all",
+#' links = "all",
+#' select = c("allAreas", "allLinks"),
+#' mcYears = c(1),
+#' linkCapacity = TRUE)
 #'
-#' opts4<-setSimulationPath(studyPath, -4)
-#' mydata4<-readAntares(areas = "all", links = "all", select=c("allAreas", "allLinks"), mcYears = c(1), linkCapacity = TRUE)
+#' opts4 <- setSimulationPath(studyPath, -4)
+#' mydata4 <- readAntares(areas = "all",
+#' links = "all",
+#' select=c("allAreas", "allLinks"),
+#' mcYears = c(1),
+#' linkCapacity = TRUE)
 #'
-#' opts5<-setSimulationPath(studyPath, -5)
-#' mydata5<-readAntares(areas = "all", links = "all", select=c("allAreas", "allLinks"), mcYears = c(1), linkCapacity = TRUE)
+#' opts5 <- setSimulationPath(studyPath, -5)
+#' mydata5 <- readAntares(areas = "all",
+#' links = "all",
+#' select=c("allAreas", "allLinks"),
+#' mcYears = c(1),
+#' linkCapacity = TRUE)
 #'
 #' resCompare1 <- compare(mydata2, mydata1, method = "diff")
 #' resCompare2 <- compare(mydata3, mydata1, method = "diff")
@@ -62,12 +82,13 @@
 #'
 #' listCompare <- list(resCompare1, resCompare2, resCompare3, resCompare4)
 #'
-#' for( i in 1:length(listCompare)){
+#' for (i in 1:length(listCompare)){
 #' listCompare[[i]] <- removeVirtualAreas(listCompare[[i]],
-#'                                        storageFlexibility = getAreas(select = c("z_dsr", "y_mul", "pum", "tur" )))
+#'                                        storageFlexibility =
+#'                                        getAreas(select = c("z_dsr", "y_mul", "pum", "tur")))
 #' }
 #'
-#' ml <- readRDS(""path/to/mapLayout.rds")
+#' ml <- readRDS("path/to/mapLayout.rds")
 #' plotMap(listCompare, ml)
 #' }
 #'
