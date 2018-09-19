@@ -62,16 +62,24 @@ describe("externalDependency", {
   })
 
   it("works with virtual nodes", {
-    mydata <- suppressWarnings({readAntares(areas = "all", districts ="all", links = "all", showProgress = FALSE, hydroStorageMaxPower = TRUE, linkCapacity = TRUE)})
+    mydata <- suppressWarnings({readAntares(areas = "all",
+                                            districts ="all",
+                                            links = "all",
+                                            showProgress = FALSE,
+                                            hydroStorageMaxPower = TRUE,
+                                            linkCapacity = TRUE,
+                                            mcYears = 1)})
     attrMyData<-attributes(mydata)
     expect_true(is.null(attrMyData$virtualNodes))
 
-    mydataCorrected <- removeVirtualAreas(mydata, storageFlexibility = c(getAreas("psp"),getAreas("hub")))
-    attrMyDataCorrected<-attributes(mydataCorrected)
+    mydataCorrected <- removeVirtualAreas(mydata,
+                                          storageFlexibility = c(getAreas("psp"),
+                                                                 getAreas("hub")))
+    attrMyDataCorrected <- attributes(mydataCorrected)
     expect_false(is.null(attrMyDataCorrected$virtualNodes))
 
-    mydataCorrected<-addNetLoad(mydataCorrected, ignoreMustRun = TRUE)
-    res<-externalDependency(mydataCorrected, timeStep = "hourly")
+    mydataCorrected <- addNetLoad(mydataCorrected, ignoreMustRun = TRUE)
+    res <- externalDependency(mydataCorrected, timeStep = "hourly")
     expect_true(is.null(res$links))
     expect_false(is.null(res$areas$exportsFrequency))
     expect_false(is.null(res$districts$exportsLevel))

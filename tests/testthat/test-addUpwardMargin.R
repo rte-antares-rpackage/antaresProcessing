@@ -8,7 +8,7 @@ data <- suppressWarnings(readAntares(
   hydroStorageMaxPower = TRUE, linkCapacity = TRUE,
   showProgress = FALSE
 ))
-dataCor <- removeVirtualAreas(data, getAreas(c("psp", "hub")))
+dataCor <- suppressWarnings(removeVirtualAreas(data, getAreas(c("psp", "hub"))))
 
 describe("addUpwardMargin", {
   it ("adds two columns with isolated and connected upward margins", {
