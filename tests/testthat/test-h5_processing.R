@@ -9,14 +9,9 @@ skipFunctionH5<-function(){
   skip_if_not(.requireRhdf5_Antares(stopP = FALSE),
               "please install a correct rhdf5 version")
 
-  print("res requireRHFD5")
-  print(.requireRhdf5_Antares(stopP = FALSE))
-  print(rhdf5_version)
-  print(requireNamespace("rhdf5", versionCheck = list(op = ">=", version = rhdf5_version)))
-
   #I dont why but according to CRAN Team antaresProcessing try to write in the user library
   # but there are checks to verify that h5 file is in tmp folder
-  #to comment in the futur ?
+  #to comment in the futur
   skip_on_cran()
 }
 
