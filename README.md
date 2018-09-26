@@ -79,6 +79,8 @@ Contributions to the library are welcome and can be submitted in the form of pul
 ## ANTARES :
  Antares is a powerful software developed by RTE to simulate and study electric power systems (more information about Antares here : <https://antares.rte-france.com>).
 
+ANTARES is now an open-source project, you can download the sources [here](https://github.com/AntaresSimulatorTeam/Antares_Simulator) if you want to use this package.
+
 ## License Information:
 
 Copyright 2015-2018 RTE (France)
