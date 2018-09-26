@@ -1,18 +1,18 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-#' Compare the surpluses of two simulations or two antaresData
+#' Compare two simulations or two antaresData
 #'
 #' \code{compare} has been designed to compare two surpluses created with function
 #' \code{\link{surplus}} but it can be used to compare the values of two tables of
 #' class \code{antaresData} that contain the same type of data.
 #'
 #' @param x
-#'   Table of class \code{antaresData}
+#'   Table of class \code{antaresData}. x can be an antaresDataTable or antaresDataList.
 #' @param y
-#'   Table of class \code{antaresData}. It must contain the same type of data
-#'   than 'x': if 'x' contains areas, it must contain areas, ... Moreover it has
-#'   to have same time step and contain either synthetic or detailed results like
-#'   'x'.
+#'   Table of class \code{antaresData}. x can be an antaresDataTable or antaresDataList.
+#'   It must contain the same type of data than 'x': if 'x' contains areas,
+#'   it must contain areas, ... Moreover it has to have same time step and
+#'   contain either synthetic or detailed results like 'x'.
 #' @param method
 #'   Method used two compare the two tables. \code{"diff"} compute the difference
 #'   between 'y' and 'x'. \code{"ratio"} computes the ratio between 'y' and 'x'.

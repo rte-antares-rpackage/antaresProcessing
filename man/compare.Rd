@@ -2,17 +2,17 @@
 % Please edit documentation in R/compare.R
 \name{compare}
 \alias{compare}
-\title{Compare the surpluses of two simulations or two antaresData}
+\title{Compare two simulations or two antaresData}
 \usage{
 compare(x, y, method = c("diff", "ratio", "rate"))
 }
 \arguments{
-\item{x}{Table of class \code{antaresData}}
+\item{x}{Table of class \code{antaresData}. x can be an antaresDataTable or antaresDataList.}
 
-\item{y}{Table of class \code{antaresData}. It must contain the same type of data
-than 'x': if 'x' contains areas, it must contain areas, ... Moreover it has
-to have same time step and contain either synthetic or detailed results like
-'x'.}
+\item{y}{Table of class \code{antaresData}. x can be an antaresDataTable or antaresDataList.
+It must contain the same type of data than 'x': if 'x' contains areas,
+it must contain areas, ... Moreover it has to have same time step and
+contain either synthetic or detailed results like 'x'.}
 
 \item{method}{Method used two compare the two tables. \code{"diff"} compute the difference
 between 'y' and 'x'. \code{"ratio"} computes the ratio between 'y' and 'x'.
