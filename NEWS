@@ -1,6 +1,6 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
-Changes in version 0.15.4 (2018-09-17)
+Changes in version 0.16.0 (2018-09-28)
 
 NEW FEATURES:
 * compare() can now compare two antaresDataList.
