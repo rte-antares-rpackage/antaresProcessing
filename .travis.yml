@@ -20,7 +20,7 @@ r:
 
 r_github_packages:
  - hadley/devtools#1263
- - rte-antares-rpackage/antares-rpackageRead@next_release_211
+ - rte-antares-rpackage/antaresRead@next_release
 #before - Bioconductor-mirror/zlibbioc
 # - Bioconductor-mirror/rhdf5
 #after
@@ -43,3 +43,7 @@ r_packages:
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
+
+env:
+  global:
+  - _R_CHECK_FORCE_SUGGESTS_=FALSE

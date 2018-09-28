@@ -27,7 +27,7 @@ build_script:
 #  - ./travis-tool.sh install_github Bioconductor-mirror/rhdf5
 #after
   - travis-tool.sh install_bioc_deps
-  - ./travis-tool.sh install_github rte-antares-rpackage/antaresRead@next_release_211
+  - ./travis-tool.sh install_github rte-antares-rpackage/antaresRead@next_release
 
 test_script:
   - travis-tool.sh run_tests

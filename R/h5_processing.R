@@ -155,7 +155,7 @@ addProcessingH5 <- function(opts = simOptions(),
   ##Load removeVirtAreas
   if(allStraitments$surplus == TRUE)
   {
-    if(!requireNamespace("rhdf5", versionCheck = list(op = ">=", version = rhdf5_version))) stop(rhdf5_message)
+    .requireRhdf5_Antares(stopP = TRUE)
     fid <- rhdf5::H5Fopen(opts$h5path)
     removeAre <- .loadAttributes(fid, "hourly")
     rhdf5::H5Fclose(fid)
@@ -323,7 +323,7 @@ addProcessingH5 <- function(opts = simOptions(),
 .writeAllTables <- function(timeStep, mcY, path, outToWrite,
                             areas, links, clusters, districts,
                             mcYear = NULL, writeStruct = FALSE){
-  if(!requireNamespace("rhdf5", versionCheck = list(op = ">=", version = rhdf5_version))) stop(rhdf5_message)
+  .requireRhdf5_Antares(stopP = TRUE)
   fid <- rhdf5::H5Fopen(path)
   sapply(c("areas", "links", "clusters", "districts"), function(X){
     if(get(X)){
@@ -343,7 +343,7 @@ addProcessingH5 <- function(opts = simOptions(),
 
 .getDim <- function(fid, GP, type = "size")
 {
-  if(!requireNamespace("rhdf5", versionCheck = list(op = ">=", version = rhdf5_version))) stop(rhdf5_message)
+  .requireRhdf5_Antares(stopP = TRUE)
   did <- rhdf5::H5Dopen(fid, GP)
   rhdf5::H5Dget_space(did)
   res <- rhdf5::H5Dget_space(did)
@@ -486,7 +486,7 @@ addProcessingH5 <- function(opts = simOptions(),
 .writeNewColumns <- function(fid, newdata, GP, mcYear = NULL, writeStruct = FALSE)
 {
 
-  if(!requireNamespace("rhdf5", versionCheck = list(op = ">=", version = rhdf5_version))) stop(rhdf5_message)
+  .requireRhdf5_Antares(stopP = TRUE)
 
   nbVarToWrite <- ncol(newdata)
   namesVariable <- colnames(newdata)
@@ -776,7 +776,7 @@ addProcessingH5 <- function(opts = simOptions(),
 
 .loadAttributes <- function(fid, timeStep){
 
-  if(!requireNamespace("rhdf5", versionCheck = list(op = ">=", version = rhdf5_version))) stop(rhdf5_message)
+  .requireRhdf5_Antares(stopP = TRUE)
 
   if(rhdf5::H5Lexists(fid, paste0(timeStep, "/attrib")))
   {

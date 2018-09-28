@@ -8,7 +8,7 @@ data <- suppressWarnings(readAntares(
   linkCapacity = TRUE, mustRun = TRUE,
   showProgress = FALSE
 ))
-dataCor <- removeVirtualAreas(data, getAreas("psp"))
+dataCor <- suppressWarnings(removeVirtualAreas(data, getAreas("psp")))
 
 describe("addDownwardMargin", {
   it("adds two columns with isolated and interconnected downward margins", {

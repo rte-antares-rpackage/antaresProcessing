@@ -2,17 +2,17 @@
 % Please edit documentation in R/compare.R
 \name{compare}
 \alias{compare}
-\title{Compare the surpluses of two simulations}
+\title{Compare two simulations or two antaresData}
 \usage{
 compare(x, y, method = c("diff", "ratio", "rate"))
 }
 \arguments{
-\item{x}{Table of class \code{antaresDataTable}}
+\item{x}{Table of class \code{antaresData}. x can be an antaresDataTable or antaresDataList.}
 
-\item{y}{Table of class \code{antaresDataTable}. It must contain the same type of data
-than 'x': if 'x' contains areas, it must contain areas, ... Moreover it has
-to have same time step and contain either synthetic or detailed results like
-'x'.}
+\item{y}{Table of class \code{antaresData}. x can be an antaresDataTable or antaresDataList.
+It must contain the same type of data than 'x': if 'x' contains areas,
+it must contain areas, ... Moreover it has to have same time step and
+contain either synthetic or detailed results like 'x'.}
 
 \item{method}{Method used two compare the two tables. \code{"diff"} compute the difference
 between 'y' and 'x'. \code{"ratio"} computes the ratio between 'y' and 'x'.
@@ -27,7 +27,7 @@ difference, ratio or rate of change.
 \description{
 \code{compare} has been designed to compare two surpluses created with function
 \code{\link{surplus}} but it can be used to compare the values of two tables of
-class \code{antaresDataTable} that contain the same type of data.
+class \code{antaresData} that contain the same type of data.
 }
 \examples{
 \dontrun{
@@ -44,6 +44,57 @@ mydata2 <- readAntares("all", "all", synthesis = FALSE)
 surplus2 <- surplus(mydata2, groupByDistrict = TRUE)
 
 compare(surplus1, surplus2)
+
+opts1 <- setSimulationPath(studyPath,-1)
+mydata1<-readAntares(areas = "all",
+links = "all",
+select = c("allAreas", "allLinks"),
+mcYears = c(1),
+linkCapacity = TRUE)
+
+opts2 <- setSimulationPath(studyPath,-2)
+mydata2 <- readAntares(areas = "all",
+links = "all",
+select = c("allAreas", "allLinks"),
+mcYears = c(1),
+linkCapacity = TRUE)
+
+opts3 <- setSimulationPath(studyPath,-3)
+mydata3 <- readAntares(areas = "all",
+links = "all",
+select = c("allAreas", "allLinks"),
+mcYears = c(1),
+linkCapacity = TRUE)
+
+opts4 <- setSimulationPath(studyPath, -4)
+mydata4 <- readAntares(areas = "all",
+links = "all",
+select=c("allAreas", "allLinks"),
+mcYears = c(1),
+linkCapacity = TRUE)
+
+opts5 <- setSimulationPath(studyPath, -5)
+mydata5 <- readAntares(areas = "all",
+links = "all",
+select=c("allAreas", "allLinks"),
+mcYears = c(1),
+linkCapacity = TRUE)
+
+resCompare1 <- compare(mydata2, mydata1, method = "diff")
+resCompare2 <- compare(mydata3, mydata1, method = "diff")
+resCompare3 <- compare(mydata4, mydata1, method = "diff")
+resCompare4 <- compare(mydata5, mydata1, method = "diff")
+
+listCompare <- list(resCompare1, resCompare2, resCompare3, resCompare4)
+
+for (i in 1:length(listCompare)){
+listCompare[[i]] <- removeVirtualAreas(listCompare[[i]],
+                                       storageFlexibility =
+                                       getAreas(select = c("z_dsr", "y_mul", "pum", "tur")))
+}
+
+ml <- readRDS("path/to/mapLayout.rds")
+plotMap(listCompare, ml)
 }
 
 }

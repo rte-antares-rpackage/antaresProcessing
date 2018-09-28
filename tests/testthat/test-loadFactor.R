@@ -28,7 +28,14 @@ describe("loadFactor", {
   lfA <- suppressWarnings(loadFactor(mydata, loadFactorAvailable = TRUE))
 
   it("returns values between 0 and 1", {
-    expect_true(all(lfA$loadFactorAvailable %between% c(0, 1)))
+    #due to travis precision #bug
+    #see https://travis-ci.org/rte-antares-rpackage/antaresProcessing/jobs/394465604
+
+    expect_true(all(na.omit(lfA$loadFactorAvailable) %between% c(0 - 1e-7, 1 + 1e-7)))
+
+    expect_equal(max(lfA$loadFactorAvailable, na.rm = TRUE), 1)
+    expect_equal(min(lfA$loadFactorAvailable, na.rm = TRUE), 0)
+
   })
 
 })

@@ -1,5 +1,14 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
+Changes in version 0.16.0 (2018-09-28)
+
+NEW FEATURES:
+* compare() can now compare two antaresDataList.
+
+BUGFIXES:
+* surplus() : 'consumerSurplus' was incorrectly computed.
+* antaresRead::writeAntaresH5() was not working anymore due to a new version of rhdf5 (h5close() does not work anymore).
+
 Changes in version 0.15.3 (2018-06-01)
 
 BUGFIXES:

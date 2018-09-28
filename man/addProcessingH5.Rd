@@ -9,10 +9,11 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
   addUpwardMargin = FALSE, addExportAndImport = FALSE,
   addLoadFactorLink = FALSE, externalDependency = FALSE,
   loadFactor = FALSE, modulation = FALSE, netLoadRamp = FALSE,
-  surplus = FALSE, surplusClusters = FALSE, thermalAvailabilities = FALSE,
-  linkCapacity = FALSE, mustRun = FALSE, allProcess = FALSE,
-  evalAreas = list(), evalLinks = list(), evalClusters = list(),
-  evalDistricts = list(), nThreads = 1)
+  surplus = FALSE, surplusClusters = FALSE,
+  thermalAvailabilities = FALSE, linkCapacity = FALSE,
+  mustRun = FALSE, allProcess = FALSE, evalAreas = list(),
+  evalLinks = list(), evalClusters = list(), evalDistricts = list(),
+  nThreads = 1)
 }
 \arguments{
 \item{opts}{\code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}}
