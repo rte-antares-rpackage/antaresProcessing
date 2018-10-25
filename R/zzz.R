@@ -80,6 +80,12 @@
     c("areas", "clusters", "mcYears", "WIND", "SOLAR", "H. ROR", "H. STOR",
       "MRG. PRICE")
   )
+
+  setAlias(
+    "correctBalance",
+    "Data required by function 'correctBalance()'",
+    c("areas", "BALANCE", "ROW BAL.")
+  )
   sapply(names(pkgEnv$process), function(X){
     tpAlias <- pkgEnv$process[[X]]
     X <- paste0("Out_", X)
@@ -116,6 +122,12 @@ globalVariables(
 .idCols <- antaresRead:::.idCols
 .addClassAndAttributes <- antaresRead:::.addClassAndAttributes
 .groupByDistrict <- antaresRead:::.groupByDistrict
+.check_x <- antaresRead:::.check_x
+.h5Antares_edit_variable <- antaresRead:::.h5Antares_edit_variable
+#.skipFunctionH5 <- antaresRead:::.skipFunctionH5
+#.check_if_h5_is_in_tmp <- antaresRead:::.check_if_h5_is_in_tmp
+.isSimOpts <- antaresRead:::.isSimOpts
+.get_by_area <- antaresRead:::.get_by_area
 
 pkgEnv <- antaresRead:::pkgEnv
 
@@ -127,6 +139,8 @@ pkgEnv <- antaresRead:::pkgEnv
 pkgEnv$process$addNetLoad$areas <- c("netLoad")
 pkgEnv$process$addNetLoad$districts <- c("netLoad")
 
+pkgEnv$process$correctBalance$areas <- c("oldBalance")
+pkgEnv$process$correctBalance$districts <- c("oldBalance")
 
 pkgEnv$process$addDownwardMargin$areas <- c("isolatedDownwardMargin",
                                                       "interconnectedDownwardMargin")
@@ -217,3 +231,43 @@ pkgEnv$processDispo <- data.frame(
                  "surplusClusters"
   ))
 
+
+.check_if_h5_is_in_tmp<-function(h5filePath=NULL, path=NULL, stop=FALSE, printMessage=TRUE){
+
+  resH5NotInTmp<-!grepl("Temp", h5filePath, ignore.case = TRUE) & !grepl("tmp", h5filePath, ignore.case = TRUE)
+  if(resH5NotInTmp){
+    if(printMessage){
+      print(paste0("h5file : ", h5filePath))
+      print(paste0("path : ", path))
+    }
+  }else{
+    return(TRUE)
+  }
+
+  messageToPrint<-"h5file is not in temp folder"
+  if(stop & resH5NotInTmp){
+    stop(messageToPrint)
+  }
+  if(resH5NotInTmp){
+    if(printMessage){
+      message(messageToPrint)
+    }
+  }
+
+  return(FALSE)
+}
+
+
+.skipFunctionH5<-function(h5file = NULL){
+  testthat::skip_if(is.null(h5file), "h5file is null")
+  if(!is.null(h5file)){
+    testthat::skip_if(!.check_if_h5_is_in_tmp(h5file), "h5file is not in temp folder")
+  }
+  testthat::skip_if_not(.requireRhdf5_Antares(stopP = FALSE),
+                        "please install a correct rhdf5 version")
+
+  #I dont why but according to CRAN Team antaresProcessing try to write in the user library
+  # but there are checks to verify that h5 file is in tmp folder
+  #to comment in the futur
+  testthat::skip_on_cran()
+}

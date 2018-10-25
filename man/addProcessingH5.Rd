@@ -7,9 +7,9 @@
 addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
   timeStep = "hourly", addNetLoad = FALSE, addDownwardMargin = FALSE,
   addUpwardMargin = FALSE, addExportAndImport = FALSE,
-  addLoadFactorLink = FALSE, externalDependency = FALSE,
-  loadFactor = FALSE, modulation = FALSE, netLoadRamp = FALSE,
-  surplus = FALSE, surplusClusters = FALSE,
+  addLoadFactorLink = FALSE, correctBalance = FALSE,
+  externalDependency = FALSE, loadFactor = FALSE, modulation = FALSE,
+  netLoadRamp = FALSE, surplus = FALSE, surplusClusters = FALSE,
   thermalAvailabilities = FALSE, linkCapacity = FALSE,
   mustRun = FALSE, allProcess = FALSE, evalAreas = list(),
   evalLinks = list(), evalClusters = list(), evalDistricts = list(),
@@ -31,6 +31,8 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
 \item{addExportAndImport}{\code{boolean} refer to \link[antaresProcessing]{addExportAndImport}}
 
 \item{addLoadFactorLink}{\code{boolean} refer to \link[antaresProcessing]{addLoadFactorLink}}
+
+\item{correctBalance}{\code{boolean} refer to \link[antaresProcessing]{correctBalance}}
 
 \item{externalDependency}{\code{boolean} refer to \link[antaresProcessing]{externalDependency}}
 
@@ -92,6 +94,7 @@ addProcessingH5(opts = opts,  mcY = "mcInd",
                addUpwardMargin = TRUE,
                addExportAndImport = TRUE,
                addLoadFactorLink = TRUE,
+               correctBalance = TRUE,
                externalDependency = TRUE,
                loadFactor = TRUE,
                modulation = TRUE,

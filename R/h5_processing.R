@@ -10,6 +10,7 @@
 #' @param addUpwardMargin \code{boolean} refer to \link[antaresProcessing]{addUpwardMargin}
 #' @param addExportAndImport \code{boolean} refer to \link[antaresProcessing]{addExportAndImport}
 #' @param addLoadFactorLink \code{boolean} refer to \link[antaresProcessing]{addLoadFactorLink}
+#' @param correctBalance \code{boolean} refer to \link[antaresProcessing]{correctBalance}
 #' @param externalDependency \code{boolean} refer to \link[antaresProcessing]{externalDependency}
 #' @param loadFactor \code{boolean} refer to \link[antaresProcessing]{loadFactor}
 #' @param modulation \code{boolean} refer to \link[antaresProcessing]{modulation}
@@ -54,6 +55,7 @@
 #'                addUpwardMargin = TRUE,
 #'                addExportAndImport = TRUE,
 #'                addLoadFactorLink = TRUE,
+#'                correctBalance = TRUE,
 #'                externalDependency = TRUE,
 #'                loadFactor = TRUE,
 #'                modulation = TRUE,
@@ -83,6 +85,7 @@ addProcessingH5 <- function(opts = simOptions(),
                             addUpwardMargin = FALSE,
                             addExportAndImport = FALSE,
                             addLoadFactorLink = FALSE,
+                            correctBalance = FALSE,
                             externalDependency = FALSE,
                             loadFactor = FALSE,
                             modulation = FALSE,
@@ -102,6 +105,12 @@ addProcessingH5 <- function(opts = simOptions(),
 
   if(!isH5Opts(opts)){
     stop("opts not refear to an h5 file")
+  }
+
+  if(correctBalance){
+    try({
+      correctBalance(x = opts)
+    })
   }
 
   allData <- allProcess
@@ -395,7 +404,7 @@ addProcessingH5 <- function(opts = simOptions(),
                      links = ln,
                      clusters = clu,
                      districts = dr,
-                     opts = opts, select = c(select,columnsToSelects),
+                     opts = opts, select = c(select, columnsToSelects),
                      mcYears = mcYears, timeStep = timeStep)
 
   res <- as.antaresDataList(res)
@@ -755,6 +764,7 @@ addProcessingH5 <- function(opts = simOptions(),
       res$clusters <- merge(res$clusters, surplusClusters, by = idC)
     })
   }
+
   options(warn = oldw)
   res
 }
