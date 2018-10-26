@@ -80,3 +80,20 @@ describe("addUpwardMargin", {
   })
 
 })
+
+
+test_that("#32 addUpwardMargin must work with an antaresDataList without virtual areas", {
+  dataT <- suppressWarnings(readAntares(
+    areas = "all", links = "all",
+    select = "upwardMargin",
+    hydroStorageMaxPower = TRUE, linkCapacity = TRUE,
+    showProgress = FALSE
+  ))
+
+  addUpwardMargin(dataT)
+
+  expect_true("isolatedUpwardMargin" %in% names(dataT$areas))
+  expect_true("interconnectedUpwardMargin" %in% names(dataT$areas))
+  expect_gt(max(unique(dataT$areas$isolatedUpwardMargin)), 1)
+  expect_gt(max(unique(dataT$areas$interconnectedUpwardMargin)), 1)
+})
