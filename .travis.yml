@@ -4,6 +4,9 @@ language: R
 sudo: true
 cache: packages
 
+#remove this line when this pull request is closed
+# https://github.com/travis-ci/travis-build/pull/1553
+fortran: false
 
 bioc_required: true
 bioc_use_devel: true
