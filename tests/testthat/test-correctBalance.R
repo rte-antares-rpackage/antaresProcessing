@@ -245,7 +245,6 @@ test_that("h5 : processing correctBalance when mcYear is set to 1 for monthly da
                                   overwrite = TRUE, supressMessages = TRUE))
   pathNewH5File <- file.path(pathNewH5, list.files(pathNewH5))
 
-  pathNewH5File <- "E:\\ANTARES\\Exemple_antares\\1_h5_test\\20170707-1355eco-test.h5"
   optsH5New <- setSimulationPath(path = pathNewH5File)
   .h5Antares_edit_variable(
     pathH5 = pathNewH5File,
