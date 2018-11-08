@@ -10,7 +10,6 @@
 #' @return
 #' \code{addMonotones} modifies its input by adding monotones.
 #'
-#' @inheritParams addUpwardMargin
 #'
 #' @examples
 #' \dontrun{
