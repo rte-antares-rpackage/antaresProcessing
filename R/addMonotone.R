@@ -54,7 +54,6 @@ addMonotones <- function(antaresData = NULL, variable = NULL){
       }
     }
   }else{
-
     if(!(variable %in% names(antaresData))){
       stop("Incorrect variable")
     }
@@ -80,7 +79,6 @@ addMonotones <- function(antaresData = NULL, variable = NULL){
     #variable to take from x
     idCols <- .idCols(antaresData)
     varToTake <- variable
-
 
     antaresDataCopy <- copy(antaresData[, mget(c(idCols, varToTake))])
     #by of x
