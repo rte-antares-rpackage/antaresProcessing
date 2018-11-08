@@ -18,7 +18,7 @@ Formulas :
 }
 }
 \description{
-This function correct the BALANCE with 'ROW BAL.'.
+This function corrects the BALANCE with 'ROW BAL.'.
 }
 \examples{
 \dontrun{

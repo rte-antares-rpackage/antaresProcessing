@@ -2,7 +2,7 @@
 
 #' correctBalance
 #'
-#' This function correct the BALANCE with 'ROW BAL.'.
+#' This function corrects the BALANCE with 'ROW BAL.'.
 #'
 #' @return
 #' \code{correctBalance} modifies its input by editing BALANCE and 'ROW BAL.'.
