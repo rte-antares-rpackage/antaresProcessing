@@ -3,9 +3,13 @@
 #' addMonotones
 #'
 #' This function compute monotone for some variables.
+#' @param antaresData Object of class \code{antaresData} created with function
+#'   \code{\link[antaresRead]{readAntares}}.
+#' @param variable An ANTARES variable.
 #'
 #' @return
 #' \code{addMonotones} modifies its input by adding monotones.
+#'
 #' @inheritParams addUpwardMargin
 #'
 #' @examples
@@ -14,43 +18,84 @@
 #' studyPath <- "path/to/study/"
 #'
 #' setSimulationPath(studyPath, 1)
-#' mydata1 <- readAntares(areas = "all", districts = "all", synthesis = FALSE)
-#' addMonotones(mydata1)
+#' myData1 <- readAntares(areas = "all",
+#' districts = "all", synthesis = FALSE)
+#' addMonotones(antaresData = myData1,
+#' variable = "LOAD")
 #'
 #' }
 #'
 #' @export
 #'
-addMonotones <- function(antaresData = NULL){
+addMonotones <- function(antaresData = NULL, variable = NULL){
+
+  .check_x(antaresData)
 
   if(attr(antaresData, "synthesis")){
     stop("antaresData are synthesis, addMonotones() needs detail data.")
   }
 
+  if(!is.character(variable)){
+    stop("variable is not a character")
+  }
+
   if(is(antaresData, "antaresDataList")){
+    #chack if variable is correct
+    nameCol <- NULL
+    for(i in 1:length(antaresData)){
+      nameCol <- c(nameCol, names(antaresData[[i]]))
+    }
+    if(!(variable %in% nameCol)){
+      stop("incorrect variable")
+    }
+    #call antaresData for an antaresDataTable
     for(na in names(antaresData)){
-      addMonotones(antaresData[[na]])
+      if(variable %in% names(antaresData[[na]])){
+        addMonotones(antaresData[[na]], variable = variable)
+      }
     }
   }else{
+
+    if(!(variable %in% names(antaresData))){
+      stop("Incorrect variable")
+    }
+    classVariable <- class(antaresData[[variable]])
+    if(classVariable %in% c("factor", "POSIXt", "character")){
+      stop("Incorrect variable class")
+    }else if(classVariable=="numeric"){
+      funcClass <- as.numeric
+      digitMonoMean <- 2
+    }else if(classVariable=="integer"){
+      funcClass <- as.integer
+      digitMonoMean <- 0
+    }else if(classVariable=="double"){
+      funcClass <- as.double
+      digitMonoMean <- 2
+    }else{
+      stop("wrong class variable")
+    }
+
     if(length(unique(antaresData$mcYear)) <= 1){
       stop("antaresData must contain at least two mcYears.")
     }
     #variable to take from x
     idCols <- .idCols(antaresData)
-    varToTake <- setdiff(names(antaresData), idCols)
+    varToTake <- variable
+
+
     antaresDataCopy <- copy(antaresData[, mget(c(idCols, varToTake))])
     #by of x
-    getByA <- .get_by_area((antaresDataCopy))
-    getByA <- setdiff(getByA, "timeId")
+    getByA <- setdiff(getIdCols(antaresDataCopy), pkgEnv$idTimeVars)
+
     #get only what you want
-    nameNewColum <- paste0(varToTake, "Mono")
-    antaresDataCopy[, eval(nameNewColum) := 0L]
+    nameNewColumn <- paste0(varToTake, "Mono")
+    antaresDataCopy[, (nameNewColumn) := funcClass(0)]
     #maybe faster but we must deal with column/string
-    # resMono <- antaresData[, eval(quote(.(nameNewColum =
+    # resMono <- antaresData[, eval(quote(.(nameNewColumn =
     #                                       sort(get(varToTake),
     #                                            decreasing = TRUE)))),
     #                        by = getByA]
-    antaresDataCopy <- antaresDataCopy[, (nameNewColum) := sort(get(varToTake),
+    antaresDataCopy <- antaresDataCopy[, (nameNewColumn) := sort(get(varToTake),
                                                    decreasing = TRUE),
                 by = getByA]
     antaresDataCopy[, c(varToTake) := NULL]
@@ -60,18 +105,20 @@ addMonotones <- function(antaresData = NULL){
     antaresDataCopy <- data.table::dcast(data = antaresDataCopy,
                                  formula = as.formula(myFormula),
                                  value.var = c(paste0(varToTake, "Mono")))
+    newNameColumnnMonoMc <- paste0(varToTake,"MonoMc" , unique(antaresData$mcYear))
     data.table::setnames(x = antaresDataCopy,
                          old = as.character(unique(antaresData$mcYear)),
-                         new = paste0(varToTake,"MonoMc" , unique(antaresData$mcYear)))
+                         new = newNameColumnnMonoMc)
     #make a monotone rowMean
     nameNewColum <- c(paste0(varToTake, "MonoMean"))
-    antaresDataCopy[, eval(nameNewColum) := 0L]
-    antaresDataCopy <- antaresDataCopy[, eval(nameNewColum) := as.integer(round(rowMeans(.SD), 0)),
-                           by = IdColsWMcYear, .SDcols = c("LOADMonoMc1", "LOADMonoMc2")]
+    antaresDataCopy[, (nameNewColum) := funcClass(0)]
+    antaresDataCopy <- antaresDataCopy[, (nameNewColum) := funcClass(round(rowMeans(.SD), digitMonoMean)),
+                           by = IdColsWMcYear, .SDcols = newNameColumnnMonoMc]
     #antaresData <- merge(antaresData, resMonoMean, by = IdColsWMcYear)
-    setkeyv(antaresDataCopy, IdColsWMcYear)
-    antaresData <- merge(antaresData, resMonoMean, by = IdColsWMcYear)
-    setcolorder(antaresData, c(idCols, varToTake, nameNewColum))
+    colToAdd <- setdiff(names(antaresDataCopy), IdColsWMcYear)
+    antaresData[antaresDataCopy,
+                (colToAdd) := mget(paste0("i.", colToAdd)),
+                on = IdColsWMcYear]
     invisible(antaresData)
   }
 }

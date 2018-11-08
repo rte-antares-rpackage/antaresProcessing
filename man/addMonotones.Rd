@@ -4,7 +4,13 @@
 \alias{addMonotones}
 \title{addMonotones}
 \usage{
-addMonotones(antaresData = NULL)
+addMonotones(antaresData = NULL, variable = NULL)
+}
+\arguments{
+\item{antaresData}{Object of class \code{antaresData} created with function
+\code{\link[antaresRead]{readAntares}}.}
+
+\item{variable}{An ANTARES variable.}
 }
 \value{
 \code{addMonotones} modifies its input by adding monotones.
@@ -18,8 +24,10 @@ This function compute monotone for some variables.
 studyPath <- "path/to/study/"
 
 setSimulationPath(studyPath, 1)
-mydata1 <- readAntares(areas = "all", districts = "all", synthesis = FALSE)
-addMonotones(mydata1)
+myData1 <- readAntares(areas = "all",
+districts = "all", synthesis = FALSE)
+addMonotones(antaresData = myData1,
+variable = "LOAD")
 
 }
 
