@@ -12,7 +12,7 @@ test_that("addMonotones works with an antaresData detail", {
 
 })
 
-test_that("addMonotones work with a correct variable", {
+test_that("addMonotones works with a correct variable", {
   myDataD <- readAntares(mcYears = "all", showProgress = FALSE)
   expect_error(addMonotones(antaresData = myDataD,
                             variable = 3),

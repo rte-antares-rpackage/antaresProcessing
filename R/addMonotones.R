@@ -2,7 +2,7 @@
 
 #' addMonotones
 #'
-#' This function compute monotone for some variables.
+#' This function computes monotones for some variables.
 #' @param antaresData Object of class \code{antaresData} created with function
 #'   \code{\link[antaresRead]{readAntares}}.
 #' @param variable An ANTARES variable.
