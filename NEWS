@@ -6,6 +6,7 @@ NEW FEATURES:
 * New function addMonotones() computes monotones and add it to the input (#37).
 * New function correctBalance() corrects the BALANCE with 'ROW BAL' (#33).
 * New functions neighbours(), addNeighbours() and getAllNeighbours() to get neighbours (#21).
+* New functions addConvergencePriceSystem() computes the biggest system without congestion (#21).
 
 Changes in version 0.16.0 (2018-09-28)
 
