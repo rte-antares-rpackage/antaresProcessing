@@ -6,6 +6,21 @@
 #' @param antaresData Object of class \code{antaresData} created with function
 #'   \code{\link[antaresRead]{readAntares}}. antaresData must contains areas and
 #'   links details data with linkCapacity.
+#' @examples
+#' \dontrun{
+#'
+#'   myData <- readAntares(areas = "all",
+#'   links = "all",
+#'   showProgress = FALSE,
+#'   linkCapacity = TRUE,
+#'   mcYears = "all")
+#'
+#'   myDataRV <- removeVirtualAreas(x = myData,
+#'   storageFlexibility = getAreas(c("psp", "hub")),
+#'   production = getAreas("off"))
+#'
+#'   addConvergencePriceSystem(myData)
+#' }
 #' @export
 addConvergencePriceSystem <- function(antaresData = NULL){
   .check_x(antaresData)
