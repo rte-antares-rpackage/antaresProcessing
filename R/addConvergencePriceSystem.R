@@ -1,7 +1,7 @@
 #' addConvergencePriceSystem
 #'
-#' This function computes priceConvergenceSystem, priceConvergenceSystem represent computes the biggest system
-#' without congestion.
+#' This function computes priceConvergenceSystem, priceConvergenceSystem represent
+#' the biggest system without congestion.
 #'
 #' @param antaresData Object of class \code{antaresData} created with function
 #'   \code{\link[antaresRead]{readAntares}}. antaresData must contains areas and
