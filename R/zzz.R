@@ -128,6 +128,7 @@ globalVariables(
 #.check_if_h5_is_in_tmp <- antaresRead:::.check_if_h5_is_in_tmp
 .isSimOpts <- antaresRead:::.isSimOpts
 .get_by_area <- antaresRead:::.get_by_area
+.get_by_link <- antaresRead:::.get_by_link
 
 pkgEnv <- antaresRead:::pkgEnv
 
@@ -232,6 +233,7 @@ pkgEnv$processDispo <- data.frame(
   ))
 
 
+
 .check_if_h5_is_in_tmp<-function(h5filePath=NULL, path=NULL, stop=FALSE, printMessage=TRUE){
 
   resH5NotInTmp<-!grepl("Temp", h5filePath, ignore.case = TRUE) & !grepl("tmp", h5filePath, ignore.case = TRUE)
@@ -257,7 +259,6 @@ pkgEnv$processDispo <- data.frame(
   return(FALSE)
 }
 
-
 .skipFunctionH5<-function(h5file = NULL){
   testthat::skip_if(is.null(h5file), "h5file is null")
   if(!is.null(h5file)){
@@ -270,4 +271,21 @@ pkgEnv$processDispo <- data.frame(
   # but there are checks to verify that h5 file is in tmp folder
   #to comment in the futur
   testthat::skip_on_cran()
+  #TODO DEL
+  testthat::skip("h5")
+}
+
+.cleanDataCluster <- function(clDes = NULL){
+  for(columnC in names(clDes)){
+    if(class(clDes[[columnC]]) %in% c("double", "numeric", "integer")){
+      clDes[is.na(get(columnC)), (columnC) := 0]
+    }
+  }
+  nameMustRun <- "must.run"
+  if(nameMustRun %in% names(clDes)){
+    clDes[is.na(get("must.run")), ("must.run") := FALSE]
+  }else{
+    clDes[, (nameMustRun) := FALSE]
+  }
+  return(clDes)
 }
