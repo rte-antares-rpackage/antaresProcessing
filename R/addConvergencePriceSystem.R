@@ -35,6 +35,14 @@ addConvergencePriceSystem <- function(antaresData = NULL){
   if(is.null(antaresData$links$congestion)){
     antaresData <- addLoadFactorLink(antaresData)
   }
+  #R CMD CHECK, init some variables
+  congestion <- NULL
+  priceConvergenceArea <- NULL
+  areasConver <- NULL
+  allAreasTgList <- NULL
+  i.areasConver <- NULL
+
+
   antaresData$links[, ':=' (from = strsplit(link, split = " - " )[[1]][1],
                             to = strsplit(link, split = " - " )[[1]][2]),
                     by = .(link)]

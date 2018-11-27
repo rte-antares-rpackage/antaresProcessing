@@ -21,6 +21,7 @@
 #'
 #'   addConvergencePriceArea(myData)
 #' }
+#' @importFrom stringi stri_detect_fixed
 #' @export
 addConvergencePriceArea <- function(antaresData = NULL){
   .check_x(antaresData)
@@ -37,6 +38,14 @@ addConvergencePriceArea <- function(antaresData = NULL){
   if(is.null(antaresData$areas$priceConvergenceSystem)){
     addConvergencePriceSystem(antaresData)
   }
+  #pb with R check, init variable
+  priceConvergenceAreaN <- NULL
+  priceConvergenceAreaN1 <- NULL
+  priceConvergenceSystem <- NULL
+  priceConvergenceArea <- NULL
+  neighboursN <- NULL
+  neighboursN1 <- NULL
+
   #priceConvergenceArea = area
   antaresData$areas[, priceConvergenceAreaN := as.character(area),
                     by=.(area, mcYear, timeId)]

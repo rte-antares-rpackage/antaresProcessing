@@ -61,6 +61,9 @@ addNeighbours <- function(antaresData = NULL){
     addNeighbours(antaresData$areas)
     return(invisible(antaresData))
   }
+  #R CMD Check, null variable
+  i.neighbours <- NULL
+
   resAttr <- attributes(antaresData)
   virtualAreas <- resAttr$virtualNodes$storageFlexibility
 
