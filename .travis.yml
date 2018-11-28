@@ -22,7 +22,7 @@ r:
 
 
 r_github_packages:
- - rte-antares-rpackage/antaresRead@develop
+  - rte-antares-rpackage/antaresRead@master
 # - hadley/devtools#1263
 #before - Bioconductor-mirror/zlibbioc
 # - Bioconductor-mirror/rhdf5
