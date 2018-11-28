@@ -4,6 +4,9 @@ language: R
 sudo: true
 cache: packages
 
+#remove this line when this pull request is closed
+# https://github.com/travis-ci/travis-build/pull/1553
+fortran: false
 
 bioc_required: true
 bioc_use_devel: true
@@ -19,8 +22,8 @@ r:
 
 
 r_github_packages:
- - hadley/devtools#1263
- - rte-antares-rpackage/antaresRead@next_release
+  - rte-antares-rpackage/antaresRead@master
+# - hadley/devtools#1263
 #before - Bioconductor-mirror/zlibbioc
 # - Bioconductor-mirror/rhdf5
 #after

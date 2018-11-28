@@ -5,8 +5,7 @@
 #' This function computes isolated and interconnected upward margins of areas and
 #' add them to an antaresData object.
 #'
-#' @param x An object of class \code{antaresData} created with
-#'   \code{\link[antaresRead]{readAntares}}
+#' @param x An object of class \code{\link[antaresRead]{readAntares}} (or \code{\link[antaresRead]{simOptions}}) created with 'readAntares()' (or 'setSimulationPath()')
 #'
 #' @return
 #' The function modifies its input by adding to it two new columns

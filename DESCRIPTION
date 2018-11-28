@@ -1,7 +1,7 @@
 Package: antaresProcessing
 Type: Package
 Title: 'Antares' Results Processing
-Version: 0.16.0
+Version: 0.16.0.902
 Date: 2018-09-28
 Authors@R: c(
     person("Jalal-Edine", "ZAWAM", , "jalal-edine.zawam@rte-france.com", role = c("aut", "cre")),
@@ -23,7 +23,7 @@ BugReports: https://github.com/rte-antares-rpackage/antaresProcessing/issues
 License: GPL (>= 2) | file LICENSE
 LazyData: TRUE
 Depends: antaresRead (>= 1.1.5)
-Imports: data.table, methods, stats
+Imports: data.table, methods, stats, stringi
 Suggests: rhdf5 (>= 2.24.0), parallel, testthat, knitr, rmarkdown, covr
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr

@@ -17,8 +17,10 @@ environment:
   matrix:
   - R_VERSION: release
     R_ARCH: x64
+    USE_RTOOLS: true
 
   - R_VERSION: patched
+    USE_RTOOLS: true
 
 
 build_script:
@@ -27,7 +29,7 @@ build_script:
 #  - ./travis-tool.sh install_github Bioconductor-mirror/rhdf5
 #after
   - travis-tool.sh install_bioc_deps
-  - ./travis-tool.sh install_github rte-antares-rpackage/antaresRead@next_release
+  - ./travis-tool.sh install_github rte-antares-rpackage/antaresRead@master
 
 test_script:
   - travis-tool.sh run_tests
