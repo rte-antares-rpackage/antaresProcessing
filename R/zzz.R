@@ -122,11 +122,12 @@ globalVariables(
 .idCols <- antaresRead:::.idCols
 .addClassAndAttributes <- antaresRead:::.addClassAndAttributes
 .groupByDistrict <- antaresRead:::.groupByDistrict
-.check_x <- antaresRead:::.check_x
-.h5Antares_edit_variable <- antaresRead:::.h5Antares_edit_variable
+#TODO add after antaresRead 2.2.2
+#.check_x <- antaresRead:::.check_x
+#.h5Antares_edit_variable <- antaresRead:::.h5Antares_edit_variable
 #.skipFunctionH5 <- antaresRead:::.skipFunctionH5
 #.check_if_h5_is_in_tmp <- antaresRead:::.check_if_h5_is_in_tmp
-.isSimOpts <- antaresRead:::.isSimOpts
+#.isSimOpts <- antaresRead:::.isSimOpts
 .get_by_area <- antaresRead:::.get_by_area
 .get_by_link <- antaresRead:::.get_by_link
 
@@ -288,4 +289,148 @@ pkgEnv$processDispo <- data.frame(
     clDes[, (nameMustRun) := FALSE]
   }
   return(clDes)
+}
+
+#TODO DEL after antaresRead 2.2.2
+#' Test antaresData
+#'
+#' @param x if x is antaresData class
+#'
+#' @noRd
+.isAntaresData <- function(x){
+  "antaresData" %in% class(x)
+}
+
+#TODO DEL after antaresRead 2.2.2
+.check_x <- function(x = NULL){
+  if ("list" %in% class(x)){
+    for (elementI in x){
+      .check_x(elementI)
+    }
+  }else{
+    if (!(.isSimOpts(x) | .isAntaresData(x))){
+      stop(paste0(substitute(x),
+                  " should be an object of class 'antaresData' (or 'simOptions') created with 'readAntares()' (or 'setSimulationPath()')"))
+    }else{
+      return(TRUE)
+    }
+  }
+}
+
+#TODO DEL after antaresRead 2.2.2
+#' edit h5 file for TEST
+#' currently for all data except clusters
+#'
+#' @param pathH5 path H5 file
+#' @param instanceData character name of one instance
+#' @param classData character name of class instance
+#' @param timeId timeId to change
+#' @param antVar antares Variable to change
+#' @param newValue the newValue
+#'
+#' @noRd
+.h5Antares_edit_variable <- function(pathH5 = NULL,
+                                     instanceData = NULL,
+                                     classData = NULL,
+                                     timeId = 1,
+                                     antVar = NULL,
+                                     newValue = NULL,
+                                     mcYear = NULL,
+                                     allTimeId = FALSE,
+                                     timeStep = "hourly"){
+
+  if (is.null(instanceData) | is.null(classData)){
+    stop("instanceData and classData must be set together")
+  }
+
+  if (classData=="areas"){
+    classDataS <- "area"
+  }else if(classData=="links"){
+    classDataS <- "link"
+  }else{
+    classDataS <- "district"
+  }
+
+  if (is.null(mcYear)){
+    typeOfData <- "/mcAll"
+  }else{
+    typeOfData <- "/mcInd"
+  }
+  timeStepType <- paste0("/",paste(timeStep, classData, sep = "/"))
+  typeOfDataTime <- paste0(timeStepType, typeOfData)
+  nameStructure <- paste0(typeOfDataTime, "/structure")
+
+  H5locAntaresh5 <- rhdf5::H5Fopen(name = pathH5)
+  resStruc <- rhdf5::h5ls(H5locAntaresh5)
+  dimData <- resStruc[ resStruc$group == typeOfDataTime & resStruc$name == "data", ]$dim
+  hourlyDataStructure <- rhdf5::h5read(H5locAntaresh5, name = nameStructure)
+
+  indexCateroryInstance <- grep(instanceData, hourlyDataStructure[[classDataS]])[1]
+
+  indexAntVar <- grep(antVar, hourlyDataStructure$variable)[1]
+  if(is.na(indexAntVar)){
+    indexAntVar <- grep(antVar, hourlyDataStructure$reCalcVar)[1]
+    if(is.na(indexAntVar)){
+      stop("error index")
+    }else{
+      indexAntVar <- indexAntVar + length(hourlyDataStructure$variable)
+    }
+  }
+  if(allTimeId){
+    maxTimeId <- as.integer(strsplit(dimData, "x")[[1]][1])
+    indexTimeId <- 1:maxTimeId
+  }else{
+    indexTimeId <- timeId
+  }
+
+  if (is.null(mcYear)){
+    indexMcYear <- 1
+  }else{
+    indexMcYear <- grep(mcYear, hourlyDataStructure$mcYear)[1]
+  }
+
+  listIndex <- list(indexTimeId, indexAntVar, indexCateroryInstance, indexMcYear)
+  #debug print(listIndex)
+
+  hourlyData <- rhdf5::h5read(
+    H5locAntaresh5,
+    name = paste0(typeOfDataTime, "/data"),
+    index = listIndex)
+
+  hourlyData[,,,] <- newValue
+
+  rhdf5::h5writeDataset.array(
+    obj = hourlyData,
+    h5loc = H5locAntaresh5,
+    name = paste0(typeOfDataTime, "/data"),
+    index = listIndex
+  )
+
+  rhdf5::H5Fclose(h5file = H5locAntaresh5)
+  rhdf5::h5closeAll()
+}
+
+
+#' Test opst
+#'
+#' @param test if x is simOptions class
+#'
+#' @noRd
+.isSimOpts <- function(x){
+  if ("simOptions" %in% class(x)){
+    if (!is.null(x$h5path)){
+      if (!file.exists(x$h5path)){
+        warning(paste0("h5file does not exists for this study :",
+                       x$studyName))
+        return(FALSE)
+      }else{
+        return(TRUE)
+      }
+    }else{
+      #opts but no h5 (TXT)
+      return(TRUE)
+    }
+  }else{
+    return(FALSE)
+  }
 }
