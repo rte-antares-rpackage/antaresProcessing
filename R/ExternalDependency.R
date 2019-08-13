@@ -1,6 +1,6 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-.neededColAreaExternalDependancies <- c("netLoad", "AVL DTG", "hstorPMaxAvg")
+.neededColAreaExternalDependencies <- c("netLoad", "AVL DTG", "hstorPMaxAvg")
 
 #' External Dependencies in imports and exports
 #'
@@ -80,10 +80,10 @@ externalDependency <- function(x , timeStep = "annual", synthesis = FALSE, opts 
 
   neededCol<-list()
   if (!is.null(x$areas)) {
-    neededCol$areas <- .neededColAreaExternalDependancies
+    neededCol$areas <- .neededColAreaExternalDependencies
   }
 
-  if (!is.null(x$districts)) neededCol$districts <- .neededColAreaExternalDependancies
+  if (!is.null(x$districts)) neededCol$districts <- .neededColAreaExternalDependencies
 
   x <- .checkColumns(x, neededCol)
 
@@ -147,7 +147,7 @@ externalDependency <- function(x , timeStep = "annual", synthesis = FALSE, opts 
   idVars <- .idCols(dataInput)
 
   # Create the main table that will be used to compute the margins
-  data <- dataInput[, c(idVars, .neededColAreaExternalDependancies), with = FALSE]
+  data <- dataInput[, c(idVars, .neededColAreaExternalDependencies), with = FALSE]
 
   #if we don't have pumpingCapacity and storageCapacity, we add columns empty
   if(is.null(data$pumpingCapacity)){
