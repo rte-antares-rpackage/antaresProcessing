@@ -22,7 +22,7 @@ per Monte-Carlo scenario.}
 
 \item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
 If is this parameter is set to \code{NULL} (the default), then the function
-attemps to read the needed data in the same study as \code{x}.}
+attempts to read the needed data in the same study as \code{x}.}
 
 \item{opts}{opts where clusterDesc will be read if null based on data}
 }
@@ -69,7 +69,7 @@ the following columns:
 }
 
 Notice that if \code{by="cluster"}, the function computes the modulation per
-unit, ie. The modulation of a cluster divided by the number of units of the
+unit, i.e. the modulation of a cluster divided by the number of units of the
 cluster. On the opposite, if \code{by="sector"}, the function returns the
 modulation of the global production of the sector. Moreover, if parameter
 \code{x} contains area and district data, the function returns a list with

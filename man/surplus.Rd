@@ -29,7 +29,7 @@ A data.table with the following columns:
 \item{timeId}{timeId and other time columns.}
 \item{consumerSurplus}{The surplus of the consumers of some area.
 
-                     formula = (unsupliedCost[area] - `MRG. PRICE`) * LOAD}
+                     formula = (unsuppliedCost[area] - `MRG. PRICE`) * LOAD}
 \item{producerSurplus}{
   The surplus of the producers of some area.
 

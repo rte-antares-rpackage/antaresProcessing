@@ -16,7 +16,7 @@ addProcessingH5(opts = simOptions(), mcY = c("mcInd", "mcAll"),
   nThreads = 1)
 }
 \arguments{
-\item{opts}{\code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}}
+\item{opts}{\code{simOptions} obtain which \link[antaresRead]{setSimulationPath}}
 
 \item{mcY}{\code{character}, "mcInd" or "mcAll".}
 
@@ -49,7 +49,7 @@ Should loadFactorAvailable be added to the result of \link[antaresProcessing]{lo
 
 \item{linkCapacity}{\code{boolean} should export and import capacities be computed by \link[antaresProcessing]{addExportAndImport}.}
 
-\item{mustRun}{\code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
+\item{mustRun}{\code{boolean} should the production in must run mode subtracted to the net load \link[antaresProcessing]{addNetLoad}.
 Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.}
 
 \item{allProcess}{\code{boolean} All process in one argument.}

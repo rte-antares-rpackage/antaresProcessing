@@ -7,7 +7,7 @@
 thermalGroupCapacities(opts = simOptions())
 }
 \arguments{
-\item{opts}{\code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}}
+\item{opts}{\code{simOptions} obtain which \link[antaresRead]{setSimulationPath}}
 }
 \description{
 compute thermal capacities from study

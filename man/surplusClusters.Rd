@@ -24,7 +24,7 @@ per Monte-Carlo scenario.}
 
 \item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
 If is this parameter is set to \code{NULL} (the default), then the function
-attemps to read the needed data in the same study as \code{x}.}
+attempts to read the needed data in the same study as \code{x}.}
 
 \item{opts}{opts where clusterDesc will be read if null based on data}
 }

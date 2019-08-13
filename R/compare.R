@@ -21,7 +21,7 @@
 #'
 #' @return
 #' a data.table of class \code{antaresDataTable}. It contains all shared rows and
-#' columns between 'x' and 'y'. The columns contains the statistic choosen:
+#' columns between 'x' and 'y'. The columns contain the statistic chosen:
 #' difference, ratio or rate of change.
 #'
 #' @examples

@@ -2,7 +2,7 @@
 #'
 #' @description In this version only hourly data can be enriched.
 #'
-#' @param opts \code{simOptions} obtain wich \link[antaresRead]{setSimulationPath}
+#' @param opts \code{simOptions} obtain which \link[antaresRead]{setSimulationPath}
 #' @param mcY  \code{character}, "mcInd" or "mcAll".
 #' @param timeStep \code{character}, timeStep
 #' @param addNetLoad  \code{boolean} refer to \link[antaresProcessing]{addNetLoad}
@@ -20,7 +20,7 @@
 #' Should loadFactorAvailable be added to the result of \link[antaresProcessing]{loadFactor}.
 #' @param allProcess \code{boolean} All process in one argument.
 #' @param linkCapacity \code{boolean} should export and import capacities be computed by \link[antaresProcessing]{addExportAndImport}.
-#' @param mustRun \code{boolean} should the production in must run mode substracted to the net load \link[antaresProcessing]{addNetLoad}.
+#' @param mustRun \code{boolean} should the production in must run mode subtracted to the net load \link[antaresProcessing]{addNetLoad}.
 #' Should the must run production be ignored in the computation of the netLoadRamp see \link[antaresProcessing]{netLoadRamp}.
 #' @param evalAreas \code{list}, list of operation to evaluate in areas data
 #' @param evalLinks \code{list}, list of operation to evaluate in links data
@@ -314,7 +314,7 @@ addProcessingH5 <- function(opts = simOptions(),
   if(Parallel) parallel::stopCluster(cl)
 
 
-  ##Add control on straitments to define all this objects
+  ##Add control on straitments to define all these objects
 
   ##IfverWiteAreas
 

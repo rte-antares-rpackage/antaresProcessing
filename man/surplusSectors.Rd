@@ -15,7 +15,7 @@ area data and if thermal sectors are required, cluster data.}
 
 \item{sectors}{vector containing the name of the sectors for which surplus needs to be
 computed. Possible values are "thermal" for thermal sectors(nuclear, coal,..),
-"ren" for renewable energie and any column name that can be considered as
+"ren" for renewable energy and any column name that can be considered as
 a production (for instance production of virtual areas). It is assumed that
 the cost of these productions is equal to 0 as for renewable energies.
 If the parameter contains the value "thermal", then the parameter
@@ -30,7 +30,7 @@ per Monte-Carlo scenario.}
 
 \item{clusterDesc}{A table created with the function \code{\link[antaresRead]{readClusterDesc}}.
 If is this parameter is set to \code{NULL} (the default), then the function
-attemps to read the needed data in the same study as \code{x}.}
+attempts to read the needed data in the same study as \code{x}.}
 
 \item{opts}{opts}
 }
