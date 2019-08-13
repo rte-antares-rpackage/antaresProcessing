@@ -32,8 +32,3 @@ Encoding: UTF-8
 biocViews: Infrastructure, DataImport
 NeedsCompilation: no
 Packaged: 2018-05-02 12:50:40 UTC; jalazawa
-Author: Jalal-Edine ZAWAM [aut, cre],
-  Francois Guillem [aut],
-  Benoit Thieurmel [aut],
-  Titouan Robert [aut],
-  RTE [cph]
