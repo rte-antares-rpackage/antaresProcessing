@@ -37,10 +37,10 @@ Sys.unsetenv("R_TESTS")
 # The following "if" prevents errors at this step
 if (sourcedir != "") {
   if (Sys.info()['sysname'] == "Windows") {
-    untar(file.path(sourcedir, "antares-test-study.tar.gz"), exdir = path,
-          extras = "--force-local")
+    untar(file.path(sourcedir, "antares-test-study-latest.tar.gz"), exdir = path)
+          # extras = "--force-local")
   } else {
-    untar(file.path(sourcedir, "antares-test-study.tar.gz"), exdir = path)
+    untar(file.path(sourcedir, "antares-test-study-latest.tar.gz"), exdir = path)
   }
 
   if(requireNamespace("rhdf5", quietly = TRUE)){

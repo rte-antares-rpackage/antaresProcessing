@@ -17,8 +17,13 @@ describe("addUpwardMargin", {
       expect_silent(addUpwardMargin(data))
       expect_false(is.null(data$areas$isolatedUpwardMargin))
       expect_false(is.null(data$areas$interconnectedUpwardMargin))
-      expect_equal(data$areas[, `AVL DTG`+storageCapacity + WIND + SOLAR + `H. ROR` + `MISC. NDG` + hstorPMaxAvg - LOAD],
-                   data$areas$isolatedUpwardMargin)
+      if (attr(data, "opts")$antaresVersion < 650) {
+        expect_equal(data$areas[, `AVL DTG`+storageCapacity + WIND + SOLAR + `H. ROR` + `MISC. NDG` + hstorPMaxAvg - LOAD],
+                     data$areas$isolatedUpwardMargin)
+      } else {
+        expect_equal(data$areas[, `AVL DTG`+storageCapacity + WIND + SOLAR + `H. ROR` + `MISC. NDG` + generatingMaxPower - LOAD],
+                     data$areas$isolatedUpwardMargin)
+      }
       expect_equal(data$areas[, isolatedUpwardMargin - BALANCE + `ROW BAL.`],
                    data$areas$interconnectedUpwardMargin)
     })
@@ -28,18 +33,25 @@ describe("addUpwardMargin", {
       expect_silent(addUpwardMargin(data))
       expect_false(is.null(data$areas$isolatedUpwardMargin))
       expect_false(is.null(data$areas$interconnectedUpwardMargin))
-      expect_equal(data$areas[, `AVL DTG` + WIND + SOLAR + `H. ROR` + `MISC. NDG` + hstorPMaxAvg - LOAD],
-                   data$areas$isolatedUpwardMargin)
+      if (attr(data, "opts")$antaresVersion < 650) {
+        expect_equal(data$areas[, `AVL DTG` + WIND + SOLAR + `H. ROR` + `MISC. NDG` + hstorPMaxAvg - LOAD],
+                     data$areas$isolatedUpwardMargin)
+      } else {
+        expect_equal(data$areas[, `AVL DTG` + WIND + SOLAR + `H. ROR` + `MISC. NDG` + generatingMaxPower - LOAD],
+                     data$areas$isolatedUpwardMargin)
+      }
       expect_equal(data$areas[, isolatedUpwardMargin - BALANCE + `ROW BAL.`],
                    data$areas$interconnectedUpwardMargin)
     })
   })
 
-  it ("throws a warning if hstorPMaxAvg is missing", {
-    data <- data.table::copy(data)
-    data$areas[, hstorPMaxAvg := NULL]
-    expect_warning(addUpwardMargin(data), "hydroStorageMaxPower")
-  })
+  if (attr(data, "opts")$antaresVersion < 650) {
+    it ("throws a warning if hstorPMaxAvg is missing", {
+      data <- data.table::copy(data)
+      data$areas[, hstorPMaxAvg := NULL]
+      expect_warning(addUpwardMargin(data), "hydroStorageMaxPower")
+    })
+  }
 
   it ("throws an error if a required column is missing", {
     data <- data.table::copy(data)
@@ -64,8 +76,13 @@ describe("addUpwardMargin", {
     expect_silent(addUpwardMargin(data))
     expect_false(is.null(data$isolatedUpwardMargin))
     expect_false(is.null(data$interconnectedUpwardMargin))
-    expect_equal(data[, `AVL DTG` + storageCapacity + WIND + SOLAR + `H. ROR` + `MISC. NDG` + hstorPMaxAvg - LOAD],
-                 data$isolatedUpwardMargin)
+    if (attr(data, "opts")$antaresVersion < 650) {
+      expect_equal(data[, `AVL DTG` + storageCapacity + WIND + SOLAR + `H. ROR` + `MISC. NDG` + hstorPMaxAvg - LOAD],
+                   data$isolatedUpwardMargin)
+    } else {
+      expect_equal(data[, `AVL DTG` + storageCapacity + WIND + SOLAR + `H. ROR` + `MISC. NDG` + generatingMaxPower - LOAD],
+                   data$isolatedUpwardMargin)
+    }
     expect_equal(data[, isolatedUpwardMargin - BALANCE + `ROW BAL.`],
                  data$interconnectedUpwardMargin)
   })

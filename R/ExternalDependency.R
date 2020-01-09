@@ -1,7 +1,5 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-.neededColAreaExternalDependencies <- c("netLoad", "AVL DTG", "hstorPMaxAvg")
-
 #' External Dependencies in imports and exports
 #'
 #' This function computes the dependency in imports and export for each area or districts at a
@@ -11,8 +9,9 @@
 #'
 #' @param x
 #'   An object created with function \code{\link[antaresRead]{readAntares}}. It
-#'   must contain data for areas and/or districts . More specifically this
-#'   function requires the columns \code{hstorPMaxAvg}, and \code{netLoad}. To
+#'   must contain data for areas and/or districts. More specifically this
+#'   function requires the columns \code{generatingMaxPower}
+#'   (or \code{hstorPMaxAvg} for Antares v6 and earlier), and \code{netLoad}. To
 #'   get these columns, one has to invoke \code{\link[antaresRead]{readAntares}}
 #'   with the parameter \code{hydroStorageMaxPower = TRUE} and
 #'   \code{\link[antaresProcessing]{addNetLoad}} (see examples).
@@ -64,6 +63,12 @@
 #' @export
 #'
 externalDependency <- function(x , timeStep = "annual", synthesis = FALSE, opts = NULL) {
+
+  .neededColAreaExternalDependencies <- if (attr(x, "opts")$antaresVersion < 650) {
+    c("netLoad", "AVL DTG", "hstorPMaxAvg")
+  } else {
+    c("netLoad", "AVL DTG", "generatingMaxPower")
+  }
 
   # Check that x contains is a antaresDataList
   if (is(x, "antaresDataList")) {
@@ -144,6 +149,13 @@ externalDependency <- function(x , timeStep = "annual", synthesis = FALSE, opts 
 #'
 #' @noRd
 .computeexternalDependency <- function(dataInput, timeStep, synthesis) {
+
+  .neededColAreaExternalDependencies <- if (attr(dataInput, "opts")$antaresVersion < 650) {
+    c("netLoad", "AVL DTG", "hstorPMaxAvg")
+  } else {
+    c("netLoad", "AVL DTG", "generatingMaxPower")
+  }
+
   idVars <- .idCols(dataInput)
 
   # Create the main table that will be used to compute the margins
@@ -154,10 +166,13 @@ externalDependency <- function(x , timeStep = "annual", synthesis = FALSE, opts 
     data[ , c("pumpingCapacity", "storageCapacity") := 0]
   }
   # Compute externalDependencyLevel
-  data[,`:=`(
-    exportsLevel = netLoad + pumpingCapacity,
-    importsLevel = netLoad - `AVL DTG` - hstorPMaxAvg - storageCapacity
-  )]
+  data[, exportsLevel := netLoad + pumpingCapacity]
+  if (attr(dataInput, "opts")$antaresVersion < 650) {
+    data[, importsLevel := netLoad - `AVL DTG` - hstorPMaxAvg - storageCapacity]
+  } else {
+    data[, importsLevel := netLoad - `AVL DTG` - generatingMaxPower - storageCapacity]
+  }
+
   # Compute externalDependencyFrequency
   #init
   data[,`:=`(
