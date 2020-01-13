@@ -4,13 +4,13 @@
 \alias{externalDependency}
 \title{External Dependencies in imports and exports}
 \usage{
-externalDependency(x, timeStep = "annual", synthesis = FALSE,
-  opts = NULL)
+externalDependency(x, timeStep = "annual", synthesis = FALSE, opts = NULL)
 }
 \arguments{
 \item{x}{An object created with function \code{\link[antaresRead]{readAntares}}. It
-  must contain data for areas and/or districts . More specifically this
-  function requires the columns \code{hstorPMaxAvg}, and \code{netLoad}. To
+  must contain data for areas and/or districts. More specifically this
+  function requires the columns \code{generatingMaxPower}
+  (or \code{hstorPMaxAvg} for Antares v6 and earlier), and \code{netLoad}. To
   get these columns, one has to invoke \code{\link[antaresRead]{readAntares}}
   with the parameter \code{hydroStorageMaxPower = TRUE} and
   \code{\link[antaresProcessing]{addNetLoad}} (see examples).

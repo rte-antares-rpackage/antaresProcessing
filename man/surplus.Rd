@@ -4,8 +4,14 @@
 \alias{surplus}
 \title{Compute economic surplus}
 \usage{
-surplus(x, timeStep = "annual", synthesis = FALSE,
-  groupByDistrict = FALSE, hurdleCost = TRUE, opts = NULL)
+surplus(
+  x,
+  timeStep = "annual",
+  synthesis = FALSE,
+  groupByDistrict = FALSE,
+  hurdleCost = TRUE,
+  opts = NULL
+)
 }
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function

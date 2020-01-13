@@ -4,8 +4,14 @@
 \alias{loadFactor}
 \title{Load factors of clusters}
 \usage{
-loadFactor(x, timeStep = "annual", synthesis = FALSE,
-  clusterDesc = NULL, loadFactorAvailable = FALSE, opts = NULL)
+loadFactor(
+  x,
+  timeStep = "annual",
+  synthesis = FALSE,
+  clusterDesc = NULL,
+  loadFactorAvailable = FALSE,
+  opts = NULL
+)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function

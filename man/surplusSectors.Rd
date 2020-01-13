@@ -4,9 +4,15 @@
 \alias{surplusSectors}
 \title{Compute the surplus of sectors}
 \usage{
-surplusSectors(x, sectors = c("thermal", "renewable"),
-  timeStep = "annual", synthesis = FALSE, groupByDistrict = FALSE,
-  clusterDesc = NULL, opts = NULL)
+surplusSectors(
+  x,
+  sectors = c("thermal", "renewable"),
+  timeStep = "annual",
+  synthesis = FALSE,
+  groupByDistrict = FALSE,
+  clusterDesc = NULL,
+  opts = NULL
+)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with \code{readAntares}. It needs

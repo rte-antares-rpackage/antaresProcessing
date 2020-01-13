@@ -26,7 +26,7 @@ LazyData: TRUE
 Depends: antaresRead (>= 1.1.5)
 Imports: data.table, methods, stats
 Suggests: rhdf5 (>= 2.24.0), parallel, testthat, knitr, rmarkdown, covr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Encoding: UTF-8
 biocViews: Infrastructure, DataImport

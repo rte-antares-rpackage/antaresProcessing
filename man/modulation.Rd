@@ -4,8 +4,14 @@
 \alias{modulation}
 \title{Compute the modulation of cluster units}
 \usage{
-modulation(x, timeStep = "annual", synthesis = FALSE,
-  by = c("cluster", "sector"), clusterDesc = NULL, opts = NULL)
+modulation(
+  x,
+  timeStep = "annual",
+  synthesis = FALSE,
+  by = c("cluster", "sector"),
+  clusterDesc = NULL,
+  opts = NULL
+)
 }
 \arguments{
 \item{x}{An \code{antaresData} object created with \code{readAntares}. It must

@@ -4,8 +4,13 @@
 \alias{netLoadRamp}
 \title{Ramp of an area}
 \usage{
-netLoadRamp(x, timeStep = "hourly", synthesis = FALSE,
-  ignoreMustRun = FALSE, opts = NULL)
+netLoadRamp(
+  x,
+  timeStep = "hourly",
+  synthesis = FALSE,
+  ignoreMustRun = FALSE,
+  opts = NULL
+)
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} containing data for areas and/or

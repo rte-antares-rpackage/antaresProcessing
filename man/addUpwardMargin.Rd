@@ -24,8 +24,11 @@ For a given area and time step, isolated upward margin is the difference
 between the available production capacity plus the fatal productions and the
 load. More formally it is equal to:
 
-\code{isolatedUpwardMargin = (`AVL DTG` + hstorPMaxAvg + storageCapacity) +
+\code{isolatedUpwardMargin = (`AVL DTG` + generatingMaxPower + storageCapacity) +
                              (`H. ROR` + WIND + SOLAR + `MISC. NDG`) - LOAD}
+
+NB: in Antares v6 (and earlier versions) \code{generatingMaxPower} is replaced
+by \code{hstorPMaxAvg}.
 
 The variable \code{storageCapacity} is automatically created when pumped
 storage areas are removed with function

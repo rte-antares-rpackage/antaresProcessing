@@ -4,8 +4,14 @@
 \alias{surplusClusters}
 \title{Compute the surplus of clusters}
 \usage{
-surplusClusters(x, timeStep = "annual", synthesis = FALSE,
-  surplusLastUnit = FALSE, clusterDesc = NULL, opts = NULL)
+surplusClusters(
+  x,
+  timeStep = "annual",
+  synthesis = FALSE,
+  surplusLastUnit = FALSE,
+  clusterDesc = NULL,
+  opts = NULL
+)
 }
 \arguments{
 \item{x}{An \code{antaresData} object created with \code{readAntares}. It must
