@@ -1,88 +1,93 @@
 context("Function externalDependency")
 
 
-opts <- setSimulationPath(studyPath)
+sapply(studyPathS, function(studyPath){
 
-describe("externalDependency", {
+  opts <- setSimulationPath(studyPath)
 
-  it("stops if time step is not hourly", {
-    data2 <- suppressWarnings(readAntares(areas="all", timeStep = "annual",
-                         showProgress = FALSE, mcYears = "all", hydroStorageMaxPower = TRUE))
-    addNetLoad(data2, ignoreMustRun = TRUE)
-    expect_error(externalDependency(data2), "hourly")
-  })
+  describe("externalDependency", {
 
-  it("stops if frequency exceeds a level ", {
-    data2 <- suppressWarnings(readAntares(areas="all", showProgress = FALSE, hydroStorageMaxPower = TRUE))
-    addNetLoad(data2, ignoreMustRun = TRUE)
-    resH<-suppressWarnings(externalDependency(data2, timeStep = "hourly"))
-    expect_lte(max(resH$exportsFrequency), 1)
+    it("stops if time step is not hourly", {
+      data2 <- suppressWarnings(readAntares(areas="all", timeStep = "annual",
+                                            showProgress = FALSE, mcYears = "all", hydroStorageMaxPower = TRUE))
+      addNetLoad(data2, ignoreMustRun = TRUE)
+      expect_error(externalDependency(data2), "hourly")
+    })
 
-    resW<-suppressWarnings(externalDependency(data2, timeStep = "weekly"))
-    expect_lte(max(resW$exportsFrequency), 168)
+    it("stops if frequency exceeds a level ", {
+      data2 <- suppressWarnings(readAntares(areas="all", showProgress = FALSE, hydroStorageMaxPower = TRUE))
+      addNetLoad(data2, ignoreMustRun = TRUE)
+      resH<-suppressWarnings(externalDependency(data2, timeStep = "hourly"))
+      expect_lte(max(resH$exportsFrequency), 1)
 
-    resM<-suppressWarnings(externalDependency(data2, timeStep = "monthly"))
-    expect_lte(max(resM$exportsFrequency), 744)
+      resW<-suppressWarnings(externalDependency(data2, timeStep = "weekly"))
+      expect_lte(max(resW$exportsFrequency), 168)
 
-    resA<-suppressWarnings(externalDependency(data2, timeStep = "annual"))
-    expect_lte(max(resA$exportsFrequency), 8736)
-  })
+      resM<-suppressWarnings(externalDependency(data2, timeStep = "monthly"))
+      expect_lte(max(resM$exportsFrequency), 744)
 
-  it("accepts 'antaresDataList' objects : areas and links", {
-    mydata <- suppressWarnings({readAntares(areas = "all", links="all", showProgress = FALSE, hydroStorageMaxPower = TRUE)})
+      resA<-suppressWarnings(externalDependency(data2, timeStep = "annual"))
+      expect_lte(max(resA$exportsFrequency), 8736)
+    })
 
-    expect_is(mydata, "antaresDataList")
+    it("accepts 'antaresDataList' objects : areas and links", {
+      mydata <- suppressWarnings({readAntares(areas = "all", links="all", showProgress = FALSE, hydroStorageMaxPower = TRUE)})
 
-    mydata<-addNetLoad(mydata, ignoreMustRun = TRUE)
-    res<-externalDependency(mydata, timeStep = "hourly")
-    expect_false(is.null(res$exportsLevel))
-  })
+      expect_is(mydata, "antaresDataList")
 
-  it("accepts 'antaresDataList' objects : areas and districts", {
-    mydata <- suppressWarnings({readAntares(areas = "all", districts ="all", showProgress = FALSE, hydroStorageMaxPower = TRUE)})
+      mydata<-addNetLoad(mydata, ignoreMustRun = TRUE)
+      res<-externalDependency(mydata, timeStep = "hourly")
+      expect_false(is.null(res$exportsLevel))
+    })
 
-    expect_is(mydata, "antaresDataList")
+    it("accepts 'antaresDataList' objects : areas and districts", {
+      mydata <- suppressWarnings({readAntares(areas = "all", districts ="all", showProgress = FALSE, hydroStorageMaxPower = TRUE)})
 
-    mydata<-addNetLoad(mydata, ignoreMustRun = TRUE)
-    res<-externalDependency(mydata, timeStep = "hourly")
-    expect_false(is.null(res$areas$exportsFrequency))
-    expect_false(is.null(res$districts$exportsLevel))
-  })
+      expect_is(mydata, "antaresDataList")
 
-  it("accepts 'antaresDataList' objects : areas, districts and links", {
-    mydata <- suppressWarnings({readAntares(areas = "all", districts ="all", links = "all", showProgress = FALSE, hydroStorageMaxPower = TRUE)})
+      mydata<-addNetLoad(mydata, ignoreMustRun = TRUE)
+      res<-externalDependency(mydata, timeStep = "hourly")
+      expect_false(is.null(res$areas$exportsFrequency))
+      expect_false(is.null(res$districts$exportsLevel))
+    })
 
-    expect_is(mydata, "antaresDataList")
+    it("accepts 'antaresDataList' objects : areas, districts and links", {
+      mydata <- suppressWarnings({readAntares(areas = "all", districts ="all", links = "all", showProgress = FALSE, hydroStorageMaxPower = TRUE)})
 
-    mydata<-addNetLoad(mydata, ignoreMustRun = TRUE)
-    res<-externalDependency(mydata, timeStep = "hourly")
-    expect_true(is.null(res$links))
-    expect_false(is.null(res$areas$exportsFrequency))
-    expect_false(is.null(res$districts$exportsLevel))
-  })
+      expect_is(mydata, "antaresDataList")
 
-  it("works with virtual nodes", {
-    mydata <- suppressWarnings({readAntares(areas = "all",
-                                            districts ="all",
-                                            links = "all",
-                                            showProgress = FALSE,
-                                            hydroStorageMaxPower = TRUE,
-                                            linkCapacity = TRUE,
-                                            mcYears = 1)})
-    attrMyData<-attributes(mydata)
-    expect_true(is.null(attrMyData$virtualNodes))
+      mydata<-addNetLoad(mydata, ignoreMustRun = TRUE)
+      res<-externalDependency(mydata, timeStep = "hourly")
+      expect_true(is.null(res$links))
+      expect_false(is.null(res$areas$exportsFrequency))
+      expect_false(is.null(res$districts$exportsLevel))
+    })
 
-    mydataCorrected <- removeVirtualAreas(mydata,
-                                          storageFlexibility = c(getAreas("psp"),
-                                                                 getAreas("hub")))
-    attrMyDataCorrected <- attributes(mydataCorrected)
-    expect_false(is.null(attrMyDataCorrected$virtualNodes))
+    it("works with virtual nodes", {
+      mydata <- suppressWarnings({readAntares(areas = "all",
+                                              districts ="all",
+                                              links = "all",
+                                              showProgress = FALSE,
+                                              hydroStorageMaxPower = TRUE,
+                                              linkCapacity = TRUE,
+                                              mcYears = 1)})
+      attrMyData<-attributes(mydata)
+      expect_true(is.null(attrMyData$virtualNodes))
 
-    mydataCorrected <- addNetLoad(mydataCorrected, ignoreMustRun = TRUE)
-    res <- externalDependency(mydataCorrected, timeStep = "hourly")
-    expect_true(is.null(res$links))
-    expect_false(is.null(res$areas$exportsFrequency))
-    expect_false(is.null(res$districts$exportsLevel))
+      mydataCorrected <- removeVirtualAreas(mydata,
+                                            storageFlexibility = c(getAreas("psp"),
+                                                                   getAreas("hub")))
+      attrMyDataCorrected <- attributes(mydataCorrected)
+      expect_false(is.null(attrMyDataCorrected$virtualNodes))
+
+      mydataCorrected <- addNetLoad(mydataCorrected, ignoreMustRun = TRUE)
+      res <- externalDependency(mydataCorrected, timeStep = "hourly")
+      expect_true(is.null(res$links))
+      expect_false(is.null(res$areas$exportsFrequency))
+      expect_false(is.null(res$districts$exportsLevel))
+    })
+
   })
 
 })
+

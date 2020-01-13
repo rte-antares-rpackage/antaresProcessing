@@ -1,15 +1,19 @@
 context("Surplus of sectors")
 
-opts <- setSimulationPath(studyPath)
+sapply(studyPathS, function(studyPath){
 
-mydata <- readAntares(areas="all", clusters = "all",
-                      showProgress = FALSE, mcYears = "all")
+  opts <- setSimulationPath(studyPath)
 
-s <- suppressWarnings(surplusSectors(mydata))
+  mydata <- readAntares(areas="all", clusters = "all",
+                        showProgress = FALSE, mcYears = "all")
 
-describe("surplusSectors", {
+  s <- suppressWarnings(surplusSectors(mydata))
 
-  it("returns an antaresDataTable with correct number of lines and columns", {
-    expect_is(s, "antaresDataTable")
+  describe("surplusSectors", {
+
+    it("returns an antaresDataTable with correct number of lines and columns", {
+      expect_is(s, "antaresDataTable")
+    })
   })
+
 })

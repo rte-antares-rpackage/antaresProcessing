@@ -2,7 +2,13 @@
 
 # Copy the test study in a temporary folder
 
-path <- tempdir()
+path0 <- tempdir()
+dir.create(file.path(path0, "v6"))
+dir.create(file.path(path0, "latest"))
+
+path_v6 <- file.path(path0, "v6")
+path_latest <- file.path(path0, "latest")
+
 sourcedir <- system.file("inst/testdata", package = "antaresRead")
 if(sourcedir == ""){ sourcedir <- system.file("testdata", package = "antaresRead")}
 
@@ -12,7 +18,7 @@ check_if_h5_is_in_tmp<-function(h5filePath=NULL,path=NULL, stop=FALSE, printMess
   if(resH5NotInTmp){
     if(printMessage){
       print(paste0("h5file : ", h5filePath))
-      print(paste0("path : ", path))
+      print(paste0("path : ", path_v6))
     }
   }else{
     return(TRUE)
@@ -37,10 +43,12 @@ Sys.unsetenv("R_TESTS")
 # The following "if" prevents errors at this step
 if (sourcedir != "") {
   if (Sys.info()['sysname'] == "Windows") {
-    untar(file.path(sourcedir, "antares-test-study-latest.tar.gz"), exdir = path)
+    untar(file.path(sourcedir, "antares-test-study-v6.tar.gz"), exdir = path_v6)
+    untar(file.path(sourcedir, "antares-test-study-latest.tar.gz"), exdir = path_latest)
           # extras = "--force-local")
   } else {
-    untar(file.path(sourcedir, "antares-test-study-latest.tar.gz"), exdir = path)
+    untar(file.path(sourcedir, "antares-test-study-v6.tar.gz"), exdir = path_v6)
+    untar(file.path(sourcedir, "antares-test-study-latest.tar.gz"), exdir = path_latest)
   }
 
   if(requireNamespace("rhdf5", quietly = TRUE)){
@@ -54,14 +62,14 @@ if (sourcedir != "") {
     }
 
     if(h5file != ""){
-      if(file.copy(from = h5file, to = path, overwrite = TRUE)){
-        assign("h5file", file.path(path, nameH5File), envir = globalenv())
+      if(file.copy(from = h5file, to = path_v6, overwrite = TRUE)){
+        assign("h5file", file.path(path_v6, nameH5File), envir = globalenv())
         #WE MUST assign h5file variable in the test environnement and not in the global environnement
-        if(!check_if_h5_is_in_tmp(h5file, path, printMessage = FALSE)){
-          assign("h5file", file.path(path, nameH5File))
+        if(!check_if_h5_is_in_tmp(h5file, path_v6, printMessage = FALSE)){
+          assign("h5file", file.path(path_v6, nameH5File))
         }
 
-        check_if_h5_is_in_tmp(h5file, path)
+        check_if_h5_is_in_tmp(h5file, path_v6)
       }
     }
 
@@ -71,19 +79,24 @@ if (sourcedir != "") {
 
     if(is.null(h5file)){
       print(paste0("h5file : ", h5file))
-      print(paste0("path : ", path))
+      print(paste0("path : ", path_v6))
       stop("h5file must not be null")
     }
 
-    check_if_h5_is_in_tmp(h5file, path, stop = FALSE)
+    check_if_h5_is_in_tmp(h5file, path_v6, stop = FALSE)
 
     silentf <- deprintize(showAliases)
     assign("silentf", silentf, envir = globalenv())
 
   }
-  assign("studyPath", file.path(path, "test_case"), envir = globalenv())
+  assign("studyPathS", c(
+    file.path(path_v6, "test_case"),
+    file.path(path_latest, "test_case")
+  ),
+  envir = globalenv())
+
   assign("nweeks", 2, envir = globalenv())
-  assign("pathtodelete", path, envir = globalenv())
+  assign("pathtodelete", path_v6, envir = globalenv())
 }
 
 

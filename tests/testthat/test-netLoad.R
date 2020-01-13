@@ -1,43 +1,48 @@
 context("Net Load")
 
-opts <- setSimulationPath(studyPath)
+sapply(studyPathS, function(studyPath){
 
-describe("netLoad", {
+  opts <- setSimulationPath(studyPath)
 
-  it("adds column 'netLoad' to the input data", {
-    mydata <- readAntares("all", timeStep = "annual", showProgress = FALSE)
-    cols <- names(copy(mydata))
-    addNetLoad(mydata, ignoreMustRun = TRUE)
-    expect_identical(c(cols, "netLoad"), names(mydata))
-  })
+  describe("netLoad", {
 
-
-  it("accepts 'antaresDataList' objects", {
-    mydata <- readAntares(areas = "all", districts = "all", timeStep = "annual", showProgress = FALSE)
-    addNetLoad(mydata, ignoreMustRun = TRUE)
-
-    expect_is(mydata, "antaresDataList")
-    expect_false(is.null(mydata$areas$netLoad))
-    expect_false(is.null(mydata$districts$netLoad))
-  })
+    it("adds column 'netLoad' to the input data", {
+      mydata <- readAntares("all", timeStep = "annual", showProgress = FALSE)
+      cols <- names(copy(mydata))
+      addNetLoad(mydata, ignoreMustRun = TRUE)
+      expect_identical(c(cols, "netLoad"), names(mydata))
+    })
 
 
-  it("stops if input does not contain area or district data", {
-    mydata <- readAntares(links="all", timeStep = "annual", showProgress = FALSE)
-    expect_error(addNetLoad(mydata, ignoreMustRun = TRUE), "area")
-  })
+    it("accepts 'antaresDataList' objects", {
+      mydata <- readAntares(areas = "all", districts = "all", timeStep = "annual", showProgress = FALSE)
+      addNetLoad(mydata, ignoreMustRun = TRUE)
+
+      expect_is(mydata, "antaresDataList")
+      expect_false(is.null(mydata$areas$netLoad))
+      expect_false(is.null(mydata$districts$netLoad))
+    })
+
+
+    it("stops if input does not contain area or district data", {
+      mydata <- readAntares(links="all", timeStep = "annual", showProgress = FALSE)
+      expect_error(addNetLoad(mydata, ignoreMustRun = TRUE), "area")
+    })
 
 
 
-  it("stops if some necesary column is missing", {
-    mydata <- readAntares(areas="all", timeStep = "annual", showProgress = FALSE, select = "LOAD")
-    expect_error(addNetLoad(mydata, ignoreMustRun = TRUE), "missing")
-  })
+    it("stops if some necesary column is missing", {
+      mydata <- readAntares(areas="all", timeStep = "annual", showProgress = FALSE, select = "LOAD")
+      expect_error(addNetLoad(mydata, ignoreMustRun = TRUE), "missing")
+    })
 
 
-  it("stops mustRunTotal", {
-    mydata <- readAntares(areas="all", timeStep = "annual", showProgress = FALSE)
-    expect_error(addNetLoad(mydata, ignoreMustRun= FALSE), "Column 'mustRunTotal' is needed but missing. You can use argument 'ignoreMustRun=TRUE' if you do not want to take 'must run' production into account.")
+    it("stops mustRunTotal", {
+      mydata <- readAntares(areas="all", timeStep = "annual", showProgress = FALSE)
+      expect_error(addNetLoad(mydata, ignoreMustRun= FALSE), "Column 'mustRunTotal' is needed but missing. You can use argument 'ignoreMustRun=TRUE' if you do not want to take 'must run' production into account.")
+    })
+
   })
 
 })
+
