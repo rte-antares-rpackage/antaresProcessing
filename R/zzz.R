@@ -109,7 +109,7 @@ globalVariables(
     "totalSurplus", "transCapacityDirect", "transCapacityIndirect",
     "unitcount", "upwardModulation", "variableCost",
     "interconnectedDownwardMargin", "interconnectedUpwardMargin",
-    "thermalAvailability", "OP. COST"
+    "thermalAvailability", "OP. COST", "generatingMaxPower"
   )
 )
 
