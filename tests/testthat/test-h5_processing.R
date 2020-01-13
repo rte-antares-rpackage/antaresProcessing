@@ -12,7 +12,8 @@ skipFunctionH5<-function(){
   #I dont why but according to CRAN Team antaresProcessing try to write in the user library
   # but there are checks to verify that h5 file is in tmp folder
   #to comment in the futur
-  skip_on_cran()
+  # skip_on_cran()
+  skip("h5")
 }
 
 test_that("h5 : processing, write results", {
