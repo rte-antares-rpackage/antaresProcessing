@@ -15,9 +15,9 @@ sapply(studyPathS, function(studyPath){
   if(requireNamespace("rhdf5")){
     rhdf5::H5close()
   }
-  if(dir.exists(pathtodelete))
-  {
-    unlink(pathtodelete, recursive = TRUE)
-  }
+  # if(dir.exists(pathtodelete))
+  # {
+  #   unlink(pathtodelete, recursive = TRUE)
+  # }
 
 })

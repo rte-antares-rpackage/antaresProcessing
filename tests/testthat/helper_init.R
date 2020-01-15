@@ -102,7 +102,7 @@ if (sourcedir != "") {
   envir = globalenv())
 
   assign("nweeks", 2, envir = globalenv())
-  assign("pathtodelete", path_v6, envir = globalenv())
+  # assign("pathtodelete", path_v6, envir = globalenv())
 }
 
 skip_according_to_options <- function() {
