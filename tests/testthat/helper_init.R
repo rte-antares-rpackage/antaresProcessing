@@ -50,11 +50,11 @@ Sys.unsetenv("R_TESTS")
 if (sourcedir != "") {
   if (Sys.info()['sysname'] == "Windows") {
     untar(file.path(sourcedir, "antares-test-study-v6.tar.gz"), exdir = path_v6)
-    untar(file.path(sourcedir, "antares-test-study-latest.tar.gz"), exdir = path_latest)
+    untar(file.path(sourcedir, "antares-test-study.tar.gz"), exdir = path_latest)
           # extras = "--force-local")
   } else {
     untar(file.path(sourcedir, "antares-test-study-v6.tar.gz"), exdir = path_v6)
-    untar(file.path(sourcedir, "antares-test-study-latest.tar.gz"), exdir = path_latest)
+    untar(file.path(sourcedir, "antares-test-study.tar.gz"), exdir = path_latest)
   }
 
   if(requireNamespace("rhdf5", quietly = TRUE)){
