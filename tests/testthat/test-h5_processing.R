@@ -12,10 +12,11 @@ skipFunctionH5<-function(){
   #I dont why but according to CRAN Team antaresProcessing try to write in the user library
   # but there are checks to verify that h5 file is in tmp folder
   #to comment in the futur
-  skip_on_cran()
+  # skip_on_cran()
 }
 
 test_that("h5 : processing, write results", {
+  skip_according_to_options()
   skipFunctionH5()
   .setAliasH5()
   optsH5 <- setSimulationPath(h5file)
@@ -41,6 +42,7 @@ test_that("h5 : processing, write results", {
 })
 
 test_that("h5 : processing, write results mcAll", {
+  skip_according_to_options()
   skipFunctionH5()
   .setAliasH5()
   optsH5 <- setSimulationPath(h5file)
@@ -66,6 +68,7 @@ test_that("h5 : processing, write results mcAll", {
 })
 
 test_that("h5 : all data", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",
@@ -82,6 +85,7 @@ test_that("h5 : all data", {
 
 #read data and compare
 test_that("h5 : processing calc by user", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   calcData <- readAntares(areas = "all", mcYears = "all",
@@ -96,6 +100,7 @@ test_that("h5 : processing calc by user", {
 })
 
 test_that("h5 : processing calc by straitements", {
+  skip_according_to_options()
   skipFunctionH5()
   UpwardMargin_out <- readAntares(areas = "all", mcYears = "all",
                                   select = "Out_addUpwardMargin", showProgress = FALSE)
@@ -112,6 +117,7 @@ test_that("h5 : processing calc by straitements", {
 })
 
 test_that("h5 : processing calc links clusters discticcts", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",
@@ -130,6 +136,7 @@ test_that("h5 : processing calc links clusters discticcts", {
 })
 
 test_that("h5 : processing Out_addNetLoad", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addNetLoad =  TRUE)})
@@ -141,6 +148,7 @@ test_that("h5 : processing Out_addNetLoad", {
 })
 
 test_that("h5 : processing Out_addDownwardMargin", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addDownwardMargin =  TRUE)})
@@ -154,6 +162,7 @@ test_that("h5 : processing Out_addDownwardMargin", {
 })
 
 test_that("h5 : processing Out_addUpwardMargin", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addUpwardMargin = TRUE)})
@@ -167,6 +176,7 @@ test_that("h5 : processing Out_addUpwardMargin", {
 })
 
 test_that("h5 : processing Out_addExportAndImport", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addExportAndImport = TRUE)})
@@ -180,6 +190,7 @@ test_that("h5 : processing Out_addExportAndImport", {
 })
 
 test_that("h5 : processing Out_addLoadFactorLink", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",addLoadFactorLink = TRUE)})
@@ -190,6 +201,7 @@ test_that("h5 : processing Out_addLoadFactorLink", {
 })
 
 test_that("h5 : processing Out_externalDependency", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",externalDependency = TRUE)})
@@ -210,6 +222,7 @@ test_that("h5 : processing Out_externalDependency", {
 })
 
 test_that("h5 : processing Out_loadFactor", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",loadFactor = TRUE)})
@@ -222,6 +235,7 @@ test_that("h5 : processing Out_loadFactor", {
 })
 
 test_that("h5 : processing Out_modulation", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd", modulation = TRUE)})
@@ -235,6 +249,7 @@ test_that("h5 : processing Out_modulation", {
 })
 
 test_that("h5 : processing netLoadRamp", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",netLoadRamp = TRUE)})
@@ -252,6 +267,7 @@ test_that("h5 : processing netLoadRamp", {
 })
 
 test_that("h5 : processing surplus", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",surplus  = TRUE)})
@@ -275,6 +291,7 @@ test_that("h5 : processing surplus", {
 })
 
 test_that("h5 : Out_surplusClusters", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings({addProcessingH5(opts = optsH5,  mcY = "mcInd",surplusClusters =  TRUE)})
@@ -291,6 +308,7 @@ test_that("h5 : Out_surplusClusters", {
 })
 
 test_that("No h5 opts", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   optsH5$h5path <- NULL
@@ -300,6 +318,7 @@ test_that("No h5 opts", {
 })
 
 test_that("Write boolean", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   suppressWarnings(addProcessingH5(optsH5, evalAreas = list(toto = "TRUE")))
@@ -307,6 +326,7 @@ test_that("Write boolean", {
 })
 
 test_that("Write character", {
+  skip_according_to_options()
   skipFunctionH5()
   optsH5 <- setSimulationPath(h5file)
   expect_error(addProcessingH5(optsH5, evalAreas = list(toto = "'GGG'")))

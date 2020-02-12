@@ -1,18 +1,17 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-.neededColAreaExternalDepandancies <- c("netLoad", "AVL DTG", "hstorPMaxAvg")
-
 #' External Dependencies in imports and exports
 #'
 #' This function computes the dependency in imports and export for each area or districts at a
 #' given time step. Dependency in imports represents moments where imports are required
-#' to have no loss of load. Depandency in exports represents moments where exports are required to
+#' to have no loss of load. Dependency in exports represents moments where exports are required to
 #' have no spilled energy.
 #'
 #' @param x
 #'   An object created with function \code{\link[antaresRead]{readAntares}}. It
-#'   must contain data for areas and/or distritcs . More specifically this
-#'   function requires the columns \code{hstorPMaxAvg}, and \code{netLoad}. To
+#'   must contain data for areas and/or districts. More specifically this
+#'   function requires the columns \code{generatingMaxPower}
+#'   (or \code{hstorPMaxAvg} for Antares v6 and earlier), and \code{netLoad}. To
 #'   get these columns, one has to invoke \code{\link[antaresRead]{readAntares}}
 #'   with the parameter \code{hydroStorageMaxPower = TRUE} and
 #'   \code{\link[antaresProcessing]{addNetLoad}} (see examples).
@@ -25,8 +24,8 @@
 #' @param timeStep
 #'   Desired time step for the result.
 #' @param synthesis
-#'   If TRUE, average external dependncies are returned. Else the function
-#'   returns external dependncies per Monte-Carlo scenario.
+#'   If TRUE, average external dependencies are returned. Else the function
+#'   returns external dependencies per Monte-Carlo scenario.
 #' @param opts opts
 #'
 #' @return
@@ -65,6 +64,12 @@
 #'
 externalDependency <- function(x , timeStep = "annual", synthesis = FALSE, opts = NULL) {
 
+  .neededColAreaExternalDependencies <- if (attr(x, "opts")$antaresVersion < 650) {
+    c("netLoad", "AVL DTG", "hstorPMaxAvg")
+  } else {
+    c("netLoad", "AVL DTG", "generatingMaxPower")
+  }
+
   # Check that x contains is a antaresDataList
   if (is(x, "antaresDataList")) {
     # Check that x contains the needed variables
@@ -80,10 +85,10 @@ externalDependency <- function(x , timeStep = "annual", synthesis = FALSE, opts 
 
   neededCol<-list()
   if (!is.null(x$areas)) {
-    neededCol$areas <- .neededColAreaExternalDepandancies
+    neededCol$areas <- .neededColAreaExternalDependencies
   }
 
-  if (!is.null(x$districts)) neededCol$districts <- .neededColAreaExternalDepandancies
+  if (!is.null(x$districts)) neededCol$districts <- .neededColAreaExternalDependencies
 
   x <- .checkColumns(x, neededCol)
 
@@ -144,20 +149,30 @@ externalDependency <- function(x , timeStep = "annual", synthesis = FALSE, opts 
 #'
 #' @noRd
 .computeexternalDependency <- function(dataInput, timeStep, synthesis) {
+
+  .neededColAreaExternalDependencies <- if (attr(dataInput, "opts")$antaresVersion < 650) {
+    c("netLoad", "AVL DTG", "hstorPMaxAvg")
+  } else {
+    c("netLoad", "AVL DTG", "generatingMaxPower")
+  }
+
   idVars <- .idCols(dataInput)
 
   # Create the main table that will be used to compute the margins
-  data <- dataInput[, c(idVars, .neededColAreaExternalDepandancies), with = FALSE]
+  data <- dataInput[, c(idVars, .neededColAreaExternalDependencies), with = FALSE]
 
   #if we don't have pumpingCapacity and storageCapacity, we add columns empty
   if(is.null(data$pumpingCapacity)){
     data[ , c("pumpingCapacity", "storageCapacity") := 0]
   }
   # Compute externalDependencyLevel
-  data[,`:=`(
-    exportsLevel = netLoad + pumpingCapacity,
-    importsLevel = netLoad - `AVL DTG` - hstorPMaxAvg - storageCapacity
-  )]
+  data[, exportsLevel := netLoad + pumpingCapacity]
+  if (attr(dataInput, "opts")$antaresVersion < 650) {
+    data[, importsLevel := netLoad - `AVL DTG` - hstorPMaxAvg - storageCapacity]
+  } else {
+    data[, importsLevel := netLoad - `AVL DTG` - generatingMaxPower - storageCapacity]
+  }
+
   # Compute externalDependencyFrequency
   #init
   data[,`:=`(

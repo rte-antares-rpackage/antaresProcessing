@@ -18,8 +18,11 @@
 #' between the available production capacity plus the fatal productions and the
 #' load. More formally it is equal to:
 #'
-#' \code{isolatedUpwardMargin = (`AVL DTG` + hstorPMaxAvg + storageCapacity) +
+#' \code{isolatedUpwardMargin = (`AVL DTG` + generatingMaxPower + storageCapacity) +
 #'                              (`H. ROR` + WIND + SOLAR + `MISC. NDG`) - LOAD}
+#'
+#' NB: in Antares v6 (and earlier versions) \code{generatingMaxPower} is replaced
+#' by \code{hstorPMaxAvg}.
 #'
 #' The variable \code{storageCapacity} is automatically created when pumped
 #' storage areas are removed with function
@@ -79,14 +82,18 @@ addUpwardMargin <- function(x) {
   if (is.null(x$storageCapacity)) storCap <- 0
   else storCap <- x$storageCapacity
 
-  # Check that the additional column "hstorPMaxAvg" is present. If not, just
-  # throw a warning instead of an because in some studies this variable is not used.
-  if (is.null(x$hstorPMaxAvg)) {
-    warning("Column 'hstorPMaxAvg' is missing. Upward margins can be wrong unless ",
-            "hydraulic storage is not used in your study. To add this column, ",
-            "use option 'hydroStorageMaxPower = TRUE' in readAntares().")
-    hstorpmax <- 0
-  } else hstorpmax <- x$hstorPMaxAvg
+  if (attr(x, "opts")$antaresVersion < 650) {
+    # Check that the additional column "hstorPMaxAvg" is present. If not, just
+    # throw a warning instead of an because in some studies this variable is not used.
+    if (is.null(x$hstorPMaxAvg)) {
+      warning("Column 'hstorPMaxAvg' is missing. Upward margins can be wrong unless ",
+              "hydraulic storage is not used in your study. To add this column, ",
+              "use option 'hydroStorageMaxPower = TRUE' in readAntares().")
+      hstorpmax <- 0
+    } else hstorpmax <- x$hstorPMaxAvg
+  } else {
+    hstorpmax <- x$generatingMaxPower
+  }
 
   x[, isolatedUpwardMargin := `AVL DTG` + hstorpmax + storCap + `H. ROR` + WIND + SOLAR + `MISC. NDG` - LOAD]
   x[, interconnectedUpwardMargin := isolatedUpwardMargin - BALANCE + `ROW BAL.`]

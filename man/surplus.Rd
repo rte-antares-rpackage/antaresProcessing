@@ -4,8 +4,14 @@
 \alias{surplus}
 \title{Compute economic surplus}
 \usage{
-surplus(x, timeStep = "annual", synthesis = FALSE,
-  groupByDistrict = FALSE, hurdleCost = TRUE, opts = NULL)
+surplus(
+  x,
+  timeStep = "annual",
+  synthesis = FALSE,
+  groupByDistrict = FALSE,
+  hurdleCost = TRUE,
+  opts = NULL
+)
 }
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
@@ -29,7 +35,7 @@ A data.table with the following columns:
 \item{timeId}{timeId and other time columns.}
 \item{consumerSurplus}{The surplus of the consumers of some area.
 
-                     formula = (unsupliedCost[area] - `MRG. PRICE`) * LOAD}
+                     formula = (unsuppliedCost[area] - `MRG. PRICE`) * LOAD}
 \item{producerSurplus}{
   The surplus of the producers of some area.
 

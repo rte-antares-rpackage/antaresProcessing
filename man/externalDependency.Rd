@@ -4,13 +4,13 @@
 \alias{externalDependency}
 \title{External Dependencies in imports and exports}
 \usage{
-externalDependency(x, timeStep = "annual", synthesis = FALSE,
-  opts = NULL)
+externalDependency(x, timeStep = "annual", synthesis = FALSE, opts = NULL)
 }
 \arguments{
 \item{x}{An object created with function \code{\link[antaresRead]{readAntares}}. It
-  must contain data for areas and/or distritcs . More specifically this
-  function requires the columns \code{hstorPMaxAvg}, and \code{netLoad}. To
+  must contain data for areas and/or districts. More specifically this
+  function requires the columns \code{generatingMaxPower}
+  (or \code{hstorPMaxAvg} for Antares v6 and earlier), and \code{netLoad}. To
   get these columns, one has to invoke \code{\link[antaresRead]{readAntares}}
   with the parameter \code{hydroStorageMaxPower = TRUE} and
   \code{\link[antaresProcessing]{addNetLoad}} (see examples).
@@ -23,8 +23,8 @@ externalDependency(x, timeStep = "annual", synthesis = FALSE,
 
 \item{timeStep}{Desired time step for the result.}
 
-\item{synthesis}{If TRUE, average external dependncies are returned. Else the function
-returns external dependncies per Monte-Carlo scenario.}
+\item{synthesis}{If TRUE, average external dependencies are returned. Else the function
+returns external dependencies per Monte-Carlo scenario.}
 
 \item{opts}{opts}
 }
@@ -48,7 +48,7 @@ A data.table of class \code{antaresDataTable} with the following columns:
 \description{
 This function computes the dependency in imports and export for each area or districts at a
 given time step. Dependency in imports represents moments where imports are required
-to have no loss of load. Depandency in exports represents moments where exports are required to
+to have no loss of load. Dependency in exports represents moments where exports are required to
 have no spilled energy.
 }
 \examples{

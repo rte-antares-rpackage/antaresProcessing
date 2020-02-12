@@ -1,10 +1,14 @@
 context("h5 : .aggregateMcYears")
 
-opts <- setSimulationPath(studyPath)
+sapply(studyPathS, function(studyPath){
 
-describe(".aggregateMcYears", {
+  opts <- setSimulationPath(studyPath)
 
-  mydata <- readAntares(areas = "all", mcYears = "all", showProgress = FALSE)
+  describe(".aggregateMcYears", {
 
-.aggregateMcYears(mydata)
+    mydata <- readAntares(areas = "all", mcYears = "all", showProgress = FALSE)
+
+    .aggregateMcYears(mydata)
+  })
+
 })

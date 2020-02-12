@@ -13,7 +13,7 @@
 #' @param sectors
 #'   vector containing the name of the sectors for which surplus needs to be
 #'   computed. Possible values are "thermal" for thermal sectors(nuclear, coal,..),
-#'   "ren" for renewable energie and any column name that can be considered as
+#'   "ren" for renewable energy and any column name that can be considered as
 #'   a production (for instance production of virtual areas). It is assumed that
 #'   the cost of these productions is equal to 0 as for renewable energies.
 #'   If the parameter contains the value "thermal", then the parameter

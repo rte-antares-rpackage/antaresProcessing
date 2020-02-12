@@ -58,7 +58,7 @@
 #' }
 #'
 #' Notice that if \code{by="cluster"}, the function computes the modulation per
-#' unit, ie. The modulation of a cluster divided by the number of units of the
+#' unit, i.e. the modulation of a cluster divided by the number of units of the
 #' cluster. On the opposite, if \code{by="sector"}, the function returns the
 #' modulation of the global production of the sector. Moreover, if parameter
 #' \code{x} contains area and district data, the function returns a list with

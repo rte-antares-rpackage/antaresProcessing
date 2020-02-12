@@ -1,55 +1,59 @@
 context("Function addExportAndImport")
 
-opts <- setSimulationPath(studyPath)
+sapply(studyPathS, function(studyPath){
 
-mydata <- readAntares(clusters = "all", areas = "all",
-                      mcYears = "all", showProgress = FALSE)
+  opts <- setSimulationPath(studyPath)
 
-describe("addExportAndImport", {
+  mydata <- readAntares(clusters = "all", areas = "all",
+                        mcYears = "all", showProgress = FALSE)
 
-  it ("stop if x is not a antaresDataTable", {
-    expect_error(addExportAndImport(x=33), "'x' is not an 'antaresData' object")
-  })
+  describe("addExportAndImport", {
 
-  it ("stop if links are missing", {
-    expect_error(addExportAndImport(x=mydata), "The following links are needed but missing: a - a_offshore, a - b, a - psp in, a - psp out, b - c, b - psp in, b - psp out, c - hub, hub - psp in-2, hub - psp out-2")
-  })
+    it ("stop if x is not a antaresDataTable", {
+      expect_error(addExportAndImport(x=33), "'x' is not an 'antaresData' object")
+    })
 
-  it ("check values for areas and distric", {
-    mydata <- readAntares(clusters = "all", areas = "all",
-                          mcYears = "all", showProgress = FALSE, links = "all")
+    it ("stop if links are missing", {
+      expect_error(addExportAndImport(x=mydata), "The following links are needed but missing: a - a_offshore, a - b, a - psp in, a - psp out, b - c, b - psp in, b - psp out, c - hub, hub - psp in-2, hub - psp out-2")
+    })
 
-    mydataCorrected<-removeVirtualAreas(mydata, storageFlexibility = getAreas(select = c("psp", "hub")), production = getAreas("off"))
-    res<-addExportAndImport(x=mydataCorrected)
+    it ("check values for areas and distric", {
+      mydata <- readAntares(clusters = "all", areas = "all",
+                            mcYears = "all", showProgress = FALSE, links = "all")
 
-    getFirstTimeIdWhereAExport<-res$links[link=="a - b" & mcYear==1 & `FLOW LIN.`>0, timeId][1]
-    valueOfExportA<-res$links[link=="a - b" & mcYear==1 & `FLOW LIN.`>0, `FLOW LIN.`][1]
-    expect_equal(res$areas[area=="a" & mcYear==1 & timeId==getFirstTimeIdWhereAExport, export],valueOfExportA)
+      mydataCorrected<-removeVirtualAreas(mydata, storageFlexibility = getAreas(select = c("psp", "hub")), production = getAreas("off"))
+      res<-addExportAndImport(x=mydataCorrected)
 
-    #if a export to b, then b import more than valueOfExportA
-    expect_gte(res$areas[area=="b" & mcYear==1 & timeId==getFirstTimeIdWhereAExport, import],valueOfExportA)
+      getFirstTimeIdWhereAExport<-res$links[link=="a - b" & mcYear==1 & `FLOW LIN.`>0, timeId][1]
+      valueOfExportA<-res$links[link=="a - b" & mcYear==1 & `FLOW LIN.`>0, `FLOW LIN.`][1]
+      expect_equal(res$areas[area=="a" & mcYear==1 & timeId==getFirstTimeIdWhereAExport, export],valueOfExportA)
 
-    mydata <- suppressWarnings(readAntares(select = "exportsImports", showProgress = FALSE, districts = "all"))
+      #if a export to b, then b import more than valueOfExportA
+      expect_gte(res$areas[area=="b" & mcYear==1 & timeId==getFirstTimeIdWhereAExport, import],valueOfExportA)
 
-    res<-addExportAndImport(x=mydata)
-    expect_equal(res$districts[district=="a and b",]$export[2],0)
-    expect_equal(res$districts[district=="a and b",]$export[5],0)
+      mydata <- suppressWarnings(readAntares(select = "exportsImports", showProgress = FALSE, districts = "all"))
 
-  })
+      res<-addExportAndImport(x=mydata)
+      expect_equal(res$districts[district=="a and b",]$export[2],0)
+      expect_equal(res$districts[district=="a and b",]$export[5],0)
 
-  it ("stop if x already contains column 'export' and 'import", {
-    mydata <- suppressWarnings(readAntares(select = "exportsImports", showProgress = FALSE))
+    })
 
-    res<-addExportAndImport(x=mydata, addCapacities=FALSE)
+    it ("stop if x already contains column 'export' and 'import", {
+      mydata <- suppressWarnings(readAntares(select = "exportsImports", showProgress = FALSE))
 
-    expect_error(res<-addExportAndImport(x=mydata), "Input already contains column 'export' and 'import'")
-  })
+      res<-addExportAndImport(x=mydata, addCapacities=FALSE)
 
-  it ("stop if x does not contain transCapacityDirect or transCapacityIndirect data", {
+      expect_error(res<-addExportAndImport(x=mydata), "Input already contains column 'export' and 'import'")
+    })
 
-    mydata <- readAntares(areas = "all",
-                          mcYears = "all", showProgress = FALSE, links = "all", districts = "all", select = "economy")
-    expect_error(res<-addExportAndImport(x=mydata, addCapacities = TRUE), "does not contain transCapacityDirect or transCapacityIndirect data")
+    it ("stop if x does not contain transCapacityDirect or transCapacityIndirect data", {
+
+      mydata <- readAntares(areas = "all",
+                            mcYears = "all", showProgress = FALSE, links = "all", districts = "all", select = "economy")
+      expect_error(res<-addExportAndImport(x=mydata, addCapacities = TRUE), "does not contain transCapacityDirect or transCapacityIndirect data")
+    })
+
   })
 
 })

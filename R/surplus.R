@@ -26,7 +26,7 @@
 #' \item{timeId}{timeId and other time columns.}
 #' \item{consumerSurplus}{The surplus of the consumers of some area.
 #'
-#'                      formula = (unsupliedCost[area] - `MRG. PRICE`) * LOAD}
+#'                      formula = (unsuppliedCost[area] - `MRG. PRICE`) * LOAD}
 #' \item{producerSurplus}{
 #'   The surplus of the producers of some area.
 #'
@@ -102,14 +102,14 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   production <- rowSums(x$areas[, allProdVars, with = FALSE])
 
   # Read unsupplied energy costs
-  # unsupliedCost is a named vector. Names are area names and values are the
-  # the unsuplied costs of the corresponding areas
-  unsupliedCost <- opts$energyCosts$unserved
+  # unsuppliedCost is a named vector. Names are area names and values are the
+  # the unsupplied costs of the corresponding areas
+  unsuppliedCost <- opts$energyCosts$unserved
 
   # consumer, producer surplus and row balance surplus
   idColsA <- .idCols(x$areas)
   res <- x$areas[,append(mget(idColsA),
-                         .(consumerSurplus = (unsupliedCost[area] - `MRG. PRICE`) * LOAD,
+                         .(consumerSurplus = (unsuppliedCost[area] - `MRG. PRICE`) * LOAD,
                            producerSurplus = `MRG. PRICE` * production - `OP. COST`,
                            rowBalanceSurplus = `MRG. PRICE` * `ROW BAL.`))]
 
