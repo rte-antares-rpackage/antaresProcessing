@@ -1,12 +1,15 @@
+# The 'antaresProcessing' R package
+
+
+> The `antaresProcessing` package provides functions that uses data created with package `antaresRead` to compute standard aggregate like customer surplus or sector surplus. This document demonstrates how to use the main functions of the package.
+
+<!-- badges: start -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/antaresProcessing)](https://cran.r-project.org/package=antaresProcessing)
 [![Build status](https://ci.appveyor.com/api/projects/status/rnf5iejmgyu00j1i?svg=true)](https://ci.appveyor.com/project/rte-antares-rpackage/antaresprocessing)
 [![Build Status](https://travis-ci.org/rte-antares-rpackage/antaresProcessing.svg?branch=master)](https://travis-ci.org/rte-antares-rpackage/antaresProcessing)
 [![codecov](https://codecov.io/gh/rte-antares-rpackage/antaresProcessing/branch/develop/graph/badge.svg)](https://codecov.io/gh/rte-antares-rpackage/antaresProcessing/branch/develop)
+<!-- badges: end -->
 
-# The 'antaresProcessing' R package
-
-
-The `antaresProcessing` package provides functions that uses data created with package `antaresRead` to compute standard aggregate like customer surplus or sector surplus. This document demonstrates how to use the main functions of the package.
 
 ## Installation
 
@@ -77,13 +80,13 @@ By default, `compare` computes the difference between two tables, but it can als
 Contributions to the library are welcome and can be submitted in the form of pull requests to this repository.
 
 ## ANTARES :
- Antares is a powerful software developed by RTE to simulate and study electric power systems (more information about Antares here : <https://antares.rte-france.com>).
+ Antares is a powerful software developed by RTE to simulate and study electric power systems (more information about Antares here : <https://antares-simulator.org/>).
 
 ANTARES is now an open-source project (since 2018), you can download the sources [here](https://github.com/AntaresSimulatorTeam/Antares_Simulator) if you want to use this package.
 
 ## License Information:
 
-Copyright 2015-2018 RTE (France)
+Copyright 2015-2020 RTE (France)
 
 * RTE: http://www.rte-france.com
 
