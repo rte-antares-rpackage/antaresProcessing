@@ -4,7 +4,6 @@ sapply(studyPathS, function(studyPath){
 
   opts <- setSimulationPath(studyPath)
 
-  opts <- setSimulationPath(studyPath)
   data <- suppressWarnings(readAntares(
     "all", "all",
     select = c("H. ROR", "WIND", "SOLAR", "MISC. NDG", "LOAD", "BALANCE",
