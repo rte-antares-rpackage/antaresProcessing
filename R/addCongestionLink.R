@@ -16,10 +16,9 @@
 #' @examples
 #' \dontrun{
 #' # Data required by the function
-#' showAliases("loadFactorLink")
 #'
-#' mydata <- readAntares(select = "loadFactorLink")
-#' addCongestionLink(mydata)
+#' mydata <- readAntares(links = "all")
+#' mydata <- addCongestionLink(mydata)
 #' names(mydata)
 #' }
 #'
@@ -32,7 +31,7 @@ addCongestionLink <- function(x) {
   #check when x is an antaresDataList
   if (is(x, "antaresDataList")) {
     if(! c("links") %in% attr(x, "names")) stop("'x' does not contain link data")
-    if (!is.null(x$links)) addCongestionLink(x$links)
+    if (!is.null(x$links)) x$links <- addCongestionLink(x$links)
     return(invisible(x))
   }
 
