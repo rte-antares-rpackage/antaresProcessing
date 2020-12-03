@@ -9,6 +9,7 @@
 #'   Object of class \code{antaresData} created with function
 #'   \code{\link[antaresRead]{readAntares}}. It must contain the columns
 #'   \code{CONG. PROB +} and \code{CONG. PROB -}.
+#' @param timestep \code{character} timestep for aggregation.
 #'
 #' @return
 #' \code{addLoadFactorLink}
@@ -18,13 +19,37 @@
 #' # Data required by the function
 #'
 #' mydata <- readAntares(links = "all")
-#' mydata <- addCongestionLink(mydata)
+#' mydata <- addCongestionLink(mydata, timestep = "link")
 #' names(mydata)
+#'
+#' mydata <- addCongestionLink(mydata, timestep = c('daily'))
 #' }
 #'
 #' @export
 #'
-addCongestionLink <- function(x) {
+addCongestionLink <- function(x, timestep = "daily") {
+
+  if(!timestep %in% c("weekly", "daily", "monthly", "annual")){
+    stop("timestep must be weekly, daily, monthly or annual")
+  }
+
+  if(timestep == "weekly"){
+    x$wd <- data.table::week(as.Date(x$time))
+    by = c("wd", "link")
+  }
+
+
+  if(timestep == "daily"){
+    by = c("link", "day", "month")
+  }
+  if(timestep == "monthly"){
+    by = c("link", "month")
+  }
+
+  if(timestep == "annual"){
+    by = c("link")
+  }
+
 
   if (!is(x, "antaresData")) stop("'x' is not an 'antaresData' object")
 
@@ -45,12 +70,20 @@ addCongestionLink <- function(x) {
     stop("The following columns are needed but missing: ", paste(missingCols, collapse = ", "))
   }
 
-  byVect <-  getIdCols(x)[getIdCols(x) %in% c("link", "mcYear")]
+  # byVect <-  getIdCols(x)[getIdCols(x) %in% c("link")]
+  # byVect <- c(byVect, by)
 
-  x <- merge(x, x[, .(congestionFrequencyDirect = round(sum((`CONG. PROB +` != 0)/.N), 2),
+  if(!all(by %in% names(x))){
+    bymiss <- by[!by %in% names(x)]
+    bymiss <- paste0(bymiss, collapse = ",")
+    stop(paste0("All columns specify in by must be in link data : ", bymiss))
+  }
+
+  x <- merge(x, unique(x[, .(congestionFrequencyDirect = round(sum((`CONG. PROB +` != 0)/.N), 2),
         congestionFrequencyIndirect = round(sum((`CONG. PROB -` != 0)/.N), 2),
         congestionHoursDirect = sum(`CONG. PROB +` != 0),
         congestionHoursIndirect = sum(`CONG. PROB -` != 0)
-        ), by = byVect])
+        ), by = by]), by = by)
+  if(timestep == "weekly")x$wd <- NULL
   invisible(x)
 }

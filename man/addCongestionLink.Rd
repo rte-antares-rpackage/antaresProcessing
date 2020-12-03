@@ -4,12 +4,14 @@
 \alias{addCongestionLink}
 \title{Load factors of link}
 \usage{
-addCongestionLink(x)
+addCongestionLink(x, timestep = "daily")
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function
 \code{\link[antaresRead]{readAntares}}. It must contain the columns
 \code{CONG. PROB +} and \code{CONG. PROB -}.}
+
+\item{timestep}{\code{character} timestep for aggregation.}
 }
 \value{
 \code{addLoadFactorLink}
@@ -21,11 +23,12 @@ This function computes the load factor of link and add it to an
 \examples{
 \dontrun{
 # Data required by the function
-showAliases("loadFactorLink")
 
-mydata <- readAntares(select = "loadFactorLink")
-addCongestionLink(mydata)
+mydata <- readAntares(links = "all")
+mydata <- addCongestionLink(mydata, timestep = "link")
 names(mydata)
+
+mydata <- addCongestionLink(mydata, timestep = c('daily'))
 }
 
 }
