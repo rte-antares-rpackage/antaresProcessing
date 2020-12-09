@@ -19,7 +19,7 @@
 #' # Data required by the function
 #'
 #' mydata <- readAntares(links = "all")
-#' mydata <- addCongestionLink(mydata, timestep = "link")
+#' mydata <- addCongestionLink(mydata, timestep = "daily")
 #' names(mydata)
 #'
 #' mydata <- addCongestionLink(mydata, timestep = c('daily'))
