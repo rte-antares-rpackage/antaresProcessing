@@ -2,30 +2,54 @@
 % Please edit documentation in R/addCongestionLink.R
 \name{addCongestionLink}
 \alias{addCongestionLink}
-\title{Load factors of link}
+\title{Add congestion of link}
 \usage{
-addCongestionLink(x, timestep = "daily")
+addCongestionLink(x, timeStep = c("daily", "weekly", "monthly", "annual"))
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function
 \code{\link[antaresRead]{readAntares}}. It must contain the columns
 \code{CONG. PROB +} and \code{CONG. PROB -}.}
 
-\item{timestep}{\code{character} timestep for aggregation.}
+\item{timestep}{\code{character} Desired time step for the result.}
 }
 \value{
-\code{addLoadFactorLink}
+\code{addCongestionLink} modifies its input by adding four columns:
+
+\item{congestionFrequencyDirect}{
+
+\preformatted{congestionFrequencyDirect = round(sum((`CONG. PROB +` != 0)/.N), 2)}
+
+}
+
+\item{congestionFrequencyIndirect }{
+
+\preformatted{congestionFrequencyIndirect  = round(sum((`CONG. PROB -` != 0)/.N), 2)}
+
+}
+
+\item{congestionHoursDirect}{
+
+\preformatted{congestionHoursDirect  = sum(`CONG. PROB +` != 0)}
+
+}
+
+\item{congestionHoursIndirect }{
+
+\preformatted{congestionHoursIndirect =  sum(`CONG. PROB -` != 0)}
+
+}
 }
 \description{
-This function computes the load factor of link and add it to an
-\code{antaresData} object.
+This function computes 4 congestion variables of link and add it to an
+\code{antaresData} object. It's only be done on hourly data.
 }
 \examples{
 \dontrun{
 # Data required by the function
 
 mydata <- readAntares(links = "all")
-mydata <- addCongestionLink(mydata, timestep = "link")
+mydata <- addCongestionLink(mydata, timestep = "daily")
 names(mydata)
 
 mydata <- addCongestionLink(mydata, timestep = c('daily'))
