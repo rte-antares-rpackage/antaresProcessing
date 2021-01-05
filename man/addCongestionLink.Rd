@@ -2,14 +2,14 @@
 % Please edit documentation in R/addCongestionLink.R
 \name{addCongestionLink}
 \alias{addCongestionLink}
-\title{Add congestion of link}
+\title{Add the congestion frequency and the number of congested hours for a given link}
 \usage{
 addCongestionLink(x, timeStep = c("daily", "weekly", "monthly", "annual"))
 }
 \arguments{
 \item{x}{Object of class \code{antaresData} created with function
 \code{\link[antaresRead]{readAntares}}. It must contain the columns
-\code{CONG. PROB +} and \code{CONG. PROB -}.}
+\code{CONG. PROB +} and \code{CONG. PROB -} and be at an hourly timestep.}
 
 \item{timestep}{\code{character} Desired time step for the result.}
 }
@@ -18,31 +18,35 @@ addCongestionLink(x, timeStep = c("daily", "weekly", "monthly", "annual"))
 
 \item{congestionFrequencyDirect}{
 
+This is the congestion frequency on the direct direction of the link at the specified time resolution.
 \preformatted{congestionFrequencyDirect = round(sum((`CONG. PROB +` != 0)/.N), 2)}
 
 }
 
 \item{congestionFrequencyIndirect }{
 
+This is the congestion frequency on the indirect direction of the link at the specified time resolution.
 \preformatted{congestionFrequencyIndirect  = round(sum((`CONG. PROB -` != 0)/.N), 2)}
 
 }
 
 \item{congestionHoursDirect}{
 
+This is the number of congestion hours on the direct direction of the link at the specified time resolution.
 \preformatted{congestionHoursDirect  = sum(`CONG. PROB +` != 0)}
 
 }
 
 \item{congestionHoursIndirect }{
 
+This is the number of congestion hours on the direct direction of the link at the specified time resolution.
 \preformatted{congestionHoursIndirect =  sum(`CONG. PROB -` != 0)}
 
 }
 }
 \description{
-This function computes 4 congestion variables of link and add it to an
-\code{antaresData} object. It's only be done on hourly data.
+This function computes 4 congestion variables of link (congestion frequency and congestion hours in direct and indirect direction) and adds them to an
+\code{antaresData} object. The input object must be at an hourly timestep.
 }
 \examples{
 \dontrun{

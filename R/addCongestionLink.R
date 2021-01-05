@@ -1,14 +1,14 @@
 #Copyright © 2016 RTE Réseau de transport d’électricité
 
-#' Add congestion of link
+#' Add the congestion frequency and the number of congested hours for a given link
 #'
-#' This function computes 4 congestion variables of link and add it to an
-#' \code{antaresData} object. It's only be done on hourly data.
+#' This function computes 4 congestion variables of link (congestion frequency and congestion hours in direct and indirect direction) and adds them to an
+#' \code{antaresData} object. The input object must be at an hourly timestep.
 #'
 #' @param x
 #'   Object of class \code{antaresData} created with function
 #'   \code{\link[antaresRead]{readAntares}}. It must contain the columns
-#'   \code{CONG. PROB +} and \code{CONG. PROB -}.
+#'   \code{CONG. PROB +} and \code{CONG. PROB -} and be at an hourly timestep.
 #' @param timestep \code{character} Desired time step for the result.
 #'
 #' @return
@@ -16,24 +16,28 @@
 #'
 #' \item{congestionFrequencyDirect}{
 #'
+#' This is the congestion frequency on the direct direction of the link at the specified time resolution.
 #' \preformatted{congestionFrequencyDirect = round(sum((`CONG. PROB +` != 0)/.N), 2)}
 #'
 #' }
 #'
 #' \item{congestionFrequencyIndirect }{
 #'
+#' This is the congestion frequency on the indirect direction of the link at the specified time resolution.
 #' \preformatted{congestionFrequencyIndirect  = round(sum((`CONG. PROB -` != 0)/.N), 2)}
 #'
 #' }
 #'
 #' \item{congestionHoursDirect}{
 #'
+#' This is the number of congestion hours on the direct direction of the link at the specified time resolution.
 #' \preformatted{congestionHoursDirect  = sum(`CONG. PROB +` != 0)}
 #'
 #' }
 #'
 #' \item{congestionHoursIndirect }{
 #'
+#' This is the number of congestion hours on the direct direction of the link at the specified time resolution.
 #' \preformatted{congestionHoursIndirect =  sum(`CONG. PROB -` != 0)}
 #'
 #' }
