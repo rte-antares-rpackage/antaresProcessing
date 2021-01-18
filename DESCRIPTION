@@ -34,7 +34,7 @@ Suggests:
     knitr,
     rmarkdown,
     covr
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Encoding: UTF-8
 biocViews: Infrastructure, DataImport
