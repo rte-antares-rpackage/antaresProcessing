@@ -1,7 +1,7 @@
 Package: antaresProcessing
 Type: Package
 Title: 'Antares' Results Processing
-Version: 0.18.0
+Version: 0.18.1
 Authors@R: c(
     person("Veronique", "Bachelier", email = "veronique.bachelier@rte-france.com", role = c("aut", "cre")),
     person("Jalal-Edine", "ZAWAM", role = "aut"),
