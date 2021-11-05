@@ -513,25 +513,7 @@ addProcessingH5 <- function(opts = simOptions(),
         structVarAdd[which(structVarAdd == "")][1:length(namesVariable)] <- namesVariable
 
         #h5write(structVarAdd, path, oldStruct)
-        rhdf5::h5writeDataset.array(obj = structVarAdd,  fid, oldStruct)
-
-
-        # if(grepl("areas", GP))
-        # {
-        #   attributes <- .loadAttributes(fid, "hourly")
-        #   attributes$opts$variables$areas <- unique(c(attributes$opts$variables$areas, namesVariable))
-        #   .writeAttributes(path = NULL, timeStep =  "hourly", fid = fid, attributes = attributes)
-        #
-        # }
-        #
-        # if(grepl("links", GP))
-        # {
-        #   attributes <- .loadAttributes(fid, "hourly")
-        #   attributes$opts$variables$links <- unique(c(attributes$opts$variables$links, namesVariable))
-        #   .writeAttributes(path = NULL, timeStep =  "hourly", fid = fid, attributes = attributes)
-        #
-        # }
-
+        rhdf5::h5writeDataset(obj = structVarAdd,  fid, oldStruct)
       }
     }
 
@@ -564,7 +546,7 @@ addProcessingH5 <- function(opts = simOptions(),
     {
       rhdf5::h5set_extent(fid, datatype, c(newDim))
     }
-    rhdf5::h5writeDataset.array(obj = arrayToWrite, fid, datatype, index = indexToWrite)
+    rhdf5::h5writeDataset(obj = arrayToWrite, fid, datatype, index = indexToWrite)
     rhdf5::H5close()
   }
 }
