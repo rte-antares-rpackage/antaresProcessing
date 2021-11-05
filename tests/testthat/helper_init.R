@@ -26,7 +26,7 @@ check_if_h5_is_in_tmp<-function(h5filePath=NULL,path=NULL, stop=FALSE, printMess
       print(paste0("h5file : ", h5filePath))
       print(paste0("path : ", path_v6))
     }
-  }else{
+  } else {
     return(TRUE)
   }
 

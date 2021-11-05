@@ -59,13 +59,13 @@ addUpwardMargin <- function(x) {
       }
       if (!is.null(x$districts)) {
         x$districts <- addUpwardMargin(x$districts)
-        }
+      }
     }
     return(invisible(x))
   }
 
   # Check required columns are present
-  .neededColAreaUp<-c("H. ROR", "WIND", "SOLAR", "MISC. NDG",
+  .neededColAreaUp <- c("H. ROR", "WIND", "SOLAR", "MISC. NDG",
                       "LOAD", "BALANCE", "ROW BAL.", "AVL DTG")
   .checkColumns(x, .neededColAreaUp)
 

@@ -55,7 +55,7 @@ addDownwardMargin <- function(x) {
       }
       if (!is.null(x$districts)) {
         x$districts <- addDownwardMargin(x$districts)
-        }
+      }
     }
     return(invisible(x))
   }
