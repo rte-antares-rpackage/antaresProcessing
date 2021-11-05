@@ -11,7 +11,7 @@ addCongestionLink(x, timeStep = c("daily", "weekly", "monthly", "annual"))
 \code{\link[antaresRead]{readAntares}}. It must contain the columns
 \code{CONG. PROB +} and \code{CONG. PROB -} and be at an hourly timestep.}
 
-\item{timestep}{\code{character} Desired time step for the result.}
+\item{timeStep}{\code{character} Desired time step for the result.}
 }
 \value{
 \code{addCongestionLink} modifies its input by adding four columns:
@@ -53,10 +53,10 @@ This function computes 4 congestion variables of link (congestion frequency and 
 # Data required by the function
 
 mydata <- readAntares(links = "all")
-mydata <- addCongestionLink(mydata, timestep = "daily")
+mydata <- addCongestionLink(mydata, timeStep = "daily")
 names(mydata)
 
-mydata <- addCongestionLink(mydata, timestep = c('daily'))
+mydata <- addCongestionLink(mydata, timeStep = c('daily'))
 }
 
 }

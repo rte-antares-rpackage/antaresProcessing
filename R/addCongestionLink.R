@@ -9,7 +9,7 @@
 #'   Object of class \code{antaresData} created with function
 #'   \code{\link[antaresRead]{readAntares}}. It must contain the columns
 #'   \code{CONG. PROB +} and \code{CONG. PROB -} and be at an hourly timestep.
-#' @param timestep \code{character} Desired time step for the result.
+#' @param timeStep \code{character} Desired time step for the result.
 #'
 #' @return
 #' \code{addCongestionLink} modifies its input by adding four columns:
@@ -47,10 +47,10 @@
 #' # Data required by the function
 #'
 #' mydata <- readAntares(links = "all")
-#' mydata <- addCongestionLink(mydata, timestep = "daily")
+#' mydata <- addCongestionLink(mydata, timeStep = "daily")
 #' names(mydata)
 #'
-#' mydata <- addCongestionLink(mydata, timestep = c('daily'))
+#' mydata <- addCongestionLink(mydata, timeStep = c('daily'))
 #' }
 #'
 #' @export
