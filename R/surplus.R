@@ -74,10 +74,9 @@ surplus <- function(x, timeStep = "annual", synthesis = FALSE, groupByDistrict =
   prodVars <- setdiff(pkgEnv$production, "PSP")
 
   x <- .checkAttrs(x, timeStep = "hourly", synthesis = FALSE)
-  x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OP. COST", prodVars, "PSP", "ROW BAL."),
+  x <- .checkColumns(x, list(areas = c("LOAD", "MRG. PRICE", "OP. COST", "PSP", "ROW BAL."),
                              links = "CONG. FEE (ALG.)"))
-  if(is.null(opts))
-  {
+  if(is.null(opts)){
     opts <- simOptions(x)
   }
 
