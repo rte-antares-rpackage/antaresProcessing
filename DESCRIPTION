@@ -3,7 +3,7 @@ Type: Package
 Title: 'Antares' Results Processing
 Version: 0.18.2
 Authors@R: c(
-    person("Veronique", "Bachelier", email = "veronique.bachelier@rte-france.com", role = c("aut", "cre")),
+    person("Tatiana", "Vargas", email = "tatiana.vargas@rte-france.com", role = c("aut", "cre")),
     person("Jalal-Edine", "ZAWAM", role = "aut"),
     person("Francois", "Guillem", role = "aut"),
     person("Benoit", "Thieurmel", role = "aut"),
