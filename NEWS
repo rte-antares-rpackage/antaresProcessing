@@ -1,5 +1,9 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
+Changes in version 0.18.2
+* delete suggest dependecies `rhdf5` causing error in `AntaresRead`
+
+
 Changes in version 0.18.1 (2021-10-20)
 
 BUGFIXES:

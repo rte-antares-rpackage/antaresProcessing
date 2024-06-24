@@ -1,7 +1,7 @@
 Package: antaresProcessing
 Type: Package
 Title: 'Antares' Results Processing
-Version: 0.18.1
+Version: 0.18.2
 Authors@R: c(
     person("Veronique", "Bachelier", email = "veronique.bachelier@rte-france.com", role = c("aut", "cre")),
     person("Jalal-Edine", "ZAWAM", role = "aut"),
@@ -27,13 +27,12 @@ Imports:
     methods, 
     stats
 Suggests: 
-    rhdf5 (>= 2.24.0), 
     parallel,
     testthat, 
     knitr,
     rmarkdown,
     covr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.2
 VignetteBuilder: knitr
 Encoding: UTF-8
 biocViews: Infrastructure, DataImport
