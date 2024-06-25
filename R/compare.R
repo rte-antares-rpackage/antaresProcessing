@@ -3,7 +3,7 @@
 #' Compare two simulations or two antaresData
 #'
 #' \code{compare} has been designed to compare two surpluses created with function
-#' \code{\link{surplus}} but it can be used to compare the values of two tables of
+#' "surplus" but it can be used to compare the values of two tables of
 #' class \code{antaresData} that contain the same type of data.
 #'
 #' @param x
