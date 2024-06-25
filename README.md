@@ -5,9 +5,6 @@
 
 <!-- badges: start -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/antaresProcessing)](https://cran.r-project.org/package=antaresProcessing)
-[![Build status](https://ci.appveyor.com/api/projects/status/rnf5iejmgyu00j1i?svg=true)](https://ci.appveyor.com/project/rte-antares-rpackage/antaresprocessing)
-[![Build Status](https://travis-ci.org/rte-antares-rpackage/antaresProcessing.svg?branch=master)](https://travis-ci.org/rte-antares-rpackage/antaresProcessing)
-[![codecov](https://codecov.io/gh/rte-antares-rpackage/antaresProcessing/branch/develop/graph/badge.svg)](https://codecov.io/gh/rte-antares-rpackage/antaresProcessing/branch/develop)
 <!-- badges: end -->
 
 
@@ -90,4 +87,4 @@ Copyright 2015-2020 RTE (France)
 
 * RTE: http://www.rte-france.com
 
-This Source Code is subject to the terms of the GNU General Public License, version 2 or any higher version. If a copy of the GPL-v2 was not distributed with this file, You can obtain one at https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html.
+This Source Code is subject to the terms of the GNU General Public License, version 2 or any higher version. If a copy of the GPL-v2 was not distributed with this file.
