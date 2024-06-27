@@ -9,7 +9,7 @@ addExportAndImport(x, addCapacities = FALSE, opts = NULL)
 \arguments{
 \item{x}{an object of class "antaresDataList" created with the function
 \code{readAntares}. It has to contain some areas and all the links that are
-connected to these areas. Moreover the function \code{\link{removeVirtualAreas}} must be call before.}
+connected to these areas. Moreover the function "removeVirtualAreas" must be call before.}
 
 \item{addCapacities}{If \code{TRUE}, export and import capacities are added.}
 

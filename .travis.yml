@@ -24,10 +24,6 @@ r_github_packages:
 #before - Bioconductor-mirror/zlibbioc
 # - Bioconductor-mirror/rhdf5
 #after
-bioc_packages:
-  - rhdf5
-  - zlibbioc
-
 
 r_packages:
   - covr

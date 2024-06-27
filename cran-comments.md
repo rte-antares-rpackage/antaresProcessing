@@ -10,3 +10,5 @@
 * There's a new maintainer to the package. This release correct problems reported by Brian D. Ripley.
 Thanks!
 
+# Changes in version 0.18.2
+* delete suggest dependecies `rhdf5` causing error in `AntaresRead`
