@@ -12,3 +12,6 @@ Thanks!
 
 # Changes in version 0.18.2
 * delete suggest dependecies `rhdf5` causing error in `AntaresRead`
+
+# v0.18.3
+To put the package back on CRAN
