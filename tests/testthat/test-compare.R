@@ -24,8 +24,8 @@ sapply(studyPathS, function(studyPath){
       res <- antaresProcessing::compare(data1, data2)
       expect_identical(names(res),
                        intersect(names(data1), names(data2)))
-      expect_identical(as.character(unique(res$area)),
-                       intersect(data1$area, data2$area))
+      expect_identical(as.character(unique(res[["area"]])),
+                       intersect(data1[["area"]], data2[["area"]]))
     })
 
     it("stops if x and y have different types", {
