@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/antaresProcessing)](https://cran.r-project.org/package=antaresProcessing)
+[![R-CMD-check](https://github.com/rte-antares-rpackage/antaresProcessing/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rte-antares-rpackage/antaresProcessing/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 
