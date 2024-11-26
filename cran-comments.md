@@ -14,4 +14,7 @@ Thanks!
 * delete suggest dependecies `rhdf5` causing error in `AntaresRead`
 
 # v0.18.3
-To put the package back on CRAN
+The documentation for these functions (`getValues()`, `mergeAllAntaresData()`, `thermalGroupCapacities`) 
+has been rewritten, including what they return and a working example.
+
+New GPL file licence in package and DESCRIPTION file updated.
