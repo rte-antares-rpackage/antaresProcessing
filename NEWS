@@ -1,5 +1,9 @@
 Copyright © 2016 RTE Réseau de transport d’électricité
 
+Changes in version 0.18.3
+* The package has been archived as version 0.18.2.
+New version for distribution on CRAN
+
 Changes in version 0.18.2
 * delete suggest dependecies `rhdf5` causing error in `AntaresRead`
 

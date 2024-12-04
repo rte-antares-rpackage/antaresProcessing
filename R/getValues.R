@@ -14,12 +14,33 @@
 #' @param mcyear
 #'  set of mcYear
 #'
-#' @examples
-#' \dontrun{
+#' @return A data.table, data.frame class object containing the study's output data
 #'
-#' mydata <- readAntares(areas="all",clusters="all", select="LOAD")
-#' getValues(mydata$areas, variable="LOAD")
-#' getValues(myData$clusters, variable = "production")
+#' @examples
+#' \donttest{
+#' library(antaresRead)
+#' # with study test for example (study is in package antaresRead)
+#' sourcedir <- system.file("testdata", package = "antaresRead")
+#'
+#' # untar study in temp dir
+#' path_latest <- file.path(tempdir(), "latest")
+#' untar(file.path(sourcedir, "antares-test-study.tar.gz"), exdir = path_latest)
+#'
+#' study_path <- file.path(path_latest, "test_case")
+#'
+#' # set path to your Antares simulation
+#' opts <- setSimulationPath(study_path)
+#'
+#' # read output simulation
+#' mydata <- readAntares(areas = "all",
+#'                       links = "all",
+#'                       clusters = "all",
+#'                       timeStep = "annual",
+#'                       mcYears = "all")
+#'
+#' # get values of a variable
+#' getValues(mydata$areas, variable="LIGNITE")
+#' getValues(mydata$clusters, variable = "NODU")
 #'
 #' }
 #' @export

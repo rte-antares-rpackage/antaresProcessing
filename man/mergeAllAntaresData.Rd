@@ -9,14 +9,33 @@ mergeAllAntaresData(dta)
 \arguments{
 \item{dta}{antaresData}
 }
+\value{
+A data.table, data.frame class object containing the study's
+output data (wide format)
+}
 \description{
 Merge all antaresDataSets
 }
 \examples{
-\dontrun{
-setSimulationPath("Mystud", 1)
-dta <- readAntares(areas = "all", links = "all", clusters = "all", districts = "all")
-dta <- mergeAllAntaresData(dta)
+\donttest{
+library(antaresRead)
+# with study test for example (study is in package antaresRead)
+sourcedir <- system.file("testdata", package = "antaresRead")
+
+# untar study in temp dir
+path_latest <- file.path(tempdir(), "latest")
+untar(file.path(sourcedir, "antares-test-study.tar.gz"), exdir = path_latest)
+
+study_path <- file.path(path_latest, "test_case")
+
+# set path to your Antares simulation
+opts <- setSimulationPath(study_path)
+
+mydata <- readAntares( areas = "all",
+                       mcYears = "all", showProgress = FALSE)
+
+# long to wide format
+mydata <- mergeAllAntaresData(mydata)
 }
 
 }

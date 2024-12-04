@@ -1,13 +1,13 @@
 Package: antaresProcessing
 Type: Package
 Title: 'Antares' Results Processing
-Version: 0.18.2
+Version: 0.18.3
 Authors@R: c(
     person("Tatiana", "Vargas", email = "tatiana.vargas@rte-france.com", role = c("aut", "cre")),
-    person("Jalal-Edine", "ZAWAM", role = "aut"),
-    person("Francois", "Guillem", role = "aut"),
-    person("Benoit", "Thieurmel", role = "aut"),
-    person("Titouan",  "Robert", role = "aut"),
+    person("Jalal-Edine", "ZAWAM", role = "ctb"),
+    person("Francois", "Guillem", role = "ctb"),
+    person("Benoit", "Thieurmel", role = "ctb"),
+    person("Titouan",  "Robert", role = "ctb"),
     person("RTE", role = "cph")
     )
 Description: 
@@ -19,7 +19,7 @@ Description:
     of consumers, producers and sectors.
 URL: https://github.com/rte-antares-rpackage/antaresProcessing
 BugReports: https://github.com/rte-antares-rpackage/antaresProcessing/issues
-License: GPL (>= 2) | file LICENSE
+License: GPL (>= 3)
 Depends: 
     antaresRead (>= 1.1.5)
 Imports: 

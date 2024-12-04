@@ -15,33 +15,34 @@ dir.create(file.path(path0, "latest"))
 # path_v6 <- file.path(path0, "v6")
 path_latest <- file.path(path0, "latest")
 
-sourcedir <- system.file("inst/testdata", package = "antaresRead")
-if(sourcedir == ""){ sourcedir <- system.file("testdata", package = "antaresRead")}
+# sourcedir <- system.file("inst/testdata", package = "antaresRead")
+# if(sourcedir == "")
+sourcedir <- system.file("testdata", package = "antaresRead")
 
-check_if_h5_is_in_tmp<-function(h5filePath=NULL,path=NULL, stop=FALSE, printMessage=TRUE){
-
-  resH5NotInTmp<-!grepl("Temp", h5filePath, ignore.case = TRUE) & !grepl("tmp", h5filePath, ignore.case = TRUE)
-  if(resH5NotInTmp){
-    if(printMessage){
-      print(paste0("h5file : ", h5filePath))
-      print(paste0("path : ", path_v6))
-    }
-  } else {
-    return(TRUE)
-  }
-
-  messageToPrint<-"h5file is not in temp folder"
-  if(stop & resH5NotInTmp){
-    stop(messageToPrint)
-  }
-  if(resH5NotInTmp){
-    if(printMessage){
-      message(messageToPrint)
-    }
-  }
-
-  return(FALSE)
-}
+# check_if_h5_is_in_tmp<-function(h5filePath=NULL,path=NULL, stop=FALSE, printMessage=TRUE){
+#
+#   resH5NotInTmp<-!grepl("Temp", h5filePath, ignore.case = TRUE) & !grepl("tmp", h5filePath, ignore.case = TRUE)
+#   if(resH5NotInTmp){
+#     if(printMessage){
+#       print(paste0("h5file : ", h5filePath))
+#       print(paste0("path : ", path_v6))
+#     }
+#   } else {
+#     return(TRUE)
+#   }
+#
+#   messageToPrint<-"h5file is not in temp folder"
+#   if(stop & resH5NotInTmp){
+#     stop(messageToPrint)
+#   }
+#   if(resH5NotInTmp){
+#     if(printMessage){
+#       message(messageToPrint)
+#     }
+#   }
+#
+#   return(FALSE)
+# }
 
 Sys.unsetenv("R_TESTS")
 # Hack: For some unknown reason, this script is executed at some point of
